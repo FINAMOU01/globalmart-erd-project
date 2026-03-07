@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AfriBazaar – The Cultural & Artifacts Marketplace</title>
+    <meta name="description" content="Discover authentic African crafts, traditional fashion, handmade artifacts, and artistic products from artisans across Africa.">
+    
+    <!-- Google Fonts - Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- ==================== NAVIGATION BAR ==================== -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Logo -->
+            <a href="/" class="logo">
+                <span class="logo-icon"><i class="fas fa-shopping-bag"></i></span>
+                <span class="logo-text">AfriBazaar</span>
+            </a>
+            
+            <!-- Menu Items -->
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#" class="nav-link active">Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Shop</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Artisans</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Categories</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+            </ul>
+            
+            <!-- Search Bar -->
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search authentic products...">
+                <button class="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            
+            <!-- Right Side Actions -->
+            <div class="nav-actions">
+                <a href="#" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge">3</span>
+                </a>
+                <div class="auth-buttons">
+                    <a href="#" class="btn btn-outline">Login</a>
+                    <a href="#" class="btn btn-primary">Sign Up</a>
+                </div>
+                <!-- Mobile Menu Toggle -->
+                <div class="mobile-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section class="hero">
+        <div class="hero-bg-image"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Discover the Beauty of African Culture</h1>
+                <p class="hero-subtitle">Authentic handmade crafts, fashion, and artifacts from artisans across Africa.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary btn-large">
+                        <i class="fas fa-compass"></i> Explore Marketplace
+                    </a>
+                    <a href="#" class="btn btn-outline-light btn-large">
+                        <i class="fas fa-users"></i> Meet the Artisans
+                    </a>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Artisans</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">2,000+</span>
+                    <span class="stat-label">Products</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">25+</span>
+                    <span class="stat-label">African Countries</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-pattern"></div>
+    </section>
+
+    <!-- ==================== FEATURED CATEGORIES ==================== -->
+    <section class="categories-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Shop by Category</span>
+                <h2 class="section-title">Explore Our Collections</h2>
+                <p class="section-subtitle">Discover unique pieces from different African traditions</p>
+            </div>
+            
+            <div class="categories-grid">
+                <!-- Category 1 -->
+                <a href="#" class="category-card">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1588268176608-3d9c1980e1eb?w=400&h=400&fit=crop" alt="Traditional Fashion">
+                        <div class="category-overlay"></div>
+                    </div>
+                    <div class="category-content">
+                        <h3 class="category-title">Traditional Fashion</h3>
+                        <p class="category-count">450+ Products</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+                
+                <!-- Category 2 -->
+                <a href="#" class="category-card">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop" alt="Jewelry & Beads">
+                        <div class="category-overlay"></div>
+                    </div>
+                    <div class="category-content">
+                        <h3 class="category-title">Jewelry & Beads</h3>
+                        <p class="category-count">380+ Products</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+                
+                <!-- Category 3 -->
+                <a href="#" class="category-card">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=400&h=400&fit=crop" alt="Handmade Crafts">
+                        <div class="category-overlay"></div>
+                    </div>
+                    <div class="category-content">
+                        <h3 class="category-title">Handmade Crafts</h3>
+                        <p class="category-count">620+ Products</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+                
+                <!-- Category 4 -->
+                <a href="#" class="category-card">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=400&h=400&fit=crop" alt="Cultural Art">
+                        <div class="category-overlay"></div>
+                    </div>
+                    <div class="category-content">
+                        <h3 class="category-title">Cultural Art</h3>
+                        <p class="category-count">550+ Products</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FEATURED PRODUCTS ==================== -->
+="products-section">
+    <section class        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Handpicked for You</span>
+                <h2 class="section-title">Featured Products</h2>
+                <p class="section-subtitle">Curated selection of authentic African treasures</p>
+            </div>
+            
+            <div class="products-grid">
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=400&h=400&fit=crop" alt="Zulu Beaded Necklace">
+                        <div class="product-badge">Bestseller</div>
+                        <div class="product-actions">
+                            <button class="action-btn" title="Quick View"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-country"><i class="fas fa-map-marker-alt"></i> South Africa</span>
+                        <h3 class="product-name">Zulu Beaded Necklace</h3>
+                        <p class="product-description">Handcrafted traditional Zulu beadwork with vibrant colors</p>
+                        <div class="product-footer">
+                            <span class="product-price">$89.00</span>
+                            <button class="btn-add-cart">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1550955295-a8b53c9f7d5f?w=400&h=400&fit=crop" alt="Maasai Sandals">
+                        <div class="product-badge">Handmade</div>                        <div class="product-actions">
+                            <button class="action-btn" title="Quick View"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-country"><i class="fas fa-map-marker-alt"></i> Kenya</span>
+                        <h3 class="product-name">Maasai Sandals</h3>
+                        <p class="product-description">Authentic Maasai leather sandals with beadwork details</p>
+                        <div class="product-footer">
+                            <span class="product-price">$65.00</span>
+                            <button class="btn-add-cart">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=400&fit=crop" alt="Nigerian Ankara Dress">
+                        <div class="product-badge">New</div>
+                        <div class="product-actions">
+                            <button class="action-btn" title="Quick View"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-country"><i class="fas fa-map-marker-alt"></i> Nigeria</span>
+                        <h3 class="product-name">Nigerian Ankara Dress</h3>
+                        <p class="product-description">Vibrant Ankara fabric dress with traditional patterns</p>
+                        <div class="product-footer">
+                            <span class="product-price">$125.00</span>
+                            <button class="btn-add-cart">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1606722590583-6951b5ea92ad?w=400&h=400&fit=crop" alt="Ghanaian Kente Cloth">
+                        <div class="product-badge">Premium</div>
+                        <div class="product-actions">
+                            <button class="action-btn" title="Quick View"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-country"><i class="fas fa-map-marker-alt"></i> Ghana</span>
+                        <h3 class="product-name">Ghanaian Kente Cloth</h3>
+                        <p class="product-description">Authentic handwoven Kente cloth with royal patterns</p>
+                        <div class="product-footer">
+                            <span class="product-price">$299.00</span>
+                            <button class="btn-add-cart">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="view-all-container">
+                <a href="#" class="btn btn-outline">View All Products</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== ARTISAN SPOTLIGHT ==================== -->
+    <section class="artisan-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Meet the Makers</span>
+                <h2 class="section-title">Artisan Spotlight</h2>
+                <p class="section-subtitle">Talented artisans preserving African traditions</p>
+            </div>
+            
+            <div class="artisan-grid">
+                <!-- Artisan 1 -->
+                <div class="artisan-card">
+                    <div class="artisan-image">
+                        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=300&h=300&fit=crop" alt="Amara Okonkwo">
+                        <div class="artisan-badge">
+                            <i class="fas fa-certificate"></i> Verified
+                        </div>
+                    </div>
+                    <div class="artisan-info">
+                        <h3 class="artisan-name">Amara Okonkwo</h3>
+                        <span class="artisan-country"><i class="fas fa-map-marker-alt"></i> Nigeria</span>
+                        <p class="artisan-description">Master weaver specializing in traditional Nigerian textiles. Creating modern pieces inspired by ancient techniques passed down through generations.</p>
+                        <div class="artisan-stats">
+                            <div class="artisan-stat">
+                                <span class="stat-value">150+</span>
+                                <span class="stat-label">Products</span>
+                            </div>
+                            <div class="artisan-stat">
+                                <span class="stat-value">4.9</span>
+                                <span class="stat-label">Rating</span>
+                            </div>
+                        </div>
+                        <a href="#" class="btn btn-secondary">View Profile</a>
+                    </div>
+                </div>
+                
+                <!-- Artisan 2 -->
+                <div class="artisan-card">
+                    <div class="artisan-image">
+                        <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=300&h=300&fit=crop" alt="Fatou Diallo">
+                        <div class="artisan-badge">
+                            <i class="fas fa-certificate"></i> Verified
+                        </div>
+                    </div>
+                    <div class="artisan-info">
+                        <h3 class="artisan-name">Fatou Diallo</h3>
+                        <span class="artisan-country"><i class="fas fa-map-marker-alt"></i> Senegal</span>
+                        <p class="artisan-description">Renowned jewelry designer blending traditional Wolof techniques with contemporary aesthetics. Expert in gold and brass craftsmanship.</p>
+                        <div class="artisan-stats">
+                            <div class="artisan-stat">
+                                <span class="stat-value">85+</span>
+                                <span class="stat-label">Products</span>
+                            </div>
+                            <div class="artisan-stat">
+                                <span class="stat-value">5.0</span>
+                                <span class="stat-label">Rating</span>
+                            </div>
+                        </div>
+                        <a href="#" class="btn btn-secondary">View Profile</a>
+                    </div>
+                </div>
+                
+                <!-- Artisan 3 -->
+                <div class="artisan-card">
+                    <div class="artisan-image">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&h=300&fit=crop" alt="Kwame Asante">
+                        <div class="artisan-badge">
+                            <i class="fas fa-certificate"></i> Verified
+                        </div>
+                    </div>
+                    <div class="artisan-info">
+                        <h3 class="artisan-name">Kwame Asante</h3>
+                        <span class="artisan-country"><i class="fas fa-map-marker-alt"></i> Ghana</span>
+                        <p class="artisan-description">Third-generation Kente weaver. Dedicated to preserving the royal art of Kente while innovating with new patterns and colors.</p>
+                        <div class="artisan-stats">
+                            <div class="artisan-stat">
+                                <span class="stat-value">200+</span>
+                                <span class="stat-label">Products</span>
+                            </div>
+                            <div class="artisan-stat">
+                                <span class="stat-value">4.8</span>
+                                <span class="stat-label">Rating</span>
+                            </div>
+                        </div>
+                        <a href="#" class="btn btn-secondary">View Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== WHY AFRIBAZAAR ==================== -->
+    <section class="why-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Why Choose Us</span>
+                <h2 class="section-title">The AfriBazaar Promise</h2>
+                <p class="section-subtitle">We're committed to bringing you the best of African craftsmanship</p>
+            </div>
+            
+            <div class="why-grid">
+                <!-- Feature 1 -->
+                <div class="why-card">
+                    <div class="why-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3 class="why-title">Authentic African Products</h3>
+                    <p class="why-description">Every product is verified for authenticity and crafted using traditional methods by skilled artisans.</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="why-card">
+                    <div class="why-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h3 class="why-title">Support Local Artisans</h3>
+                    <p class="why-description">Your purchase directly supports African communities and helps preserve cultural traditions for future generations.</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="why-card">
+                    <div class="why-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="why-title">Secure Payments</h3>
+                    <p class="why-description">Shop with confidence using our secure payment gateway with multiple payment options and buyer protection.</p>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="why-card">
+                    <div class="why-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h3 class="why-title">Global Shipping</h3>
+                    <p class="why-description">We deliver authentic African products to over 100 countries with reliable and insured shipping.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== NEWSLETTER SECTION ==================== -->
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="newsletter-content">
+                <div class="newsletter-pattern"></div>
+                <div class="newsletter-text">
+                    <h2 class="newsletter-title">Stay Connected with African Creativity</h2>
+                    <p class="newsletter-subtitle">Subscribe to receive updates on new products, artisan stories, and exclusive offers</p>
+                </div>
+                <form class="newsletter-form">
+                    <div class="form-group">
+                        <input type="email" class="newsletter-input" placeholder="Enter your email address" required>
+                        <button type="submit" class="newsletter-btn">
+                            Subscribe <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <p class="newsletter-privacy">We respect your privacy. Unsubscribe at any time.</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- About Column -->
+                <div class="footer-column">
+                    <a href="/" class="footer-logo">
+                        <span class="logo-icon"><i class="fas fa-shopping-bag"></i></span>
+                        <span class="logo-text">AfriBazaar</span>
+                    </a>
+                    <p class="footer-description">Your gateway to authentic African craftsmanship. We connect skilled artisans with lovers of African culture worldwide.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="footer-column">
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Shop All</a></li>
+                        <li><a href="#">New Arrivals</a></li>
+                        <li><a href="#">Bestsellers</a></li>
+                        <li><a href="#">Artisans</a></li>
+                        <li><a href="#">Our Story</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Customer Service -->
+                <div class="footer-column">
+                    <h4 class="footer-title">Customer Service</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns & Exchanges</a></li>
+                        <li><a href="#">Track Order</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Categories -->
+                <div class="footer-column">
+                    <h4 class="footer-title">Categories</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Traditional Fashion</a></li>
+                        <li><a href="#">Jewelry & Beads</a></li>
+                        <li><a href="#">Handmade Crafts</a></li>
+                        <li><a href="#">Cultural Art</a></li>
+                        <li><a href="#">Home Decor</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="copyright">&copy; 2024 AfriBazaar. All rights reserved. Made with <i class="fas fa-heart"></i> in Africa</p>
+                <div class="footer-legal">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            
+            mobileToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+                mobileToggle.querySelector('i').classList.toggle('fa-bars');
+                mobileToggle.querySelector('i').classList.toggle('fa-times');
+            });
+            
+            // Close mobile menu when clicking on a link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    mobileToggle.querySelector('i').classList.add('fa-bars');
+                    mobileToggle.querySelector('i').classList.remove('fa-times');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
