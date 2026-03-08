@@ -412,10 +412,10 @@ button {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('https://images.unsplash.com/photo-1518105779142-d975f22f1b0a?w=1920&h=1080&fit=crop');
+    background-image: url('../images/kente-cloth-styles-ghana-DW7G6C.jpg');
     background-size: cover;
     background-position: center;
-    opacity: 0.4;
+    opacity: 0.35;
 }
 
 .hero::before {
@@ -674,6 +674,14 @@ button {
 .product-badge.premium {
     background: linear-gradient(135deg, var(--color-gold), var(--color-terracotta));
     color: var(--color-white);
+}
+
+.product-badge.cultural {
+    background: var(--color-emerald);
+}
+
+.product-badge.traditional {
+    background: var(--color-terracotta);
 }
 
 .product-actions {
