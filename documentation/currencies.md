@@ -2,7 +2,6 @@ Name:  TCHANGO NODUOU  JOSEPH
 Matricule: ICTU20233955
 
 
-
 GlobalMart E-Commerce Platform
 Currency & Exchange Rate System
 
@@ -50,27 +49,8 @@ Currencies → Exchange_Rates (via from_currency)	1 : N	One currency is the sour
 Currencies → Exchange_Rates (via to_currency)	1 : N	One currency is the target in many rate records
 
 5. ERD Description
-The ERD for the Currency System contains two entity boxes connected by two foreign key lines.
+The ERD for the Currency System contains two entity boxes connected by two foreign keys.
 The Currencies entity holds three attributes: currency_code as the primary key, currency_name, and symbol.
-The Exchange_Rates entity holds four attributes: from_currency as a primary key and foreign key, to_currency as a primary key and foreign key, effective_date as a primary key, and rate.
-Two lines connect Currencies to Exchange_Rates — one from currency_code to from_currency, and one from currency_code to to_currency. Both carry a one-to-many notation: one currency record on the Currencies side, many records on the Exchange_Rates side.
-The ERD diagram is drawn separately and saved as a .png file in the ERD folder of the repository under the filename member4_erd.png.
-
-7. Business Rules (BR)
-   
-The following rules govern how the currency system behaves. They are enforced through a combination of database constraints, application logic, and stored procedures.
-
-BR-01 — Base Currency Storage.  Every order must record its total in both the customer's currency and the base currency (USD). This ensures consistent financial reporting across all transactions regardless of what currency the customer used. Enforced through application logic and a dedicated column on the Orders table.
-
-BR-02 — Latest Rate Selection.  When an order is placed, the system must use the exchange rate whose effective_date is the most recent date that is still less than or equal to the order date. This is handled by a SQL subquery or stored procedure that selects MAX(effective_date) satisfying that condition.
-
-BR-03 — No Self-Conversion.  A currency cannot have an exchange rate with itself. The from_currency and to_currency columns must always hold different values. Enforced by a CHECK constraint at the database level.
-
-BR-04 — Positive Rate Only.  The rate value must always be greater than zero. A rate of zero or a negative value has no financial meaning and is rejected by a CHECK constraint.
-
-BR-05 — Immutable Rate History.  Exchange rates are never updated or deleted. When a rate changes, a new row is inserted with the new effective_date. The old record remains permanently in the table, making full historical reconstruction possible.
-
-BR-06 — Valid Currency Codes Only.  The from_currency and to_currency columns in Exchange_Rates can only contain values that already exist in the Currencies table. This is enforced by two FOREIGN KEY constraints.
-
-BR-07 — Dual Amount on Orders.  The Orders table must include both a total_amount column in the customer's currency and a total_amount_usd column in the base currency. Both must be populated at the time the order is created.
-
+The Exchange_Rates entity holds four attributes: from_currency as a foreign key, to_currency as a foreign key, effective_date as a primary key, and rate.
+One lines connect Currencies to Exchange_Rates — Indicating the relationship: From currency_code to from_currency, and from currency_code to to_currency. Both carry a one-to-many notation: one currency record on the Currencies side, many records on the Exchange_Rates side.
+The ERD diagram is drawn separately and saved as a .JPG file in the ERD folder of the repository under the filename currency_system_erd.JPG.
