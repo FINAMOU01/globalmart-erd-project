@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ category.name }} - AfriBazaar{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Page Header -->
+    <div class="page-header mb-5">
+        <h1 class="display-4">{{ category.name }}</h1>
+        <p class="lead text-muted">{{ category.description }}</p>
+    </div>
+
+    <!-- Category Products -->
+    {% if products %}
+    <div class="row g-4">
+        {% for product in products %}
+        <div class="col-md-6 col-lg-4">
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
+                    {% if product.is_featured %}
+                    <div class="badge-featured">Featured</div>
+                    {% endif %}
+                </div>
+                <div class="product-info">
+                    <h5 class="product-name">{{ product.name }}</h5>
+                    <p class="product-artisan">
+                        <i class="fas fa-user"></i> {{ product.artisan.get_full_name }}
+                    </p>
+                    <p class="product-description">{{ product.description|truncatewords:15 }}</p>
+                    
+                    {% if product.attributes %}
+                    <div class="product-attributes">
+                        <small class="text-muted">
+                            {% for key, value in product.attributes.items %}
+                                <span class="badge bg-light text-dark">{{ key }}: {{ value }}</span>
+                            {% endfor %}
+                        </small>
+                    </div>
+                    {% endif %}
+
+                    <div class="product-footer">
+                        <div class="price-stock">
+                            <span class="product-price">USD {{ product.price }}</span>
+                            {% if product.stock_quantity > 0 %}
+                            <span class="stock-available">In Stock</span>
+                            {% else %}
+                            <span class="stock-unavailable">Out of Stock</span>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'products:product_detail' product.id %}" class="btn btn-sm btn-gold">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <p class="mb-0">No products found in this category. Check back soon!</p>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .page-header {
+        text-align: center;
+    }
+
+    .product-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 8px;
+        overflow: hidden;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-image {
+        position: relative;
+        overflow: hidden;
+        height: 250px;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .product-card:hover .product-image img {
+        transform: scale(1.1);
+    }
+
+    .badge-featured {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #D4AF37;
+        color: #1E1E1E;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: bold;
+    }
+
+    .product-info {
+        padding: 1.5rem;
+    }
+
+    .product-name {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #1E1E1E;
+    }
+
+    .product-artisan {
+        font-size: 0.875rem;
+        color: #C44A2F;
+        margin-bottom: 0.5rem;
+    }
+
+    .product-description {
+        font-size: 0.875rem;
+        color: #666;
+        margin-bottom: 0.75rem;
+    }
+
+    .product-attributes {
+        margin-bottom: 0.75rem;
+    }
+
+    .product-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+    }
+
+    .product-price {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #C44A2F;
+    }
+
+    .btn-gold {
+        background: #D4AF37;
+        color: #1E1E1E;
+        border: none;
+    }
+
+    .btn-gold:hover {
+        background: #c99e2e;
+        color: #1E1E1E;
+    }
+</style>
+{% endblock %}

@@ -5,15 +5,15 @@
 
 /* ==================== CSS VARIABLES ==================== */
 :root {
-    /* Color Palette */
-    --color-terracotta: #C44A2F;
+    /* Color Palette - Inspired by African Culture */
+    --color-terracotta: #C44A2F;       /* Warm earth tone */
     --color-terracotta-dark: #A33D26;
-    --color-gold: #D4AF37;
+    --color-gold: #D4AF37;             /* Luxury accent */
     --color-gold-light: #E8C84A;
-    --color-black: #1E1E1E;
-    --color-cream: #F5F3EE;
+    --color-black: #1E1E1E;            /* Deep charcoal */
+    --color-cream: #F5F3EE;            /* Warm background */
     --color-cream-dark: #E8E4D9;
-    --color-emerald: #1F7A6B;
+    --color-emerald: #1F7A6B;          /* African green */
     --color-emerald-dark: #166054;
     --color-white: #FFFFFF;
     --color-gray-100: #F7F7F7;
@@ -48,6 +48,600 @@
     /* Shadows */
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* ==================== GLOBAL STYLES ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-primary);
+    color: var(--color-gray-700);
+    background-color: var(--color-cream);
+    line-height: 1.6;
+}
+
+/* ==================== TYPOGRAPHY ==================== */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-black);
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+h2 {
+    font-size: 2.25rem;
+}
+
+h3 {
+    font-size: 1.875rem;
+}
+
+h4 {
+    font-size: 1.5rem;
+}
+
+h5 {
+    font-size: 1.25rem;
+}
+
+h6 {
+    font-size: 1rem;
+}
+
+p {
+    margin-bottom: var(--spacing-md);
+}
+
+a {
+    color: var(--color-terracotta);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--color-terracotta-dark);
+}
+
+/* ==================== NAVBAR ==================== */
+.afribazaar-navbar {
+    background: linear-gradient(90deg, var(--color-emerald) 0%, var(--color-black) 100%);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-md) 0;
+}
+
+.afribazaar-navbar .navbar-brand {
+    font-size: 1.75rem;
+    color: var(--color-gold) !important;
+    letter-spacing: 1px;
+}
+
+.afribazaar-navbar .nav-link {
+    color: var(--color-white) !important;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    margin: 0 var(--spacing-md);
+}
+
+.afribazaar-navbar .nav-link:hover,
+.afribazaar-navbar .nav-link.active {
+    color: var(--color-gold) !important;
+}
+
+.btn-login {
+    background-color: var(--color-gold);
+    color: var(--color-black) !important;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-login:hover {
+    background-color: var(--color-gold-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ==================== FOOTER ==================== */
+.afribazaar-footer {
+    background: linear-gradient(90deg, var(--color-black) 0%, var(--color-emerald) 100%);
+    color: var(--color-white);
+    margin-top: auto;
+}
+
+.afribazaar-footer h5 {
+    color: var(--color-gold);
+    margin-bottom: var(--spacing-md);
+}
+
+.afribazaar-footer a {
+    color: var(--color-white) !important;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.afribazaar-footer a:hover {
+    opacity: 1;
+    color: var(--color-gold) !important;
+}
+
+.afribazaar-footer .social-links a {
+    display: inline-block;
+    margin-right: var(--spacing-md);
+    font-size: 1.5rem;
+}
+
+/* ==================== HERO SECTION ==================== */
+.hero-section {
+    background: linear-gradient(135deg, var(--color-terracotta) 0%, var(--color-emerald) 100%) !important;
+    color: var(--color-white);
+    padding: 4rem 0;
+}
+
+.hero-section h1 {
+    color: var(--color-white);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.hero-section .search-box {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.hero-section .search-box input {
+    border-radius: var(--radius-md);
+    border: none;
+    padding: 0.75rem 1.5rem;
+}
+
+/* ==================== BUTTONS ==================== */
+.btn-gold {
+    background-color: var(--color-gold);
+    color: var(--color-black);
+    border: none;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+    padding: 0.75rem 1.5rem;
+}
+
+.btn-gold:hover {
+    background-color: var(--color-gold-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    color: var(--color-black);
+}
+
+.btn-primary {
+    background-color: var(--color-emerald);
+    border-color: var(--color-emerald);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-emerald-dark);
+    border-color: var(--color-emerald-dark);
+}
+
+/* ==================== CARDS & CONTAINERS ==================== */
+.card {
+    border: none;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+    background-color: var(--color-emerald);
+    color: var(--color-white);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    border: none;
+    font-weight: 600;
+}
+
+.afribazaar-header {
+    background-color: var(--color-emerald);
+    color: var(--color-white);
+}
+
+/* ==================== PRODUCT CARDS ==================== */
+.product-card {
+    background: var(--color-white);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+.product-image {
+    position: relative;
+    overflow: hidden;
+    height: 250px;
+    background: var(--color-gray-100);
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.1);
+}
+
+.badge-featured {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--color-gold);
+    color: var(--color-black);
+    padding: 6px 12px;
+    border-radius: var(--radius-md);
+    font-size: 0.75rem;
+    font-weight: 700;
+    z-index: 10;
+}
+
+.product-info {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.category-tag {
+    display: inline-block;
+    background: var(--color-emerald);
+    color: white;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    width: fit-content;
+}
+
+.product-name {
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-black);
+    line-height: 1.3;
+}
+
+.product-artisan {
+    font-size: 0.875rem;
+    color: var(--color-terracotta);
+    margin-bottom: var(--spacing-sm);
+    font-weight: 500;
+}
+
+.product-description {
+    font-size: 0.875rem;
+    color: var(--color-gray-500);
+    margin-bottom: var(--spacing-md);
+    flex-grow: 1;
+}
+
+.product-attributes {
+    margin-bottom: var(--spacing-md);
+}
+
+.product-attributes .badge {
+    background-color: var(--color-cream-dark);
+    color: var(--color-black);
+    margin-right: var(--spacing-sm);
+    padding: 4px 8px;
+    font-size: 0.75rem;
+}
+
+.product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--color-gray-200);
+}
+
+.product-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-terracotta);
+}
+
+.price-stock {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stock-available {
+    font-size: 0.75rem;
+    color: #28a745;
+    font-weight: 700;
+}
+
+.stock-unavailable {
+    font-size: 0.75rem;
+    color: #dc3545;
+    font-weight: 700;
+}
+
+/* ==================== FORMS ==================== */
+.form-control {
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    font-family: var(--font-primary);
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--color-emerald);
+    box-shadow: 0 0 0 0.2rem rgba(31, 122, 107, 0.25);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--color-black);
+    margin-bottom: var(--spacing-sm);
+}
+
+.form-check-input:checked {
+    background-color: var(--color-emerald);
+    border-color: var(--color-emerald);
+}
+
+/* ==================== ALERTS ==================== */
+.alert {
+    border: none;
+    border-radius: var(--radius-md);
+    border-left: 4px solid;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    border-left-color: #0c5460;
+    color: #0c5460;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border-left-color: #155724;
+    color: #155724;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    border-left-color: #856404;
+    color: #856404;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-left-color: #721c24;
+    color: #721c24;
+}
+
+/* ==================== BADGES ==================== */
+.badge {
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.badge-success {
+    background-color: #28a745;
+}
+
+.badge-danger {
+    background-color: #dc3545;
+}
+
+.badge-info {
+    background-color: var(--color-emerald);
+}
+
+.badge-warning {
+    background-color: var(--color-gold);
+    color: var(--color-black);
+}
+
+/* ==================== PAGINATION ==================== */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-2xl);
+}
+
+.pagination a,
+.pagination span {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+}
+
+.pagination a:hover {
+    background-color: var(--color-emerald);
+    color: var(--color-white);
+    border-color: var(--color-emerald);
+}
+
+.pagination .current {
+    background-color: var(--color-emerald);
+    color: var(--color-white);
+    border-color: var(--color-emerald);
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+    }
+
+    .hero-section {
+        padding: 2rem 0;
+    }
+
+    .product-image {
+        height: 200px;
+    }
+
+    .product-card {
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .dashboard-stats {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        margin-top: var(--spacing-xl);
+    }
+
+    .stat-box {
+        text-align: center;
+    }
+}
+
+@media (max-width: 576px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.25rem;
+    }
+
+    .btn,
+    .btn-gold {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .product-info {
+        padding: 1rem;
+    }
+
+    .container {
+        padding: 0 1rem;
+    }
+}
+
+/* ==================== UTILITY CLASSES ==================== */
+.text-terracotta {
+    color: var(--color-terracotta);
+}
+
+.text-gold {
+    color: var(--color-gold);
+}
+
+.text-emerald {
+    color: var(--color-emerald);
+}
+
+.bg-terracotta {
+    background-color: var(--color-terracotta);
+}
+
+.bg-gold {
+    background-color: var(--color-gold);
+}
+
+.bg-emerald {
+    background-color: var(--color-emerald);
+}
+
+.bg-cream {
+    background-color: var(--color-cream);
+}
+
+.hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease;
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.5s ease;
+}
+
+.slide-in-right {
+    animation: slideInRight 0.5s ease;
+}
     --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
     --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
     --shadow-hover: 0 15px 30px rgba(0, 0, 0, 0.15);
@@ -582,17 +1176,23 @@ button {
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--color-gold);
-    opacity: 0;
-    transform: translateY(10px);
+    opacity: 1;
+    transform: translateY(0);
     transition: var(--transition-base);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
+    display: block;
+    padding: var(--spacing-sm) 0;
+    text-decoration: none;
+}
+
+.category-link:hover {
+    color: var(--color-terracotta);
+    padding-left: var(--spacing-sm);
 }
 
 .category-link i {
     font-size: 0.75rem;
     transition: var(--transition-fast);
+    margin-right: var(--spacing-xs);
 }
 
 .category-card:hover .category-link {
