@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if action == 'Add' %}Add Product{% else %}Edit Product{% endif %} - AfriBazaar{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header afribazaar-header">
+                    <h4 class="mb-0">
+                        {% if action == 'Add' %}
+                        <i class="fas fa-plus-circle"></i> Add New Product
+                        {% else %}
+                        <i class="fas fa-edit"></i> Edit Product
+                        {% endif %}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" class="product-form">
+                        {% csrf_token %}
+
+                        <!-- Form Errors -->
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <!-- Product Name -->
+                        <div class="mb-3">
+                            <label for="{{ form.name.id_for_label }}" class="form-label">Product Name *</label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                            <div class="text-danger small mt-1">{{ form.name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">Description *</label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                            <div class="text-danger small mt-1">{{ form.description.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Category -->
+                        <div class="mb-3">
+                            <label for="{{ form.category.id_for_label }}" class="form-label">Category *</label>
+                            {{ form.category }}
+                            {% if form.category.errors %}
+                            <div class="text-danger small mt-1">{{ form.category.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Price & Stock Row -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.price.id_for_label }}" class="form-label">Price (USD) *</label>
+                                {{ form.price }}
+                                {% if form.price.errors %}
+                                <div class="text-danger small mt-1">{{ form.price.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.stock_quantity.id_for_label }}" class="form-label">Stock Quantity *</label>
+                                {{ form.stock_quantity }}
+                                {% if form.stock_quantity.errors %}
+                                <div class="text-danger small mt-1">{{ form.stock_quantity.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Image -->
+                        <div class="mb-3">
+                            <label for="{{ form.image.id_for_label }}" class="form-label">Product Image *</label>
+                            <div class="image-preview" id="imagePreview">
+                                {% if form.image.value %}
+                                <img src="{{ form.image.value.url }}" alt="Current Image" style="max-width: 200px; margin-bottom: 1rem;">
+                                {% endif %}
+                            </div>
+                            {{ form.image }}
+                            {% if form.image.errors %}
+                            <div class="text-danger small mt-1">{{ form.image.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Attributes -->
+                        <div class="mb-3">
+                            <label for="{{ form.attributes.id_for_label }}" class="form-label">
+                                Product Attributes (JSON)
+                            </label>
+                            {{ form.attributes }}
+                            <small class="form-text text-muted d-block mt-1">
+                                Example: {"color":"red","size":"M","material":"Ankara"}
+                            </small>
+                            {% if form.attributes.errors %}
+                            <div class="text-danger small mt-1">{{ form.attributes.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Featured Checkbox -->
+                        <div class="mb-3 form-check">
+                            {{ form.is_featured }}
+                            <label class="form-check-label" for="{{ form.is_featured.id_for_label }}">
+                                Featured Product (mark this product as featured)
+                            </label>
+                            {% if form.is_featured.errors %}
+                            <div class="text-danger small mt-1">{{ form.is_featured.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions mt-4">
+                            <button type="submit" class="btn btn-gold btn-lg">
+                                <i class="fas fa-save"></i>
+                                {% if action == 'Add' %}
+                                Add Product
+                                {% else %}
+                                Update Product
+                                {% endif %}
+                            </button>
+                            <a href="{% url 'products:artisan_dashboard' %}" class="btn btn-secondary btn-lg ms-2">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .afribazaar-header {
+        background: #1F7A6B;
+        color: white;
+    }
+
+    .product-form input[type="text"],
+    .product-form input[type="number"],
+    .product-form input[type="email"],
+    .product-form textarea,
+    .product-form select {
+        border: 1px solid #dee2e6;
+        padding: 0.75rem;
+    }
+
+    .product-form textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .product-form input[type="file"] {
+        padding: 0.5rem;
+    }
+
+    .btn-gold {
+        background: #D4AF37;
+        color: #1E1E1E;
+        border: none;
+        font-weight: 600;
+    }
+
+    .btn-gold:hover {
+        background: #c99e2e;
+        color: #1E1E1E;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .image-preview {
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
