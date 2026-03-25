@@ -1,0 +1,515 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register as Artisan - AfriBazaar{% endblock %}
+
+{% block extra_css %}
+
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    .auth-page {
+        min-height: 100vh;
+        display: flex;
+        background: #F5F3EE;
+        font-family: 'Poppins', sans-serif;
+        margin-top: 80px;
+    }
+
+    /* ===== LEFT DECORATIVE PANEL ===== */
+    .auth-panel-left {
+        flex: 1;
+        background: linear-gradient(145deg, #D4AF37 0%, #C44A2F 100%);
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 50px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .auth-panel-left::before {
+        content: '';
+        position: absolute;
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+        border: 60px solid rgba(212, 175, 55, 0.12);
+        top: -100px;
+        right: -100px;
+    }
+
+    .auth-panel-left::after {
+        content: '';
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        border: 40px solid rgba(196, 74, 47, 0.15);
+        bottom: -80px;
+        left: -60px;
+    }
+
+    .panel-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 50px;
+        z-index: 1;
+    }
+
+    .panel-logo-icon {
+        width: 52px;
+        height: 52px;
+        background: linear-gradient(135deg, #C44A2F, #D4AF37);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.4rem;
+        box-shadow: 0 4px 15px rgba(196, 74, 47, 0.4);
+    }
+
+    .panel-logo-text {
+        color: white;
+        font-size: 1.6rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+    .panel-headline {
+        color: white;
+        font-size: 2.6rem;
+        font-weight: 700;
+        line-height: 1.25;
+        margin-bottom: 20px;
+        z-index: 1;
+        text-align: center;
+    }
+
+    .panel-sub {
+        color: rgba(255,255,255,0.85);
+        font-size: 1rem;
+        line-height: 1.7;
+        text-align: center;
+        z-index: 1;
+        max-width: 320px;
+    }
+
+    .panel-features {
+        list-style: none;
+        margin-top: 40px;
+        z-index: 1;
+    }
+
+    .panel-features li {
+        color: rgba(255,255,255,0.9);
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .panel-features i {
+        color: #D4AF37;
+        font-size: 1.1rem;
+    }
+
+    /* ===== RIGHT FORM PANEL ===== */
+    .auth-panel-right {
+        flex: 1;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 40px 30px;
+        padding-top: 20px;
+        overflow-y: auto;
+        min-height: calc(100vh - 80px);
+    }
+
+    .auth-form-box {
+        width: 100%;
+        max-width: 440px;
+        animation: fadeInUp 0.5s ease forwards;
+        margin-top: 20px;
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(24px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-eyebrow {
+        color: #C44A2F;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .form-title {
+        color: #1E1E1E;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+        line-height: 1.2;
+    }
+
+    .form-subtitle {
+        display: none;
+    }
+
+    .form-eyebrow {
+        display: none;
+    }
+
+    /* ===== MESSAGES ===== */
+    .messages-box {
+        margin-bottom: 20px;
+    }
+
+    .alert {
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 0.875rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .alert-error, .alert-danger {
+        background: rgba(196,74,47,0.08);
+        border-left: 4px solid #C44A2F;
+        color: #A33D26;
+    }
+
+    .alert-success {
+        background: rgba(31,122,107,0.08);
+        border-left: 4px solid #1F7A6B;
+        color: #166054;
+    }
+
+    /* ===== FORM FIELDS ===== */
+    .form-group {
+        margin-bottom: 14px;
+    }
+
+    .form-group label {
+        display: block;
+        color: #333333;
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 12px 14px;
+        border: 2px solid #E5E5E5;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-family: 'Poppins', sans-serif;
+        color: #1E1E1E;
+        background: #FFFFFF;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        outline: none;
+    }
+
+    .form-group input:focus {
+        border-color: #C44A2F;
+        box-shadow: 0 0 0 4px rgba(196,74,47,0.12);
+    }
+
+    .form-group input::placeholder {
+        color: #AAAAAA;
+    }
+
+    .error-message {
+        color: #C44A2F;
+        font-size: 0.75rem;
+        margin-top: 4px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    /* ===== SUBMIT BUTTON ===== */
+    .btn-submit {
+        width: 100%;
+        padding: 14px;
+        background: #C44A2F;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        letter-spacing: 0.3px;
+        box-shadow: 0 4px 15px rgba(196,74,47,0.3);
+        margin-top: 10px;
+    }
+
+    .btn-submit:hover {
+        background: #A33D26;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(196,74,47,0.4);
+    }
+
+    .btn-submit:active {
+        transform: scale(0.98);
+    }
+
+    /* ===== DIVIDER ===== */
+    .auth-divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 20px 0;
+    }
+
+    .auth-divider span {
+        flex: 1;
+        height: 1px;
+        background: #E5E5E5;
+    }
+
+    .auth-divider p {
+        color: #AAAAAA;
+        font-size: 0.8rem;
+    }
+
+    /* ===== FOOTER LINKS ===== */
+    .auth-links {
+        text-align: center;
+        margin-top: 8px;
+    }
+
+    .auth-links p {
+        color: #666666;
+        font-size: 0.875rem;
+        margin-bottom: 8px;
+    }
+
+    .auth-links a {
+        color: #C44A2F;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .auth-links a:hover {
+        color: #A33D26;
+        text-decoration: underline;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+        .auth-panel-left { display: none; }
+        .auth-panel-right { padding: 30px 20px; }
+    }
+
+    @media (max-width: 480px) {
+        .auth-panel-right { padding: 20px 16px; }
+        .form-title { font-size: 1.6rem; }
+        .auth-form-box { max-width: 100%; }
+    }
+
+    /* Hide footer on auth pages */
+    .footer {
+        display: none !important;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="auth-page">
+
+    <!-- LEFT PANEL -->
+    <div class="auth-panel-left">
+        <div class="panel-logo">
+            <div class="panel-logo-icon">
+                <i class="fas fa-palette"></i>
+            </div>
+            <span class="panel-logo-text">AfriBazaar</span>
+        </div>
+        <h2 class="panel-headline">Sell Global 🎨</h2>
+        <p class="panel-sub">
+            Share your authentic African craft with collectors worldwide and grow your business from home.
+        </p>
+        <ul class="panel-features">
+            <li><i class="fas fa-star"></i> Commission-based earnings</li>
+            <li><i class="fas fa-star"></i> Global reach & exposure</li>
+            <li><i class="fas fa-star"></i> Secure payments</li>
+            <li><i class="fas fa-star"></i> Marketing support</li>
+        </ul>
+    </div>
+
+    <!-- RIGHT FORM PANEL -->
+    <div class="auth-panel-right">
+        <div class="auth-form-box">
+
+            <p class="form-eyebrow">AfriBazaar</p>
+            <h1 class="form-title">Start Selling</h1>
+            <p class="form-subtitle">Create your artisan account</p>
+
+            <!-- Messages -->
+            {% if messages %}
+            <div class="messages-box">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {% if message.tags == 'error' or message.tags == 'danger' %}
+                        <i class="fas fa-exclamation-circle"></i>
+                    {% else %}
+                        <i class="fas fa-check-circle"></i>
+                    {% endif %}
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Form -->
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="id_username">Business Name / Username</label>
+                    <input
+                        type="text"
+                        name="username"
+                        id="id_username"
+                        placeholder="Your business/artist name"
+                        value="{{ form.username.value|default:'' }}"
+                        required
+                    >
+                    {% if form.username.errors %}
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ form.username.errors|first }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_email">Email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="id_email"
+                        placeholder="your@email.com"
+                        value="{{ form.email.value|default:'' }}"
+                        required
+                    >
+                    {% if form.email.errors %}
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ form.email.errors|first }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_phone">Phone</label>
+                    <input
+                        type="tel"
+                        name="phone"
+                        id="id_phone"
+                        placeholder="+1 (555) 000-0000"
+                        value="{{ form.phone.value|default:'' }}"
+                    >
+                    {% if form.phone.errors %}
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ form.phone.errors|first }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_address">Address / Studio Location</label>
+                    <input
+                        type="text"
+                        name="address"
+                        id="id_address"
+                        placeholder="Your studio or business address"
+                        value="{{ form.address.value|default:'' }}"
+                    >
+                    {% if form.address.errors %}
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ form.address.errors|first }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password1">Password</label>
+                    <input
+                        type="password"
+                        name="password1"
+                        id="id_password1"
+                        placeholder="Enter your password"
+                        autocomplete="new-password"
+                        required
+                    >
+                    {% if form.password1.errors %}
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ form.password1.errors|first }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password2">Confirm Password</label>
+                    <input
+                        type="password"
+                        name="password2"
+                        id="id_password2"
+                        placeholder="Confirm your password"
+                        autocomplete="new-password"
+                        required
+                    >
+                    {% if form.password2.errors %}
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ form.password2.errors|first }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    Start Selling &nbsp;<i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <div class="auth-divider">
+                <span></span>
+                <p>Already have an account?</p>
+                <span></span>
+            </div>
+
+            <div class="auth-links">
+                <p>
+                    <a href="{% url 'login' %}">Sign in here</a>
+                </p>
+                <p>
+                    Looking to shop?
+                    <a href="{% url 'customer_register' %}">Shop as customer</a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
