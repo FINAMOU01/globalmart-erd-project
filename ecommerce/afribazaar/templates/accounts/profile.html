@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Profile - AfriBazaar{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="profile-picture">
+            {% if customer_profile.profile_picture %}
+                <img src="{{ customer_profile.profile_picture.url }}" alt="Profile Picture">
+            {% else %}
+                <i class="fas fa-user-circle fa-5x"></i>
+            {% endif %}
+        </div>
+        <h2>Hello, {{ user.username }} 👋</h2>
+        <p class="profile-subtitle">Manage your AfriBazaar account</p>
+    </div>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="profile-info-cards">
+        <div class="info-card">
+            <h3 class="info-title">Account Information</h3>
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Date Joined:</strong> {{ user.date_joined|date:"M d, Y" }}</p>
+        </div>
+        
+        <div class="info-card">
+            <h3 class="info-title">Contact Information</h3>
+            <p><strong>Phone:</strong> {{ customer_profile.phone|default:"Not provided" }}</p>
+            <p><strong>Address:</strong> {{ customer_profile.address|default:"Not provided" }}</p>
+        </div>
+    </div>
+    
+    <div class="profile-edit-section">
+        <h3>Edit Profile</h3>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.phone.label_tag }}
+                {{ form.phone }}
+            </div>
+            <div class="form-group">
+                {{ form.address.label_tag }}
+                {{ form.address }}
+            </div>
+            <div class="form-group">
+                {{ form.profile_picture.label_tag }}
+                {{ form.profile_picture }}
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Update Profile</button>
+        </form>
+    </div>
+    
+    <div class="profile-actions">
+        <a href="{% url 'logout' %}" class="btn btn-outline btn-block">Logout</a>
+    </div>
+</div>
+{% endblock %}

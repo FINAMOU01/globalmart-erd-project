@@ -41,7 +41,11 @@ INSTALLED_APPS = [
     'users',
     'products',
     'orders',
+    'accounts',
 ]
+
+# Custom user model
+AUTH_USER_MODEL = 'users.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -120,8 +124,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
@@ -130,8 +132,6 @@ STATICFILES_DIRS = [
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Custom user model
-AUTH_USER_MODEL = 'users.CustomUser'
-
-# Default primary key field type
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Login redirect
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
