@@ -1,140 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}AfriBazaar{% endblock %}</title>
-    <meta name="description" content="Discover authentic African crafts, traditional fashion, handmade artifacts, and artistic products from artisans across Africa.">
-    
-    {% load static %}
-    
-    <!-- Google Fonts - Poppins -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Custom CSS -->
+    <title>{% block title %}AfriBazaar - African Cultural Products{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- ==================== NAVIGATION BAR ==================== -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <!-- Logo -->
-            <a href="/" class="logo">
-                <span class="logo-icon"><i class="fas fa-shopping-bag"></i></span>
-                <span class="logo-text">AfriBazaar</span>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark afribazaar-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="{% url 'home' %}">
+                <i class="fas fa-shopping-basket"></i> AfriBazaar
             </a>
-            
-            <!-- Menu Items -->
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a></li>
-                <!-- URL: product_list (from products app) -->
-                <li class="nav-item"><a href="#" class="nav-link">Shop</a></li>
-                <!-- URL: artisan_list (from artisan listings) -->
-                <li class="nav-item"><a href="#" class="nav-link">Artisans</a></li>
-                <!-- URL: category_list (from categories app) -->
-                <li class="nav-item"><a href="#" class="nav-link">Categories</a></li>
-                <!-- URL: about (static page) -->
-                <li class="nav-item"><a href="#" class="nav-link">About</a></li>
-                <!-- URL: contact (contact form) -->
-                <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
-            </ul>
-            
-            <!-- Search Bar -->
-            <div class="search-container">
-                <input type="text" class="search-input" placeholder="Search authentic products...">
-                <button class="search-btn"><i class="fas fa-search"></i></button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'products:shop' %}">Shop</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        {% if user.is_artisan %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'products:artisan_dashboard' %}">
+                                <i class="fas fa-user-tie"></i> My Dashboard
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle"></i> {{ user.get_full_name|default:user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#">My Profile</a></li>
+                                <li><a class="dropdown-item" href="#">My Orders</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'users:logout' %}">Logout</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link btn-login" href="{% url 'users:login' %}">Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
             </div>
-            
-             <!-- Right Side Actions -->
-             <div class="nav-actions">
-                 <!-- Cart URL: orders_cart (from orders app, provided by Randy) -->
-                 <a href="#" class="cart-icon">
-                     <i class="fas fa-shopping-cart"></i>
-                     <span class="cart-badge">3</span>
-                 </a>
-                 <div class="auth-buttons">
-                     {% if user.is_authenticated %}
-                         {% if user.role == 'customer' %}
-                             <a href="{% url 'customer_profile' %}" class="btn-nav btn-nav-secondary">My Profile</a>
-                             <a href="{% url 'logout' %}" class="btn-nav btn-nav-primary">Logout</a>
-                         {% elif user.role == 'artisan' %}
-                             <a href="{% url 'artisan_profile' %}" class="btn-nav btn-nav-secondary">Dashboard</a>
-                             <a href="{% url 'logout' %}" class="btn-nav btn-nav-primary">Logout</a>
-                         {% endif %}
-                     {% else %}
-                         <a href="{% url 'login' %}" class="btn-nav btn-nav-secondary">Login</a>
-                         <a href="{% url 'register' %}" class="btn-nav btn-nav-primary">Sign Up</a>
-                     {% endif %}
-                 </div>
-                 <!-- Mobile Menu Toggle -->
-                 <div class="mobile-toggle">
-                     <i class="fas fa-bars"></i>
-                 </div>
-             </div>
         </div>
     </nav>
-    
-    <!-- ==================== PAGE CONTENT ==================== -->
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
     <main>
-        {% block content %}
-        {% endblock %}
+        {% block content %}{% endblock %}
     </main>
-    
-    <!-- ==================== FOOTER ==================== -->
-    <footer class="footer">
+
+    <!-- Footer -->
+    <footer class="afribazaar-footer mt-5 py-4">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>AfriBazaar</h3>
-                    <p>Discover authentic African crafts, traditional fashion, handmade artifacts, and artistic products from artisans across Africa.</p>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5 class="text-white">AfriBazaar</h5>
+                    <p class="text-muted">Celebrating African culture through authentic handcrafted products.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5 class="text-white">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'products:shop' %}" class="text-muted text-decoration-none">Shop</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">About Us</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5 class="text-white">Follow Us</h5>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                        <a href="#" class="text-muted"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-muted"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-muted"><i class="fab fa-twitter"></i></a>
                     </div>
                 </div>
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Shop</a></li>
-                        <li><a href="#">Artisans</a></li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Shipping & Returns</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Newsletter</h4>
-                    <p>Subscribe to get updates on new arrivals and special offers.</p>
-                    <form action="#" class="newsletter-form">
-                        <input type="email" placeholder="Enter your email" required>
-                        <button type="submit">Subscribe</button>
-                    </form>
-                </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 AfriBazaar. All rights reserved.</p>
-            </div>
+            <hr class="bg-muted">
+            <p class="text-center text-muted mb-0">&copy; 2024 AfriBazaar. All rights reserved.</p>
         </div>
     </footer>
-    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

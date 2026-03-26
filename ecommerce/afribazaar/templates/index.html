@@ -31,18 +31,18 @@
             <!-- Menu Items -->
             <ul class="nav-menu">
                 <li class="nav-item"><a href="{% url 'home' %}" class="nav-link active">Home</a></li>
-                <li class="nav-item"><a href="{% url 'home' %}#shop" class="nav-link">Shop</a></li>
-                <li class="nav-item"><a href="{% url 'home' %}#artisans" class="nav-link">Artisans</a></li>
-                <li class="nav-item"><a href="{% url 'home' %}#categories" class="nav-link">Categories</a></li>
-                <li class="nav-item"><a href="{% url 'home' %}#about" class="nav-link">About</a></li>
-                <li class="nav-item"><a href="{% url 'home' %}#contact" class="nav-link">Contact</a></li>
+                <li class="nav-item"><a href="{% url 'products:shop' %}" class="nav-link">Shop</a></li>
+                <li class="nav-item"><a href="{% url 'products:artisan_dashboard' %}" class="nav-link">Artisans</a></li>
+                <li class="nav-item"><a href="{% url 'products:shop' %}" class="nav-link">Categories</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
             </ul>
             
             <!-- Search Bar -->
-            <div class="search-container">
-                <input type="text" class="search-input" placeholder="Search authentic products...">
-                <button class="search-btn"><i class="fas fa-search"></i></button>
-            </div>
+            <form method="get" action="{% url 'products:search' %}" class="search-container">
+                <input type="text" name="q" class="search-input" placeholder="Search authentic products...">
+                <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
+            </form>
             
             <!-- Right Side Actions -->
             <div class="nav-actions">
@@ -51,9 +51,9 @@
                     <span class="cart-badge">3</span>
                 </a>
                 <div class="auth-buttons">
-    <a href="{% url 'login' %}" class="btn btn-outline">Login</a>
-    <a href="{% url 'register' %}" class="btn btn-primary">Sign Up</a>
-</div>
+                    <a href="{% url 'users:login' %}" class="btn btn-outline">Login</a>
+                    <a href="{% url 'users:login' %}" class="btn btn-primary">Sign Up</a>
+                </div>
                 <!-- Mobile Menu Toggle -->
                 <div class="mobile-toggle">
                     <i class="fas fa-bars"></i>
@@ -71,10 +71,10 @@
                 <h1 class="hero-title">Discover the Beauty of African Culture</h1>
                 <p class="hero-subtitle">Authentic handmade crafts, fashion, and artifacts from artisans across Africa.</p>
                 <div class="hero-buttons">
-                    <a href="{% url 'home' %}#products" class="btn btn-primary btn-large">
+                    <a href="{% url 'products:shop' %}" class="btn btn-primary btn-large">
                         <i class="fas fa-compass"></i> Explore Marketplace
                     </a>
-                    <a href="{% url 'home' %}#artisans" class="btn btn-outline-light btn-large">
+                    <a href="{% url 'products:artisan_dashboard' %}" class="btn btn-outline-light btn-large">
                         <i class="fas fa-users"></i> Meet the Artisans
                     </a>
                 </div>
@@ -107,63 +107,63 @@
             </div>
             
             <div class="categories-grid">
-                 <!-- Category 1: African Fabrics -->
-                 <a href="{% url 'home' %}#categories" class="category-card">
-                     <div class="category-image">
-                         <img src="{% static 'images/cameroonNdop.jpg' %}" alt="African Fabrics">
-                         <div class="category-overlay"></div>
-                     </div>
-                     <div class="category-content">
-                         <h3 class="category-title">African Fabrics</h3>
-                         <p class="category-count">Kente, Ankara, Ndop & More</p>
-                         <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
-                     </div>
-                 </a>
+                <!-- Category 1: African Fabrics -->
+                <a href="{% url 'products:category' 1 %}" class="category-card">
+                    <div class="category-image">
+                        <img src="{% static 'images/cameroonNdop.jpg' %}" alt="African Fabrics">
+                        <div class="category-overlay"></div>
+                    </div>
+                    <div class="category-content">
+                        <h3 class="category-title">African Fabrics</h3>
+                        <p class="category-count">Kente, Ankara, Ndop & More</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
                 
-                 <!-- Category 2: Traditional Jewelry -->
-                 <a href="{% url 'home' %}#categories" class="category-card">
-                     <div class="category-image">
-                         <img src="{% static 'images/Collier-Perles-Africaines-Maasai.png' %}" alt="Traditional African Jewelry">
-                         <div class="category-overlay"></div>
-                     </div>
-                     <div class="category-content">
-                         <h3 class="category-title">Beaded Jewelry</h3>
-                         <p class="category-count">Maasai, Zulu & Tribal Beads</p>
-                         <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
-                     </div>
-                 </a>
+                <!-- Category 2: Traditional Jewelry -->
+                <a href="{% url 'products:category' 2 %}" class="category-card">
+                    <div class="category-image">
+                        <img src="{% static 'images/Collier-Perles-Africaines-Maasai.png' %}" alt="Traditional African Jewelry">
+                        <div class="category-overlay"></div>
+                    </div>
+                    <div class="category-content">
+                        <h3 class="category-title">Beaded Jewelry</h3>
+                        <p class="category-count">Maasai, Zulu & Tribal Beads</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
                 
-                 <!-- Category 3: Handwoven Baskets -->
-                 <a href="{% url 'home' %}#categories" class="category-card">
-                     <div class="category-image">
-                         <img src="{% static 'images/Boubou.jpg' %}" alt="Handwoven Baskets">
-                         <div class="category-overlay"></div>
-                     </div>
-                     <div class="category-content">
-                         <h3 class="category-title">Traditional Clothing</h3>
-                         <p class="category-count">Dashiki, Boubou & Dresses</p>
-                         <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
-                     </div>
-                 </a>
+                <!-- Category 3: Handwoven Baskets -->
+                <a href="{% url 'products:category' 3 %}" class="category-card">
+                    <div class="category-image">
+                        <img src="{% static 'images/Boubou.jpg' %}" alt="Handwoven Baskets">
+                        <div class="category-overlay"></div>
+                    </div>
+                    <div class="category-content">
+                        <h3 class="category-title">Traditional Clothing</h3>
+                        <p class="category-count">Dashiki, Boubou & Dresses</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
                 
-                 <!-- Category 4: Cultural Art -->
-                 <a href="{% url 'home' %}#categories" class="category-card">
-                     <div class="category-image">
-                         <img src="{% static 'images/kente-cloth-styles-ghana-DW7G6C.jpg' %}" alt="Cultural Art">
-                         <div class="category-overlay"></div>
-                     </div>
-                     <div class="category-content">
-                         <h3 class="category-title">African Fabrics</h3>
-                         <p class="category-count">Kente, Wax & Prints</p>
-                         <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
-                     </div>
-                 </a>
+                <!-- Category 4: Cultural Art -->
+                <a href="{% url 'products:category' 1 %}" class="category-card">
+                    <div class="category-image">
+                        <img src="{% static 'images/kente-cloth-styles-ghana-DW7G6C.jpg' %}" alt="Cultural Art">
+                        <div class="category-overlay"></div>
+                    </div>
+                    <div class="category-content">
+                        <h3 class="category-title">African Fabrics</h3>
+                        <p class="category-count">Kente, Wax & Prints</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
             </div>
         </div>
     </section>
 
     <!-- ==================== FEATURED PRODUCTS ==================== -->
-    <section class="products-section" id="products">
+    <section class="products-section">
         <div class="container">
             <div class="section-header">
                 <span class="section-tag">Authentic African Treasures</span>
@@ -187,7 +187,7 @@
                         <h3 class="product-name">Cameroon Ndop Traditional Fabric</h3>
                         <p class="product-description">Hand-dyed Ndop cloth, a traditional Bamileke fabric with symbolic patterns worn by Cameroonian royalty</p>
                         <div class="product-footer">
-                            <span class="product-price">145.00USD</span>
+                            <span class="product-price">USD 145.00</span>
                             <button class="btn-add-cart">
                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                             </button>
@@ -210,7 +210,7 @@
                         <h3 class="product-name">Maasai Beaded Necklace</h3>
                         <p class="product-description">Traditional Maasai beadwork necklace, each color carries cultural meaning - red for bravery and unity</p>
                         <div class="product-footer">
-                            <span class="product-price">75.00USD</span>
+                            <span class="product-price">USD 75.00</span>
                             <button class="btn-add-cart">
                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                             </button>
@@ -233,7 +233,7 @@
                         <h3 class="product-name">Ghanaian Kente Royal Cloth</h3>
                         <p class="product-description">Authentic handwoven Kente cloth featuring royal Adinkra symbols, a symbol of wealth and status</p>
                         <div class="product-footer">
-                            <span class="product-price">350.00USD</span>
+                            <span class="product-price">USD 350.00</span>
                             <button class="btn-add-cart">
                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                             </button>
@@ -256,7 +256,7 @@
                         <h3 class="product-name">Handwoven Raffia Basket</h3>
                         <p class="product-description">Traditional Bamileke palm weave basket, a centuries-old craft used for storage and ceremonies</p>
                         <div class="product-footer">
-                            <span class="product-price">55.00USD</span>
+                            <span class="product-price">USD 55.00</span>
                             <button class="btn-add-cart">
                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                             </button>
@@ -279,7 +279,7 @@
                         <h3 class="product-name">Nigerian Ankara Fashion Dress</h3>
                         <p class="product-description">Vibrant Ankara wax print dress featuring traditional Nigerian patterns, perfect for celebrations</p>
                         <div class="product-footer">
-                            <span class="product-price">120.00USD</span>
+                            <span class="product-price">USD 120.00</span>
                             <button class="btn-add-cart">
                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                             </button>
@@ -302,7 +302,7 @@
                         <h3 class="product-name">African Tribal Wooden Mask</h3>
                         <p class="product-description">Hand-carved wooden mask representing ancestral spirits, used in traditional ceremonies</p>
                         <div class="product-footer">
-                            <span class="product-price">185.00USD</span>
+                            <span class="product-price">USD 185.00</span>
                             <button class="btn-add-cart">
                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                             </button>
@@ -325,7 +325,7 @@
                         <h3 class="product-name">West African Dashiki Shirt</h3>
                         <p class="product-description">Elegant Dashiki tunic with intricate embroidery, worn during special occasions across West Africa</p>
                         <div class="product-footer">
-                            <span class="product-price">95.00USD</span>
+                            <span class="product-price">USD 95.00</span>
                             <button class="btn-add-cart">
                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                             </button>
@@ -348,7 +348,7 @@
                         <h3 class="product-name">Handmade Tuareg Leather Sandals</h3>
                         <p class="product-description">Traditional Sahara sandals handcrafted by Tuareg artisans using age-old leatherworking techniques</p>
                         <div class="product-footer">
-                            <span class="product-price">65.00USD</span>
+                            <span class="product-price">USD 65.00</span>
                             <button class="btn-add-cart">
                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                             </button>
@@ -358,7 +358,7 @@
             </div>
             
             <div class="view-all-container">
-                <a href="{% url 'home' %}#products" class="btn btn-outline">View All African Products</a>
+                <a href="{% url 'products:shop' %}" class="btn btn-outline">View All African Products</a>
             </div>
         </div>
     </section>
@@ -395,7 +395,7 @@
                                 <span class="stat-label">Rating</span>
                             </div>
                         </div>
-                        <a href="#" class="btn btn-secondary">View Profile</a>
+                        <a href="{% url 'products:shop' %}" class="btn btn-secondary">View Profile</a>
                     </div>
                 </div>
                 
@@ -421,7 +421,7 @@
                                 <span class="stat-label">Rating</span>
                             </div>
                         </div>
-                        <a href="#" class="btn btn-secondary">View Profile</a>
+                        <a href="{% url 'products:shop' %}" class="btn btn-secondary">View Profile</a>
                     </div>
                 </div>
                 
@@ -447,7 +447,7 @@
                                 <span class="stat-label">Rating</span>
                             </div>
                         </div>
-                        <a href="#" class="btn btn-secondary">View Profile</a>
+                        <a href="{% url 'products:shop' %}" class="btn btn-secondary">View Profile</a>
                     </div>
                 </div>
             </div>
