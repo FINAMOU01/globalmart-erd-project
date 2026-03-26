@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'products',
     'orders',
     'payments',
+    'accounts', 
 ]
 
 MIDDLEWARE = [
@@ -124,3 +125,13 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+# Media files (User uploads)
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Custom user model
+AUTH_USER_MODEL = 'users.CustomUser'
+
+# Default primary key field type
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
