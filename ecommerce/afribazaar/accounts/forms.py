@@ -52,6 +52,7 @@ class CustomerRegisterForm(UserCreationForm):
         user.set_password(self.cleaned_data['password1'])
         user.email = self.cleaned_data['email']
         user.role = 'customer'
+        user.is_artisan = False
         if commit:
             user.save()
         return user
@@ -103,6 +104,7 @@ class ArtisanRegisterForm(UserCreationForm):
         user.set_password(self.cleaned_data['password1'])
         user.email = self.cleaned_data['email']
         user.role = 'artisan'
+        user.is_artisan = True
         if commit:
             user.save()
         return user

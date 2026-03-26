@@ -108,11 +108,18 @@ def artisan_dashboard(request):
     products = Product.objects.filter(artisan=request.user)
     artisan_profile = getattr(request.user, 'artisan_profile', None)
     
+    # Import OrderItem to get sales data
+    from orders.models import OrderItem
+    artisan_order_items = OrderItem.objects.filter(artisan=request.user)
+    total_sales = sum(item.price * item.quantity for item in artisan_order_items)
+    
     context = {
         'products': products,
         'artisan_profile': artisan_profile,
         'total_products': products.count(),
         'total_value': sum(p.price * p.stock_quantity for p in products),
+        'total_sales': total_sales,
+        'total_items_sold': sum(item.quantity for item in artisan_order_items),
     }
     return render(request, 'products/artisan_dashboard.html', context)
 
@@ -238,4 +245,41 @@ def edit_artisan_profile(request):
         'artisan_profile': artisan_profile,
     }
     return render(request, 'products/edit_artisan_profile.html', context)
+
+
+@login_required(login_url='accounts:login')
+def artisan_orders(request):
+    """
+    Display all orders containing the artisan's products.
+    Artisans can see orders made for their products by customers.
+    """
+    if not request.user.is_artisan:
+        return HttpResponseForbidden("You must be an artisan to access this page.")
+    
+    from orders.models import OrderItem
+    
+    # Get all OrderItems where this artisan sold the product
+    artisan_order_items = OrderItem.objects.filter(
+        artisan=request.user
+    ).select_related('order', 'product').order_by('-created_at')
+    
+    # Group by order to show each order once
+    orders_dict = {}
+    for item in artisan_order_items:
+        if item.order.id not in orders_dict:
+            orders_dict[item.order.id] = item.order
+    
+    orders = list(orders_dict.values())
+    
+    # Get summary stats
+    total_sales = sum(item.price * item.quantity for item in artisan_order_items)
+    total_items_sold = sum(item.quantity for item in artisan_order_items)
+    
+    context = {
+        'orders': orders,
+        'total_sales': total_sales,
+        'total_items_sold': total_items_sold,
+        'order_items_count': artisan_order_items.count(),
+    }
+    return render(request, 'orders/artisan_orders.html', context)
 

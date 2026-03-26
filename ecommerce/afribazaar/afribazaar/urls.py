@@ -26,6 +26,7 @@ urlpatterns = [
     path('auth/', include('accounts.urls', namespace='accounts')),
     path('payments/', include('payments.urls', namespace='payments')),
     path('products/', include('products.urls')),
+    path('orders/', include('orders.urls')),
 ]
 
 # Serve media files in development

@@ -23,7 +23,11 @@
                         </div>
                         <div class="stat-box">
                             <div class="stat-value">USD {{ total_value|floatformat:2 }}</div>
-                            <div class="stat-label">Total Value</div>
+                            <div class="stat-label">Inventory Value</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">USD {{ total_sales|floatformat:2 }}</div>
+                            <div class="stat-label">Total Sales</div>
                         </div>
                     </div>
                 </div>
@@ -39,6 +43,9 @@
                 <div class="list-group sticky-top">
                     <a href="{% url 'products:artisan_dashboard' %}" class="list-group-item list-group-item-action active">
                         <i class="fas fa-chart-bar"></i> Dashboard
+                    </a>
+                    <a href="{% url 'products:artisan_orders' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-shopping-box"></i> Orders
                     </a>
                     <a href="{% url 'products:add_product' %}" class="list-group-item list-group-item-action">
                         <i class="fas fa-plus-circle"></i> Add New Product

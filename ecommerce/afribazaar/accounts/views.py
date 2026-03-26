@@ -33,7 +33,7 @@ def artisan_register_view(request):
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
             login(request, user)
-            return redirect('accounts:artisan_profile')
+            return redirect('products:artisan_dashboard')
     else:
         form = ArtisanRegisterForm()
     return render(request, 'accounts/artisan_register.html', {'form': form})
@@ -53,7 +53,7 @@ def login_view(request):
                 if user.role == 'customer':
                     return redirect('accounts:customer_profile')
                 elif user.role == 'artisan':
-                    return redirect('accounts:artisan_profile')
+                    return redirect('products:artisan_dashboard')
             else:
                 messages.error(request, 'Invalid username or password.')
         else:
@@ -91,19 +91,5 @@ def customer_profile_view(request):
 
 @login_required
 def artisan_profile_view(request):
-    if request.method == 'POST':
-        form = ArtisanProfileUpdateForm(request.POST, request.FILES, instance=request.user.artisanprofile)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Your profile has been updated!')
-            return redirect('accounts:artisan_profile')
-        else:
-            messages.error(request, 'Please correct the error below.')
-    else:
-        form = ArtisanProfileUpdateForm(instance=request.user.artisanprofile)
-    
-    context = {
-        'form': form,
-        'artisan_profile': request.user.artisanprofile
-    }
-    return render(request, 'accounts/artisan_profile.html', context)
+    # Redirect to the functional artisan dashboard
+    return redirect('products:artisan_dashboard')
