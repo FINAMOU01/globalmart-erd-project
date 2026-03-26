@@ -7,6 +7,17 @@ class CustomUser(AbstractUser):
     Extended User model for AfriBazaar.
     Extends Django's built-in User model.
     """
+    ROLE_CHOICES = [
+        ('customer', 'Customer'),
+        ('artisan', 'Artisan/Seller'),
+    ]
+    
+    role = models.CharField(
+        max_length=10, 
+        choices=ROLE_CHOICES, 
+        default='customer',
+        help_text="User role in the marketplace"
+    )
     is_artisan = models.BooleanField(default=False, help_text="Is this user an artisan/seller?")
     phone = models.CharField(max_length=20, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)

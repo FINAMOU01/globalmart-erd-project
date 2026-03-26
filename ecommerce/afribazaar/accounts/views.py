@@ -19,7 +19,7 @@ def customer_register_view(request):
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
             login(request, user)
-            return redirect('customer_profile')
+            return redirect('accounts:customer_profile')
     else:
         form = CustomerRegisterForm()
     return render(request, 'accounts/customer_register.html', {'form': form})
@@ -33,7 +33,7 @@ def artisan_register_view(request):
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
             login(request, user)
-            return redirect('artisan_profile')
+            return redirect('accounts:artisan_profile')
     else:
         form = ArtisanRegisterForm()
     return render(request, 'accounts/artisan_register.html', {'form': form})
@@ -51,9 +51,9 @@ def login_view(request):
                 messages.info(request, f'You are now logged in as {username}.')
                 # Redirect based on role
                 if user.role == 'customer':
-                    return redirect('customer_profile')
+                    return redirect('accounts:customer_profile')
                 elif user.role == 'artisan':
-                    return redirect('artisan_profile')
+                    return redirect('accounts:artisan_profile')
             else:
                 messages.error(request, 'Invalid username or password.')
         else:
@@ -66,7 +66,7 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     messages.info(request, 'You have been logged out.')
-    return redirect('login')
+    return redirect('accounts:login')
 
 
 @login_required
@@ -76,7 +76,7 @@ def customer_profile_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Your profile has been updated!')
-            return redirect('customer_profile')
+            return redirect('accounts:customer_profile')
         else:
             messages.error(request, 'Please correct the error below.')
     else:
@@ -96,7 +96,7 @@ def artisan_profile_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Your profile has been updated!')
-            return redirect('artisan_profile')
+            return redirect('accounts:artisan_profile')
         else:
             messages.error(request, 'Please correct the error below.')
     else:
