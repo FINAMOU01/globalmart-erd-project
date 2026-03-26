@@ -1,0 +1,23 @@
+[
+  {"model": "payments.currency", "pk": "USD", "fields": {"currency_name": "US Dollar",          "symbol": "$",    "is_active": true}},
+  {"model": "payments.currency", "pk": "EUR", "fields": {"currency_name": "Euro",               "symbol": "€",    "is_active": true}},
+  {"model": "payments.currency", "pk": "GBP", "fields": {"currency_name": "British Pound",      "symbol": "£",    "is_active": true}},
+  {"model": "payments.currency", "pk": "XAF", "fields": {"currency_name": "CFA Franc (BEAC)",   "symbol": "FCFA", "is_active": true}},
+  {"model": "payments.currency", "pk": "NGN", "fields": {"currency_name": "Nigerian Naira",     "symbol": "₦",    "is_active": true}},
+  {"model": "payments.currency", "pk": "GHS", "fields": {"currency_name": "Ghanaian Cedi",      "symbol": "₵",    "is_active": true}},
+  {"model": "payments.currency", "pk": "KES", "fields": {"currency_name": "Kenyan Shilling",    "symbol": "KSh",  "is_active": true}},
+  {"model": "payments.currency", "pk": "ZAR", "fields": {"currency_name": "South African Rand", "symbol": "R",    "is_active": true}},
+  {"model": "payments.currency", "pk": "EGP", "fields": {"currency_name": "Egyptian Pound",     "symbol": "E£",   "is_active": true}},
+  {"model": "payments.currency", "pk": "MAD", "fields": {"currency_name": "Moroccan Dirham",    "symbol": "د.م.", "is_active": true}},
+
+  {"model": "payments.exchangerate", "pk": 1,  "fields": {"currency": "USD", "rate_to_usd": "1.00000000",    "date_updated": "2026-03-01T00:00:00Z"}},
+  {"model": "payments.exchangerate", "pk": 2,  "fields": {"currency": "EUR", "rate_to_usd": "1.08000000",    "date_updated": "2026-03-01T00:00:00Z"}},
+  {"model": "payments.exchangerate", "pk": 3,  "fields": {"currency": "GBP", "rate_to_usd": "1.27000000",    "date_updated": "2026-03-01T00:00:00Z"}},
+  {"model": "payments.exchangerate", "pk": 4,  "fields": {"currency": "XAF", "rate_to_usd": "0.00165000",    "date_updated": "2026-03-01T00:00:00Z"}},
+  {"model": "payments.exchangerate", "pk": 5,  "fields": {"currency": "NGN", "rate_to_usd": "0.00065000",    "date_updated": "2026-03-01T00:00:00Z"}},
+  {"model": "payments.exchangerate", "pk": 6,  "fields": {"currency": "GHS", "rate_to_usd": "0.06700000",    "date_updated": "2026-03-01T00:00:00Z"}},
+  {"model": "payments.exchangerate", "pk": 7,  "fields": {"currency": "KES", "rate_to_usd": "0.00780000",    "date_updated": "2026-03-01T00:00:00Z"}},
+  {"model": "payments.exchangerate", "pk": 8,  "fields": {"currency": "ZAR", "rate_to_usd": "0.05500000",    "date_updated": "2026-03-01T00:00:00Z"}},
+  {"model": "payments.exchangerate", "pk": 9,  "fields": {"currency": "EGP", "rate_to_usd": "0.02050000",    "date_updated": "2026-03-01T00:00:00Z"}},
+  {"model": "payments.exchangerate", "pk": 10, "fields": {"currency": "MAD", "rate_to_usd": "0.10000000",    "date_updated": "2026-03-01T00:00:00Z"}}
+]

@@ -46,6 +46,32 @@
             
             <!-- Right Side Actions -->
             <div class="nav-actions">
+                <!-- Currency Selector – Noudou: Payment & Currency System -->
+                <form method="post" action="/payments/set-currency/" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="/">
+                    <select name="currency_code" onchange="this.form.submit()"
+                            title="Select display currency"
+                            style="padding:.3rem .5rem;border-radius:6px;border:1px solid #ccc;
+                                   font-size:.8rem;background:#fff;cursor:pointer;">
+                        <option value="USD">$ USD</option>
+                        <option value="EUR">€ EUR</option>
+                        <option value="GBP">£ GBP</option>
+                        <option value="XAF">FCFA XAF</option>
+                        <option value="NGN">₦ NGN</option>
+                        <option value="GHS">₵ GHS</option>
+                        <option value="KES">KSh KES</option>
+                        <option value="ZAR">R ZAR</option>
+                    </select>
+                </form>
+                <a href="/payments/currencies/" style="color:#C44A2F;font-size:.8rem;
+                   text-decoration:none;white-space:nowrap;" title="Live exchange rates">
+                    <i class="fas fa-chart-line"></i> Rates
+                </a>
+                <a href="/payments/pay/" style="color:#C44A2F;font-size:.8rem;
+                   text-decoration:none;white-space:nowrap;">
+                    <i class="fas fa-lock"></i> Pay
+                </a>
                 <a href="#" class="cart-icon">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-badge">3</span>
@@ -302,7 +328,11 @@
                         <h3 class="product-name">African Tribal Wooden Mask</h3>
                         <p class="product-description">Hand-carved wooden mask representing ancestral spirits, used in traditional ceremonies</p>
                         <div class="product-footer">
+<<<<<<< HEAD
                             <span class="product-price">USD 185.00</span>
+=======
+                            <span class="product-price">185.00USD</span>
+>>>>>>> origin/currency_system
                             <button class="btn-add-cart">
                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                             </button>
@@ -325,7 +355,11 @@
                         <h3 class="product-name">West African Dashiki Shirt</h3>
                         <p class="product-description">Elegant Dashiki tunic with intricate embroidery, worn during special occasions across West Africa</p>
                         <div class="product-footer">
+<<<<<<< HEAD
                             <span class="product-price">USD 95.00</span>
+=======
+                            <span class="product-price">95.00USD</span>
+>>>>>>> origin/currency_system
                             <button class="btn-add-cart">
                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                             </button>
@@ -348,7 +382,11 @@
                         <h3 class="product-name">Handmade Tuareg Leather Sandals</h3>
                         <p class="product-description">Traditional Sahara sandals handcrafted by Tuareg artisans using age-old leatherworking techniques</p>
                         <div class="product-footer">
+<<<<<<< HEAD
                             <span class="product-price">USD 65.00</span>
+=======
+                            <span class="product-price">65.00USD</span>
+>>>>>>> origin/currency_system
                             <button class="btn-add-cart">
                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                             </button>
@@ -358,7 +396,11 @@
             </div>
             
             <div class="view-all-container">
+<<<<<<< HEAD
                 <a href="{% url 'products:shop' %}" class="btn btn-outline">View All African Products</a>
+=======
+                <a href="#" class="btn btn-outline">View All African Products</a>
+>>>>>>> origin/currency_system
             </div>
         </div>
     </section>

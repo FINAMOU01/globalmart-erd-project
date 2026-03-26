@@ -1,0 +1,578 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment – AfriBazaar</title>
+    <meta name="description" content="Complete your AfriBazaar purchase securely.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+        /* ── Payment Page Specific Styles ── */
+        .payment-wrapper {
+            min-height: 100vh;
+            background: var(--color-cream);
+            padding: 2rem 1rem 4rem;
+        }
+
+        .payment-container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            color: var(--color-gray-500);
+        }
+        .breadcrumb a { color: var(--color-terracotta); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+
+        /* Two-column layout */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 1.5rem;
+            align-items: start;
+        }
+        @media (max-width: 768px) {
+            .payment-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Card */
+        .card {
+            background: var(--color-white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+        .card-header {
+            background: var(--color-terracotta);
+            color: var(--color-white);
+            padding: 1.25rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .card-body { padding: 1.5rem; }
+
+        /* Form elements */
+        .form-group { margin-bottom: 1.25rem; }
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--color-gray-700);
+            margin-bottom: 0.4rem;
+        }
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 0.65rem 0.9rem;
+            border: 1px solid var(--color-gray-300);
+            border-radius: var(--radius-md);
+            font-family: var(--font-primary);
+            font-size: 0.95rem;
+            background: var(--color-white);
+            color: var(--color-gray-700);
+            transition: border-color var(--transition-fast);
+        }
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--color-terracotta);
+            box-shadow: 0 0 0 3px rgba(196,74,47,0.12);
+        }
+        .form-error {
+            color: #c0392b;
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+        }
+
+        /* Payment method radio cards */
+        .method-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+        @media (max-width: 480px) { .method-grid { grid-template-columns: 1fr; } }
+
+        .method-card input[type="radio"] { display: none; }
+        .method-card label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            border: 2px solid var(--color-gray-200);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--color-gray-600);
+        }
+        .method-card label i {
+            font-size: 1.5rem;
+            color: var(--color-terracotta);
+        }
+        .method-card input[type="radio"]:checked + label {
+            border-color: var(--color-terracotta);
+            background: rgba(196,74,47,0.05);
+            color: var(--color-terracotta);
+            font-weight: 500;
+        }
+
+        /* Dynamic method detail panels */
+        .method-details { display: none; }
+        .method-details.active { display: block; }
+
+        /* Currency display badge */
+        .amount-badge {
+            background: linear-gradient(135deg, var(--color-terracotta), #e05a3a);
+            color: white;
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .amount-badge .amount-label {
+            font-size: 0.8rem;
+            opacity: 0.85;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .amount-badge .amount-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0.3rem 0;
+        }
+        .amount-badge .amount-sub {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* Order summary */
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--color-gray-200);
+            color: var(--color-gray-600);
+        }
+        .summary-row:last-child { border-bottom: none; }
+        .summary-row.total {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-gray-800);
+            border-bottom: none;
+            margin-top: 0.5rem;
+            padding-top: 0.75rem;
+            border-top: 2px solid var(--color-terracotta);
+        }
+
+        /* Submit button */
+        .btn-pay {
+            width: 100%;
+            padding: 0.9rem;
+            background: var(--color-terracotta);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-primary);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .btn-pay:hover { background: var(--color-terracotta-dark); }
+
+        /* Security badge */
+        .security-note {
+            text-align: center;
+            font-size: 0.78rem;
+            color: var(--color-gray-400);
+            margin-top: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        /* Currency selector inline */
+        .currency-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .currency-row label { white-space: nowrap; }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/" class="logo">
+            <span class="logo-icon"><i class="fas fa-shopping-bag"></i></span>
+            <span class="logo-text">AfriBazaar</span>
+        </a>
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Shop</a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="#" class="cart-icon"><i class="fas fa-shopping-cart"></i></a>
+            <div class="auth-buttons">
+                <a href="#" class="btn btn-outline">Login</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="payment-wrapper">
+    <div class="payment-container">
+
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="/"><i class="fas fa-home"></i> Home</a>
+            <i class="fas fa-chevron-right"></i>
+            <a href="#">Cart</a>
+            <i class="fas fa-chevron-right"></i>
+            <span>Payment</span>
+        </nav>
+
+        {% if messages %}
+        <div style="margin-bottom:1rem;">
+            {% for msg in messages %}
+            <div style="padding:.75rem 1rem;border-radius:var(--radius-md);
+                        background:{% if msg.tags == 'error' %}#fdecea{% else %}#e8f5e9{% endif %};
+                        color:{% if msg.tags == 'error' %}#c0392b{% else %}#27ae60{% endif %};
+                        border-left:4px solid {% if msg.tags == 'error' %}#c0392b{% else %}#27ae60{% endif %};">
+                {{ msg }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="payment-grid">
+
+            <!-- ── LEFT: Payment Form ─────────────────────────────────────── -->
+            <div>
+                <form method="post" action="{% url 'payments:payment_page' %}" id="paymentForm">
+                    {% csrf_token %}
+                    {{ form.order_id }}
+
+                    <!-- Currency & Amount -->
+                    <div class="card" style="margin-bottom:1.25rem;">
+                        <div class="card-header">
+                            <i class="fas fa-coins"></i> Currency & Amount
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label" for="id_currency_code">
+                                    Choose your currency
+                                </label>
+                                {{ form.currency_code }}
+                                {% if form.currency_code.errors %}
+                                <div class="form-error">{{ form.currency_code.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Live amount preview (updated by JS) -->
+                            <div class="amount-badge">
+                                <div class="amount-label">Total to Pay</div>
+                                <div class="amount-value" id="displayAmount">
+                                    {{ chosen_currency.symbol }} {{ display_amount|floatformat:2 }}
+                                </div>
+                                <div class="amount-sub" id="usdEquiv">
+                                    ≈ $ {{ order_amount_usd|floatformat:2 }} USD
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="card" style="margin-bottom:1.25rem;">
+                        <div class="card-header">
+                            <i class="fas fa-wallet"></i> Payment Method
+                        </div>
+                        <div class="card-body">
+                            {% if form.payment_method.errors %}
+                            <div class="form-error" style="margin-bottom:.75rem;">
+                                {{ form.payment_method.errors.0 }}
+                            </div>
+                            {% endif %}
+                            <div class="method-grid">
+                                <div class="method-card">
+                                    <input type="radio" name="payment_method" id="m_card"
+                                           value="CARD" checked>
+                                    <label for="m_card">
+                                        <i class="fas fa-credit-card"></i>
+                                        Credit / Debit Card
+                                    </label>
+                                </div>
+                                <div class="method-card">
+                                    <input type="radio" name="payment_method" id="m_mobile"
+                                           value="MOBILE_MONEY">
+                                    <label for="m_mobile">
+                                        <i class="fas fa-mobile-alt"></i>
+                                        Mobile Money
+                                    </label>
+                                </div>
+                                <div class="method-card">
+                                    <input type="radio" name="payment_method" id="m_bank"
+                                           value="BANK_TRANSFER">
+                                    <label for="m_bank">
+                                        <i class="fas fa-university"></i>
+                                        Bank Transfer
+                                    </label>
+                                </div>
+                                <div class="method-card">
+                                    <input type="radio" name="payment_method" id="m_cod"
+                                           value="CASH_ON_DELIVERY">
+                                    <label for="m_cod">
+                                        <i class="fas fa-hand-holding-usd"></i>
+                                        Cash on Delivery
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Card fields -->
+                            <div class="method-details active" id="details_card"
+                                 style="margin-top:1.25rem;">
+                                <div class="form-group">
+                                    <label class="form-label">Cardholder Name</label>
+                                    {{ form.cardholder_name }}
+                                    {% if form.cardholder_name.errors %}
+                                    <div class="form-error">{{ form.cardholder_name.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Last 4 digits of card</label>
+                                    {{ form.card_last_four }}
+                                    {% if form.card_last_four.errors %}
+                                    <div class="form-error">{{ form.card_last_four.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Mobile money fields -->
+                            <div class="method-details" id="details_mobile"
+                                 style="margin-top:1.25rem;">
+                                <div class="form-group">
+                                    <label class="form-label">Mobile Money Number
+                                        <small style="color:var(--color-gray-400);">
+                                            (MTN, Orange, M-Pesa)
+                                        </small>
+                                    </label>
+                                    {{ form.mobile_number }}
+                                    {% if form.mobile_number.errors %}
+                                    <div class="form-error">{{ form.mobile_number.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Bank transfer info -->
+                            <div class="method-details" id="details_bank"
+                                 style="margin-top:1.25rem;">
+                                <div style="background:var(--color-cream);
+                                            border-radius:var(--radius-md);
+                                            padding:1rem;
+                                            font-size:0.875rem;
+                                            color:var(--color-gray-600);">
+                                    <p><strong>Bank:</strong> AfriBank International</p>
+                                    <p><strong>Account:</strong> 0012-3456-7890</p>
+                                    <p><strong>Reference:</strong> ORDER-{{ order_id }}</p>
+                                    <p style="margin-top:.5rem;color:var(--color-terracotta);">
+                                        <i class="fas fa-info-circle"></i>
+                                        Your order is confirmed once the transfer is received.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Cash on delivery info -->
+                            <div class="method-details" id="details_cod"
+                                 style="margin-top:1.25rem;">
+                                <div style="background:var(--color-cream);
+                                            border-radius:var(--radius-md);
+                                            padding:1rem;
+                                            font-size:0.875rem;
+                                            color:var(--color-gray-600);">
+                                    <i class="fas fa-check-circle"
+                                       style="color:var(--color-emerald);"></i>
+                                    Pay in cash when your order arrives at your door.
+                                    No payment needed now.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn-pay">
+                        <i class="fas fa-lock"></i>
+                        <span id="btnLabel">Pay Now</span>
+                    </button>
+                    <div class="security-note">
+                        <i class="fas fa-shield-alt"></i>
+                        Your payment is secured with 256-bit SSL encryption
+                    </div>
+                </form>
+            </div>
+
+            <!-- ── RIGHT: Order Summary ───────────────────────────────────── -->
+            <div>
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-receipt"></i> Order Summary
+                    </div>
+                    <div class="card-body">
+                        <div class="summary-row">
+                            <span>Order #{{ order_id }}</span>
+                            <span>AfriBazaar</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Subtotal (USD)</span>
+                            <span>$ {{ order_amount_usd|floatformat:2 }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping</span>
+                            <span style="color:var(--color-emerald);">Free</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total</span>
+                            <span id="summaryTotal">
+                                {{ chosen_currency.symbol }} {{ display_amount|floatformat:2 }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Currency rates quick reference -->
+                <div class="card" style="margin-top:1.25rem;">
+                    <div class="card-header" style="font-size:0.875rem;">
+                        <i class="fas fa-chart-line"></i> Live Rates vs USD
+                    </div>
+                    <div class="card-body" style="padding:1rem;">
+                        {% for curr in active_currencies %}
+                        {% if curr.currency_code != "USD" %}
+                        <div style="display:flex;justify-content:space-between;
+                                    font-size:0.8rem;padding:.3rem 0;
+                                    border-bottom:1px solid var(--color-gray-200);">
+                            <span>{{ curr.currency_code }} ({{ curr.symbol }})</span>
+                            <span style="color:var(--color-gray-500);">
+                                —
+                            </span>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        <div style="margin-top:.75rem;text-align:center;">
+                            <a href="{% url 'payments:currency_rates' %}"
+                               style="font-size:0.8rem;color:var(--color-terracotta);
+                                      text-decoration:none;">
+                               View all rates →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+/*
+ * AfriBazaar – Payment Page JS (Noudou – Payment & Currency System)
+ *
+ * 1. Show/hide method-specific fields based on radio selection
+ * 2. Live currency conversion using the backend API endpoint
+ */
+
+const ORDER_AMOUNT_USD = {{ order_amount_usd }};
+const CONVERT_API = "{% url 'payments:api_convert' %}";
+
+// ── 1. Payment method toggling ──────────────────────────────────────────────
+const methodRadios = document.querySelectorAll('input[name="payment_method"]');
+const allDetails   = document.querySelectorAll('.method-details');
+const btnLabel     = document.getElementById('btnLabel');
+
+const methodToPanel = {
+    CARD:             'details_card',
+    MOBILE_MONEY:     'details_mobile',
+    BANK_TRANSFER:    'details_bank',
+    CASH_ON_DELIVERY: 'details_cod',
+};
+const methodToLabel = {
+    CARD:             'Pay Now',
+    MOBILE_MONEY:     'Pay with Mobile Money',
+    BANK_TRANSFER:    'Confirm Bank Transfer',
+    CASH_ON_DELIVERY: 'Place Order (Pay on Delivery)',
+};
+
+function activateMethod(method) {
+    allDetails.forEach(el => el.classList.remove('active'));
+    const target = document.getElementById(methodToPanel[method]);
+    if (target) target.classList.add('active');
+    btnLabel.textContent = methodToLabel[method] || 'Pay Now';
+}
+
+methodRadios.forEach(radio => {
+    radio.addEventListener('change', () => activateMethod(radio.value));
+});
+
+// ── 2. Live currency conversion ─────────────────────────────────────────────
+const currencySelect  = document.getElementById('id_currency_code');
+const displayAmount   = document.getElementById('displayAmount');
+const summaryTotal    = document.getElementById('summaryTotal');
+const usdEquiv        = document.getElementById('usdEquiv');
+
+async function updateAmountDisplay(currencyCode) {
+    if (!currencyCode || currencyCode === 'USD') {
+        displayAmount.textContent = '$ ' + ORDER_AMOUNT_USD.toFixed(2);
+        summaryTotal.textContent  = '$ ' + ORDER_AMOUNT_USD.toFixed(2);
+        usdEquiv.textContent      = '≈ $ ' + ORDER_AMOUNT_USD.toFixed(2) + ' USD';
+        return;
+    }
+    try {
+        const url = `${CONVERT_API}?amount=${ORDER_AMOUNT_USD}&from=USD&to=${currencyCode}`;
+        const res  = await fetch(url);
+        const data = await res.json();
+        if (data.success) {
+            displayAmount.textContent = data.formatted;
+            summaryTotal.textContent  = data.formatted;
+            usdEquiv.textContent      = '≈ $ ' + ORDER_AMOUNT_USD.toFixed(2) + ' USD';
+        }
+    } catch (err) {
+        console.error('Currency conversion failed:', err);
+    }
+}
+
+if (currencySelect) {
+    currencySelect.addEventListener('change', () => {
+        const selected = currencySelect.options[currencySelect.selectedIndex];
+        updateAmountDisplay(selected.value);
+    });
+    // Trigger on load for pre-selected currency
+    const initial = currencySelect.options[currencySelect.selectedIndex];
+    if (initial) updateAmountDisplay(initial.value);
+}
+</script>
+</body>
+</html>
