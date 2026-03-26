@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Failed – AfriBazaar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .failed-wrapper {
+            min-height: 100vh;
+            background: var(--color-cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+        .failed-card {
+            background: var(--color-white);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            max-width: 500px;
+            width: 100%;
+            overflow: hidden;
+            text-align: center;
+        }
+        .failed-header {
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
+            padding: 2.5rem 2rem;
+            color: white;
+        }
+        .failed-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+        }
+        .failed-header h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.4rem; }
+        .failed-header p  { opacity: 0.9; font-size: 0.95rem; }
+
+        .failed-body { padding: 2rem; }
+
+        .reason-box {
+            background: #fdecea;
+            border-left: 4px solid #c0392b;
+            border-radius: var(--radius-md);
+            padding: 0.85rem 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            color: #7b241c;
+            text-align: left;
+        }
+
+        .tips-list {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            color: var(--color-gray-600);
+        }
+        .tips-list li {
+            padding: 0.4rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+        }
+        .tips-list li i { color: var(--color-terracotta); margin-top: 2px; }
+
+        .action-buttons { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+        .btn-retry, .btn-home {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center;
+            transition: all var(--transition-fast);
+        }
+        .btn-retry { background: var(--color-terracotta); color: white; }
+        .btn-retry:hover { background: var(--color-terracotta-dark); }
+        .btn-home  { background: var(--color-cream); color: var(--color-gray-700);
+                     border: 1px solid var(--color-gray-300); }
+        .btn-home:hover { background: var(--color-cream-dark); }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/" class="logo">
+            <span class="logo-icon"><i class="fas fa-shopping-bag"></i></span>
+            <span class="logo-text">AfriBazaar</span>
+        </a>
+    </div>
+</nav>
+
+<div class="failed-wrapper">
+    <div class="failed-card">
+        <div class="failed-header">
+            <div class="failed-icon"><i class="fas fa-times"></i></div>
+            <h1>Payment Failed</h1>
+            <p>We couldn't process your payment. Please try again.</p>
+        </div>
+        <div class="failed-body">
+
+            {% if payment %}
+            <div class="reason-box">
+                <strong><i class="fas fa-exclamation-circle"></i> Payment #{{ payment.pk }}</strong><br>
+                Order #{{ payment.order_id }} &nbsp;|&nbsp;
+                {{ payment.currency.symbol }} {{ payment.amount_in_currency|floatformat:2 }}
+                &nbsp;|&nbsp; {{ payment.get_payment_method_display }}
+            </div>
+            {% else %}
+            <div class="reason-box">
+                <strong><i class="fas fa-exclamation-circle"></i> Transaction Declined</strong><br>
+                Your payment could not be completed at this time.
+            </div>
+            {% endif %}
+
+            <ul class="tips-list">
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    Verify your card details or mobile money balance.
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    Make sure your card is enabled for online purchases.
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    Try a different payment method (Mobile Money or Cash on Delivery).
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    Contact your bank if the issue persists.
+                </li>
+            </ul>
+
+            <div class="action-buttons">
+                <a href="{% url 'payments:payment_page' %}" class="btn-retry">
+                    <i class="fas fa-redo"></i> Try Again
+                </a>
+                <a href="/" class="btn-home">
+                    <i class="fas fa-home"></i> Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

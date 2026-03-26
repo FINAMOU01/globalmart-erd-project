@@ -1,0 +1,395 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Currency Rates – AfriBazaar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .rates-wrapper {
+            min-height: 100vh;
+            background: var(--color-cream);
+            padding: 2rem 1rem 4rem;
+        }
+        .rates-container { max-width: 900px; margin: 0 auto; }
+
+        /* Page header */
+        .page-hero {
+            background: linear-gradient(135deg, var(--color-terracotta), #e05a3a);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .page-hero h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.3rem; }
+        .page-hero p  { opacity: 0.9; font-size: 0.9rem; }
+        .page-hero .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+        }
+
+        /* Currency grid */
+        .currency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .currency-card {
+            background: var(--color-white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+            border: 1px solid var(--color-gray-200);
+        }
+        .currency-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+        .currency-flag {
+            width: 48px;
+            height: 48px;
+            background: var(--color-cream);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+        .currency-info { flex: 1; }
+        .currency-code-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.2rem;
+        }
+        .currency-code {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-gray-800);
+        }
+        .currency-symbol {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--color-terracotta);
+            background: rgba(196,74,47,0.1);
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+        }
+        .currency-name {
+            font-size: 0.78rem;
+            color: var(--color-gray-500);
+            margin-bottom: 0.4rem;
+        }
+        .rate-row {
+            font-size: 0.85rem;
+            color: var(--color-gray-600);
+        }
+        .rate-value {
+            font-weight: 600;
+            color: var(--color-emerald);
+        }
+
+        /* USD is highlighted differently */
+        .currency-card.usd-card {
+            border-color: var(--color-gold);
+            background: linear-gradient(135deg, #fffef5, white);
+        }
+        .currency-card.usd-card .currency-flag {
+            background: var(--color-gold);
+            color: white;
+        }
+
+        /* Converter widget */
+        .converter-card {
+            background: var(--color-white);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            padding: 2rem;
+        }
+        .converter-card h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-gray-800);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .converter-form {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr auto;
+            gap: 0.75rem;
+            align-items: end;
+            flex-wrap: wrap;
+        }
+        @media (max-width: 600px) {
+            .converter-form { grid-template-columns: 1fr; }
+            .swap-btn { display: none; }
+        }
+        .conv-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--color-gray-600);
+            margin-bottom: 0.35rem;
+        }
+        .conv-input, .conv-select {
+            width: 100%;
+            padding: 0.65rem 0.9rem;
+            border: 1px solid var(--color-gray-300);
+            border-radius: var(--radius-md);
+            font-family: var(--font-primary);
+            font-size: 0.95rem;
+        }
+        .conv-input:focus, .conv-select:focus {
+            outline: none;
+            border-color: var(--color-terracotta);
+        }
+        .swap-btn {
+            background: var(--color-cream);
+            border: 1px solid var(--color-gray-300);
+            border-radius: var(--radius-md);
+            width: 42px;
+            height: 42px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-terracotta);
+            font-size: 0.9rem;
+            transition: all var(--transition-fast);
+        }
+        .swap-btn:hover { background: var(--color-terracotta); color: white; }
+
+        .convert-btn {
+            padding: 0.65rem 1.5rem;
+            background: var(--color-terracotta);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background var(--transition-fast);
+        }
+        .convert-btn:hover { background: var(--color-terracotta-dark); }
+
+        .result-box {
+            margin-top: 1.25rem;
+            background: var(--color-cream);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            color: var(--color-gray-700);
+            display: none;
+        }
+        .result-box.visible { display: block; }
+        .result-amount { font-size: 1.4rem; font-weight: 700; color: var(--color-emerald); }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/" class="logo">
+            <span class="logo-icon"><i class="fas fa-shopping-bag"></i></span>
+            <span class="logo-text">AfriBazaar</span>
+        </a>
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Shop</a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="#" class="cart-icon"><i class="fas fa-shopping-cart"></i></a>
+        </div>
+    </div>
+</nav>
+
+<div class="rates-wrapper">
+    <div class="rates-container">
+
+        <!-- Page hero -->
+        <div class="page-hero">
+            <div>
+                <h1><i class="fas fa-chart-line"></i> Live Currency Rates</h1>
+                <p>All prices on AfriBazaar can be displayed in your local currency.</p>
+            </div>
+            <div class="badge">
+                <i class="fas fa-sync-alt"></i>
+                Updated: {{ last_updated|date:"N j, Y" }}
+            </div>
+        </div>
+
+        <!-- Currency cards -->
+        <div class="currency-grid">
+            {% for item in currency_data %}
+            <div class="currency-card {% if item.currency.currency_code == 'USD' %}usd-card{% endif %}">
+                <div class="currency-flag">
+                    {% if item.currency.currency_code == "USD" %}💵
+                    {% elif item.currency.currency_code == "EUR" %}💶
+                    {% elif item.currency.currency_code == "GBP" %}💷
+                    {% elif item.currency.currency_code == "XAF" %}🌍
+                    {% elif item.currency.currency_code == "NGN" %}🇳🇬
+                    {% elif item.currency.currency_code == "GHS" %}🇬🇭
+                    {% elif item.currency.currency_code == "KES" %}🇰🇪
+                    {% elif item.currency.currency_code == "ZAR" %}🇿🇦
+                    {% elif item.currency.currency_code == "EGP" %}🇪🇬
+                    {% elif item.currency.currency_code == "MAD" %}🇲🇦
+                    {% else %}🌐
+                    {% endif %}
+                </div>
+                <div class="currency-info">
+                    <div class="currency-code-row">
+                        <span class="currency-code">{{ item.currency.currency_code }}</span>
+                        <span class="currency-symbol">{{ item.currency.symbol }}</span>
+                    </div>
+                    <div class="currency-name">{{ item.currency.currency_name }}</div>
+                    <div class="rate-row">
+                        {% if item.currency.currency_code == "USD" %}
+                            <span class="rate-value">Base Currency</span>
+                        {% elif item.rate %}
+                            1 {{ item.currency.currency_code }} =
+                            <span class="rate-value">$ {{ item.rate.rate_to_usd }}</span> USD
+                        {% else %}
+                            <span style="color:var(--color-gray-400);">No rate available</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div style="grid-column:1/-1;text-align:center;color:var(--color-gray-500);padding:2rem;">
+                No currencies configured yet. Add them via the admin panel.
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Currency converter widget -->
+        <div class="converter-card">
+            <h2><i class="fas fa-exchange-alt" style="color:var(--color-terracotta);"></i>
+                Currency Converter</h2>
+
+            <div class="converter-form">
+                <div class="conv-group">
+                    <label>Amount</label>
+                    <input type="number" id="convAmount" class="conv-input"
+                           placeholder="e.g. 10.00" value="10" min="0" step="0.01">
+                </div>
+                <div class="conv-group">
+                    <label>From</label>
+                    <select id="convFrom" class="conv-select">
+                        {% for item in currency_data %}
+                        <option value="{{ item.currency.currency_code }}"
+                            {% if item.currency.currency_code == "USD" %}selected{% endif %}>
+                            {{ item.currency.currency_code }} – {{ item.currency.currency_name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button class="swap-btn" onclick="swapCurrencies()" title="Swap currencies">
+                    <i class="fas fa-exchange-alt"></i>
+                </button>
+
+                <div class="conv-group">
+                    <label>To</label>
+                    <select id="convTo" class="conv-select">
+                        {% for item in currency_data %}
+                        <option value="{{ item.currency.currency_code }}"
+                            {% if item.currency.currency_code == "XAF" %}selected{% endif %}>
+                            {{ item.currency.currency_code }} – {{ item.currency.currency_name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div style="margin-top:1rem;">
+                <button class="convert-btn" onclick="runConversion()">
+                    <i class="fas fa-calculator"></i> Convert
+                </button>
+            </div>
+
+            <div class="result-box" id="resultBox">
+                <div id="resultText" style="margin-bottom:0.3rem;font-size:0.875rem;
+                                            color:var(--color-gray-500);"></div>
+                <div class="result-amount" id="resultAmount"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const CONVERT_API = "{% url 'payments:api_convert' %}";
+
+async function runConversion() {
+    const amount = document.getElementById('convAmount').value;
+    const from   = document.getElementById('convFrom').value;
+    const to     = document.getElementById('convTo').value;
+    const resultBox    = document.getElementById('resultBox');
+    const resultText   = document.getElementById('resultText');
+    const resultAmount = document.getElementById('resultAmount');
+
+    if (!amount || isNaN(amount) || Number(amount) <= 0) {
+        resultText.textContent   = 'Please enter a valid amount.';
+        resultAmount.textContent = '';
+        resultBox.classList.add('visible');
+        return;
+    }
+
+    resultText.textContent   = 'Converting...';
+    resultAmount.textContent = '';
+    resultBox.classList.add('visible');
+
+    try {
+        const url  = `${CONVERT_API}?amount=${amount}&from=${from}&to=${to}`;
+        const res  = await fetch(url);
+        const data = await res.json();
+
+        if (data.success) {
+            resultText.textContent   = `${amount} ${from} =`;
+            resultAmount.textContent = data.formatted;
+        } else {
+            resultText.textContent   = 'Error: ' + data.error;
+            resultAmount.textContent = '';
+        }
+    } catch (err) {
+        resultText.textContent   = 'Network error. Please try again.';
+        resultAmount.textContent = '';
+    }
+}
+
+function swapCurrencies() {
+    const fromEl = document.getElementById('convFrom');
+    const toEl   = document.getElementById('convTo');
+    const tmp    = fromEl.value;
+    fromEl.value = toEl.value;
+    toEl.value   = tmp;
+}
+
+// Allow pressing Enter in amount field to trigger conversion
+document.getElementById('convAmount').addEventListener('keydown', e => {
+    if (e.key === 'Enter') runConversion();
+});
+</script>
+</body>
+</html>
