@@ -209,7 +209,7 @@
       "description": "Handwoven Kente cloth from Ghana using traditional methods. This vibrant fabric features intricate geometric patterns and is perfect for special occasions, clothing, or home décor. Each piece is unique and made with high-quality cotton threads.",
       "price": "75.00",
       "stock_quantity": 15,
-      "image": "products/kente_cloth.jpg",
+      "image": "",
       "attributes": {
         "color": "Multi-colored",
         "size": "2 yards",
@@ -231,7 +231,7 @@
       "description": "Traditional Bogolan fabric from Senegal, hand-dyed using natural mud and plant-based dyes. This authentic cloth features unique linear patterns and is a testament to centuries-old textile traditions.",
       "price": "85.00",
       "stock_quantity": 8,
-      "image": "products/bogolan.jpg",
+      "image": "",
       "attributes": {
         "color": "Brown & Cream",
         "size": "3 yards",
@@ -253,7 +253,7 @@
       "description": "Beautiful handmade dress featuring vibrant Ankara print. This stylish dress combines traditional African fabric with modern design elements. Perfect for casual wear or special occasions.",
       "price": "65.00",
       "stock_quantity": 12,
-      "image": "products/ankara_dress.jpg",
+      "image": "",
       "attributes": {
         "color": "Purple & Gold",
         "size": "Medium",
@@ -275,7 +275,7 @@
       "description": "Traditional Maasai beaded necklace handcrafted using authentic beading techniques. Each bead is carefully selected and assembled to create this beautiful piece of African jewelry.",
       "price": "45.00",
       "stock_quantity": 20,
-      "image": "products/maasai_necklace.jpg",
+      "image": "",
       "attributes": {
         "color": "Red & Blue",
         "length": "18 inches",
@@ -297,7 +297,7 @@
       "description": "Elegant pendant featuring the Adinkra symbol, a traditional Ghanaian symbol representing wisdom and excellence. Made with gold-plated brass and comes with an adjustable leather cord.",
       "price": "35.00",
       "stock_quantity": 25,
-      "image": "products/adinkra_pendant.jpg",
+      "image": "",
       "attributes": {
         "color": "Gold",
         "symbol": "Adinkra",
@@ -319,7 +319,7 @@
       "description": "Luxurious traditional boubou robe featuring rich Senegalese Bogolan fabric. This flowing robe is perfect for special occasions and celebrations. Handmade with attention to detail.",
       "price": "120.00",
       "stock_quantity": 5,
-      "image": "products/boubou.jpg",
+      "image": "",
       "attributes": {
         "color": "Brown & Cream",
         "size": "Large",
@@ -341,7 +341,7 @@
       "description": "Handcrafted leather sandals inspired by Tuareg desert tradition. These comfortable and durable sandals feature intricate leather tooling and are perfect for warm weather.",
       "price": "55.00",
       "stock_quantity": 18,
-      "image": "products/tuareg_sandals.jpg",
+      "image": "",
       "attributes": {
         "color": "Brown",
         "size": "9 US",
@@ -363,7 +363,7 @@
       "description": "Traditional African mask carved from sustainable hardwood. This beautiful mask features authentic designs and is a wonderful piece of home décor. Each mask is unique.",
       "price": "95.00",
       "stock_quantity": 6,
-      "image": "products/wooden_mask.jpg",
+      "image": "",
       "attributes": {
         "color": "Natural Wood",
         "height": "12 inches",

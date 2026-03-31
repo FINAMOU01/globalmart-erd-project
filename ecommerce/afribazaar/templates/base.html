@@ -28,11 +28,45 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'products:shop' %}">Shop</a>
                     </li>
+                    
+                    <!-- Currency Selector -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="currencyDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-globe"></i> {{ currency_symbol }} {{ selected_currency }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" style="max-height: 400px; overflow-y: auto;">
+                            {% for currency in all_currencies %}
+                            <li>
+                                <a class="dropdown-item {% if currency.currency_code == selected_currency %}active{% endif %}" 
+                                   href="javascript:void(0);" 
+                                   onclick="setCurrency('{{ currency.currency_code }}')">
+                                    {{ currency.symbol }} {{ currency.currency_code }} - {{ currency.currency_name }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
                     {% if user.is_authenticated %}
+                        {% if not user.is_artisan %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'orders:cart_view' %}">
+                                <i class="fas fa-shopping-cart me-1"></i>Cart
+                                {% if user.cart.items_count > 0 %}
+                                <span class="badge bg-danger">{{ user.cart.items_count }}</span>
+                                {% endif %}
+                            </a>
+                        </li>
+                        {% endif %}
                         {% if user.is_artisan %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'products:artisan_dashboard' %}">
                                 <i class="fas fa-user-tie"></i> My Dashboard
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'accounts:customer_dashboard' %}">
+                                <i class="fas fa-user-circle"></i> Dashboard
                             </a>
                         </li>
                         {% endif %}
@@ -41,8 +75,13 @@
                                 <i class="fas fa-user-circle"></i> {{ user.get_full_name|default:user.username }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">My Profile</a></li>
-                                <li><a class="dropdown-item" href="#">My Orders</a></li>
+                                {% if user.is_artisan %}
+                                <li><a class="dropdown-item" href="{% url 'products:edit_artisan_profile' %}">Edit Profile</a></li>
+                                {% else %}
+                                <li><a class="dropdown-item" href="{% url 'accounts:customer_dashboard' %}">My Dashboard</a></li>
+                                <li><a class="dropdown-item" href="{% url 'accounts:customer_profile' %}">My Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'orders:cart_view' %}">My Cart</a></li>
+                                {% endif %}
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a></li>
                             </ul>
@@ -105,6 +144,13 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Currency selection function
+        function setCurrency(currencyCode) {
+            // Navigate to set-currency endpoint
+            window.location.href = `/products/set-currency/${currencyCode}/`;
+        }
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

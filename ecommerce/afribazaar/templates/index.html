@@ -32,10 +32,8 @@
             <ul class="nav-menu">
                 <li class="nav-item"><a href="{% url 'home' %}" class="nav-link active">Home</a></li>
                 <li class="nav-item"><a href="{% url 'products:shop' %}" class="nav-link">Shop</a></li>
-                <li class="nav-item"><a href="{% url 'products:artisan_dashboard' %}" class="nav-link">Artisans</a></li>
-                <li class="nav-item"><a href="{% url 'products:shop' %}" class="nav-link">Categories</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">About</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+                <li class="nav-item"><a href="{% url 'products:artisan_listing' %}" class="nav-link">Artisans</a></li>
+                <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
             </ul>
             
             <!-- Search Bar -->
@@ -68,11 +66,7 @@
                    text-decoration:none;white-space:nowrap;" title="Live exchange rates">
                     <i class="fas fa-chart-line"></i> Rates
                 </a>
-                <a href="/payments/pay/" style="color:#C44A2F;font-size:.8rem;
-                   text-decoration:none;white-space:nowrap;">
-                    <i class="fas fa-lock"></i> Pay
-                </a>
-                <a href="#" class="cart-icon">
+                <a href="{% url 'products:shop' %}" class="cart-icon">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-badge">3</span>
                 </a>
@@ -100,7 +94,7 @@
                     <a href="{% url 'products:shop' %}" class="btn btn-primary btn-large">
                         <i class="fas fa-compass"></i> Explore Marketplace
                     </a>
-                    <a href="{% url 'products:artisan_dashboard' %}" class="btn btn-outline-light btn-large">
+                    <a href="{% url 'products:artisan_listing' %}" class="btn btn-outline-light btn-large">
                         <i class="fas fa-users"></i> Meet the Artisans
                     </a>
                 </div>
@@ -214,9 +208,13 @@
                         <p class="product-description">Hand-dyed Ndop cloth, a traditional Bamileke fabric with symbolic patterns worn by Cameroonian royalty</p>
                         <div class="product-footer">
                             <span class="product-price">USD 145.00</span>
-                            <button class="btn-add-cart">
-                                <i class="fas fa-shopping-cart"></i> Add to Cart
-                            </button>
+                            <form method="POST" action="{% url 'orders:add_to_cart' 1 %}" class="add-to-cart-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="/">
+                                <button type="submit" class="btn-add-cart">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -237,9 +235,13 @@
                         <p class="product-description">Traditional Maasai beadwork necklace, each color carries cultural meaning - red for bravery and unity</p>
                         <div class="product-footer">
                             <span class="product-price">USD 75.00</span>
-                            <button class="btn-add-cart">
-                                <i class="fas fa-shopping-cart"></i> Add to Cart
-                            </button>
+                            <form method="POST" action="{% url 'orders:add_to_cart' 2 %}" class="add-to-cart-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="/">
+                                <button type="submit" class="btn-add-cart">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -260,9 +262,13 @@
                         <p class="product-description">Authentic handwoven Kente cloth featuring royal Adinkra symbols, a symbol of wealth and status</p>
                         <div class="product-footer">
                             <span class="product-price">USD 350.00</span>
-                            <button class="btn-add-cart">
-                                <i class="fas fa-shopping-cart"></i> Add to Cart
-                            </button>
+                            <form method="POST" action="{% url 'orders:add_to_cart' 3 %}" class="add-to-cart-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="/">
+                                <button type="submit" class="btn-add-cart">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -283,9 +289,13 @@
                         <p class="product-description">Traditional Bamileke palm weave basket, a centuries-old craft used for storage and ceremonies</p>
                         <div class="product-footer">
                             <span class="product-price">USD 55.00</span>
-                            <button class="btn-add-cart">
-                                <i class="fas fa-shopping-cart"></i> Add to Cart
-                            </button>
+                            <form method="POST" action="{% url 'orders:add_to_cart' 4 %}" class="add-to-cart-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="/">
+                                <button type="submit" class="btn-add-cart">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -306,9 +316,13 @@
                         <p class="product-description">Vibrant Ankara wax print dress featuring traditional Nigerian patterns, perfect for celebrations</p>
                         <div class="product-footer">
                             <span class="product-price">USD 120.00</span>
-                            <button class="btn-add-cart">
-                                <i class="fas fa-shopping-cart"></i> Add to Cart
-                            </button>
+                            <form method="POST" action="{% url 'orders:add_to_cart' 5 %}" class="add-to-cart-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="/">
+                                <button type="submit" class="btn-add-cart">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -328,14 +342,14 @@
                         <h3 class="product-name">African Tribal Wooden Mask</h3>
                         <p class="product-description">Hand-carved wooden mask representing ancestral spirits, used in traditional ceremonies</p>
                         <div class="product-footer">
-<<<<<<< HEAD
                             <span class="product-price">USD 185.00</span>
-=======
-                            <span class="product-price">185.00USD</span>
->>>>>>> origin/currency_system
-                            <button class="btn-add-cart">
-                                <i class="fas fa-shopping-cart"></i> Add to Cart
-                            </button>
+                            <form method="POST" action="{% url 'orders:add_to_cart' 6 %}" class="add-to-cart-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="/">
+                                <button type="submit" class="btn-add-cart">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -355,14 +369,14 @@
                         <h3 class="product-name">West African Dashiki Shirt</h3>
                         <p class="product-description">Elegant Dashiki tunic with intricate embroidery, worn during special occasions across West Africa</p>
                         <div class="product-footer">
-<<<<<<< HEAD
                             <span class="product-price">USD 95.00</span>
-=======
-                            <span class="product-price">95.00USD</span>
->>>>>>> origin/currency_system
-                            <button class="btn-add-cart">
-                                <i class="fas fa-shopping-cart"></i> Add to Cart
-                            </button>
+                            <form method="POST" action="{% url 'orders:add_to_cart' 7 %}" class="add-to-cart-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="/">
+                                <button type="submit" class="btn-add-cart">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -382,25 +396,21 @@
                         <h3 class="product-name">Handmade Tuareg Leather Sandals</h3>
                         <p class="product-description">Traditional Sahara sandals handcrafted by Tuareg artisans using age-old leatherworking techniques</p>
                         <div class="product-footer">
-<<<<<<< HEAD
                             <span class="product-price">USD 65.00</span>
-=======
-                            <span class="product-price">65.00USD</span>
->>>>>>> origin/currency_system
-                            <button class="btn-add-cart">
-                                <i class="fas fa-shopping-cart"></i> Add to Cart
-                            </button>
+                            <form method="POST" action="{% url 'orders:add_to_cart' 8 %}" class="add-to-cart-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="/">
+                                <button type="submit" class="btn-add-cart">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
             
             <div class="view-all-container">
-<<<<<<< HEAD
                 <a href="{% url 'products:shop' %}" class="btn btn-outline">View All African Products</a>
-=======
-                <a href="#" class="btn btn-outline">View All African Products</a>
->>>>>>> origin/currency_system
             </div>
         </div>
     </section>

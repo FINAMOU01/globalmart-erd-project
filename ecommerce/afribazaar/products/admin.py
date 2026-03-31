@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Category, Product
+from .models import Category, Product, ArtisanRating
 
 
 @admin.register(Category)
@@ -52,3 +52,32 @@ class ProductAdmin(admin.ModelAdmin):
             )
         return "No Image"
     get_image_preview.short_description = 'Image Preview'
+
+
+@admin.register(ArtisanRating)
+class ArtisanRatingAdmin(admin.ModelAdmin):
+    """
+    Admin for managing artisan ratings and reviews.
+    """
+    list_display = ('get_artisan_name', 'get_rater_name', 'get_rating_stars', 'created_at')
+    list_filter = ('rating', 'created_at')
+    search_fields = ('artisan__first_name', 'artisan__last_name', 'rater__first_name', 'rater__last_name', 'comment')
+    readonly_fields = ('created_at', 'updated_at')
+    
+    fieldsets = (
+        ('Rating Information', {'fields': ('artisan', 'rater', 'rating', 'comment')}),
+        ('Timestamps', {'fields': ('created_at', 'updated_at'), 'classes': ('collapse',)}),
+    )
+    
+    def get_artisan_name(self, obj):
+        return obj.artisan.get_full_name()
+    get_artisan_name.short_description = 'Artisan'
+    
+    def get_rater_name(self, obj):
+        return obj.rater.get_full_name() or obj.rater.username
+    get_rater_name.short_description = 'Rater'
+    
+    def get_rating_stars(self, obj):
+        stars = '⭐' * obj.rating
+        return format_html('{} ({}/5)', stars, obj.rating)
+    get_rating_stars.short_description = 'Rating'

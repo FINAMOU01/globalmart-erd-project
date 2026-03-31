@@ -1,0 +1,309 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Payment - AfriBazaar{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Header -->
+            <div class="mb-4">
+                <h2 style="color: #1F7A6B;">
+                    <i class="fas fa-credit-card me-2"></i>Process Payment
+                </h2>
+                <p class="text-muted">Order #{{ order.id }} | {{ order.created_at|date:"M d, Y" }}</p>
+            </div>
+
+            <!-- Order Summary Card -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header" style="background-color: #f8f9fa; border-bottom: 2px solid #e0e0e0;">
+                    <h6 class="mb-0" style="color: #1F7A6B;">Order Summary</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-borderless mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th class="text-end">Price</th>
+                                    <th class="text-end">Qty</th>
+                                    <th class="text-end">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order.items.all %}
+                                <tr>
+                                    <td>{{ item.product.name }}</td>
+                                    <td class="text-end">USD {{ item.price }}</td>
+                                    <td class="text-end">{{ item.quantity }}</td>
+                                    <td class="text-end fw-bold">USD {{ item.get_subtotal }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr class="my-3">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="text-muted mb-0">Order Total</p>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <h6 style="color: #1F7A6B;">USD {{ order_total_usd }}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Form -->
+            <form method="post" class="needs-validation">
+                {% csrf_token %}
+                
+                <!-- Payment Method Selection -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header" style="background-color: #f8f9fa; border-bottom: 2px solid #e0e0e0;">
+                        <h6 class="mb-0" style="color: #1F7A6B;">Payment Method</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            {% if form.payment_method.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ form.payment_method.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Payment Method Options -->
+                        <div class="payment-methods">
+                            {% for value, label in form.payment_method.field.choices %}
+                            <div class="form-check payment-method-option mb-3 p-3" style="border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer;">
+                                <input 
+                                    class="form-check-input" 
+                                    type="radio" 
+                                    name="payment_method" 
+                                    id="method_{{ value }}" 
+                                    value="{{ value }}"
+                                    {% if form.payment_method.value == value %}checked{% endif %}
+                                >
+                                <label class="form-check-label w-100" for="method_{{ value }}">
+                                    <strong>{{ label }}</strong>
+                                    {% if value == 'CARD' %}
+                                        <div class="text-muted small mt-1">
+                                            <i class="fas fa-credit-card me-1"></i>Visa, Mastercard, Amex
+                                        </div>
+                                    {% elif value == 'MOBILE_MONEY' %}
+                                        <div class="text-muted small mt-1">
+                                            <i class="fas fa-mobile-alt me-1"></i>MTN, Orange, M-Pesa, etc.
+                                        </div>
+                                    {% elif value == 'BANK_TRANSFER' %}
+                                        <div class="text-muted small mt-1">
+                                            <i class="fas fa-university me-1"></i>Direct bank transfer (may take 1-2 days)
+                                        </div>
+                                    {% elif value == 'CASH_ON_DELIVERY' %}
+                                        <div class="text-muted small mt-1">
+                                            <i class="fas fa-box me-1"></i>Pay when your order arrives
+                                        </div>
+                                    {% endif %}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Currency Selection -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header" style="background-color: #f8f9fa; border-bottom: 2px solid #e0e0e0;">
+                        <h6 class="mb-0" style="color: #1F7A6B;">Currency</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            {% if form.currency_code.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ form.currency_code.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            {% for currency in active_currencies %}
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check currency-option p-3" style="border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer;">
+                                    <input 
+                                        class="form-check-input currency-select" 
+                                        type="radio" 
+                                        name="currency_code" 
+                                        id="currency_{{ currency.currency_code }}" 
+                                        value="{{ currency.currency_code }}"
+                                        {% if form.currency_code.value == currency.currency_code %}checked{% endif %}
+                                    >
+                                    <label class="form-check-label w-100" for="currency_{{ currency.currency_code }}">
+                                        <strong>{{ currency.currency_code }}</strong> - {{ currency.currency_name }}
+                                        <div class="text-muted small mt-1" id="amount_{{ currency.currency_code }}">
+                                            {% if currency.currency_code == 'USD' %}
+                                                {{ currency.symbol }} {{ display_amount|floatformat:2 }}
+                                            {% else %}
+                                                Converting...
+                                            {% endif %}
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Details (Simulated) -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header" style="background-color: #f8f9fa; border-bottom: 2px solid #e0e0e0;">
+                        <h6 class="mb-0" style="color: #1F7A6B;">Payment Details</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Simulation Mode:</strong> This is a simulated payment system for testing. 
+                            No real funds will be charged.
+                        </div>
+
+                        <!-- Card Holder Name -->
+                        <div class="mb-3">
+                            <label for="cardholder" class="form-label">Full Name</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="cardholder" 
+                                placeholder="John Doe"
+                                value="{{ request.user.get_full_name }}"
+                            >
+                        </div>
+
+                        <!-- Card Number -->
+                        <div class="mb-3">
+                            <label for="card_number" class="form-label">Card / Phone Number</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="card_number" 
+                                placeholder="4532 1234 5678 9010"
+                            >
+                            <small class="text-muted">Use 4532 1234 5678 9010 for testing</small>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="expiry" class="form-label">Exp Date (MM/YY)</label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="expiry" 
+                                    placeholder="12/25"
+                                >
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cvv" class="form-label">CVV</label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="cvv" 
+                                    placeholder="123"
+                                    maxlength="4"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Amount Summary -->
+                <div class="card shadow-sm border-0 mb-4" style="background-color: #f8f9fa;">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <p class="mb-0 text-muted">You will pay:</p>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <h5 style="color: #1F7A6B; margin-bottom: 0;">
+                                    <span id="display-currency">{{ chosen_currency.symbol }}</span>
+                                    <span id="display-amount">{{ display_amount|floatformat:2 }}</span>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-grid gap-2 d-sm-flex justify-content-center mb-4">
+                    <button type="submit" class="btn btn-success btn-lg px-5">
+                        <i class="fas fa-check-circle me-2"></i>Complete Payment
+                    </button>
+                    <a href="{% url 'orders:cart_view' %}" class="btn btn-outline-secondary btn-lg px-4">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Cart
+                    </a>
+                </div>
+
+                <!-- Security Notice -->
+                <div class="alert alert-light border text-center" role="alert">
+                    <i class="fas fa-lock" style="color: #1F7A6B;"></i>
+                    <small class="text-muted">Your payment information is secure and encrypted.</small>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .payment-method-option:hover,
+    .currency-option:hover {
+        border-color: #1F7A6B !important;
+        background-color: rgba(31, 122, 107, 0.05);
+    }
+
+    .payment-method-option input[type="radio"]:checked ~ label,
+    .currency-option input[type="radio"]:checked ~ label {
+        color: #1F7A6B;
+        font-weight: bold;
+    }
+
+    .payment-method-option input[type="radio"]:checked,
+    .currency-option input[type="radio"]:checked {
+        border-color: #1F7A6B;
+    }
+
+    .form-control:focus {
+        border-color: #1F7A6B;
+        box-shadow: 0 0 0 0.2rem rgba(31, 122, 107, 0.25);
+    }
+</style>
+
+<script>
+    // Currency converter - live update amounts
+    document.querySelectorAll('.currency-select').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                const currencyCode = this.value;
+                const fromUSD = {{ order_total_usd|floatformat:2 }};
+                
+                // Call conversion API
+                fetch("{% url 'payments:api_convert' %}?from_code=USD&to_code=" + currencyCode + "&amount=" + fromUSD)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById('display-amount').textContent = data.amount.toFixed(2);
+                            // Update symbol based on currency
+                            const symbols = {
+                                'USD': '$',
+                                'EUR': '€',
+                                'XAF': 'FCFA',
+                                'NGN': '₦',
+                                'GHS': '₵',
+                                'KES': 'KSh',
+                                'ZAR': 'R'
+                            };
+                            document.getElementById('display-currency').textContent = symbols[currencyCode] || currencyCode;
+                        }
+                    });
+            }
+        });
+    });
+</script>
+{% endblock %}
