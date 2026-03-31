@@ -27,4 +27,9 @@ urlpatterns = [
     path("currencies/",   views.currency_rates,        name="currency_rates"),
     path("set-currency/", views.set_currency,           name="set_currency"),
     path("api/convert/",  views.api_convert,            name="api_convert"),
+    
+    # Order payment flow
+    path("order/<int:order_id>/pay/",           views.order_payment_view,           name="order_payment"),
+    path("order/<int:order_id>/confirmation/",  views.order_payment_confirmation_view, name="order_payment_confirmation"),
+    path("order/<int:order_id>/failed/",        views.order_payment_failed_view,    name="order_payment_failed"),
 ]

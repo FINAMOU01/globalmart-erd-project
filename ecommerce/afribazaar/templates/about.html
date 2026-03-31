@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About AfriBazaar - Supporting African Artisans{% endblock %}
+
+{% block content %}
+<div class="about-page">
+    <!-- Hero Section -->
+    <div class="hero-section" style="background: linear-gradient(135deg, #1F7A6B 0%, #0d4436 100%); color: white; padding: 80px 20px; text-align: center; margin-bottom: 60px;">
+        <div class="container">
+            <h1 style="font-size: 3.5rem; font-weight: 700; margin-bottom: 20px;">About AfriBazaar</h1>
+            <p style="font-size: 1.3rem; font-weight: 300; max-width: 600px; margin: 0 auto;">
+                Empowering African artisans and connecting them with a global marketplace of conscious consumers
+            </p>
+        </div>
+    </div>
+
+    <!-- Mission Section -->
+    <section class="mission-section py-5">
+        <div class="container">
+            <div class="row align-items-center mb-5">
+                <div class="col-md-6 mb-4 mb-md-0">
+                    <div style="background: linear-gradient(135deg, #1F7A6B 0%, #16573c 100%); border-radius: 15px; padding: 40px; color: white; height: 100%;">
+                        <h2 style="font-size: 2rem; margin-bottom: 20px; font-weight: 700;">Our Mission</h2>
+                        <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px;">
+                            At AfriBazaar, we believe in the power of authentic African craftsmanship. Our mission is to create a sustainable marketplace where talented artisans from across Africa can showcase their unique creations to the world.
+                        </p>
+                        <p style="font-size: 1.1rem; line-height: 1.8;">
+                            We're committed to fair trade practices, supporting local communities, and preserving traditional art forms while connecting them to a global audience of conscious consumers who appreciate quality and authenticity.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div style="background: linear-gradient(45deg, rgba(31, 122, 107, 0.1) 0%, rgba(22, 87, 60, 0.1) 100%); border-radius: 15px; padding: 30px; border-left: 5px solid #1F7A6B;">
+                        <i class="fas fa-heart" style="font-size: 3rem; color: #1F7A6B; margin-bottom: 20px;"></i>
+                        <h3 style="color: #1F7A6B; font-weight: 700; margin-bottom: 15px;">Why We Care</h3>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                                <i class="fas fa-check-circle" style="color: #1F7A6B; margin-right: 10px;"></i>
+                                <strong>Support Local Communities</strong> - Direct income for artisans and their families
+                            </li>
+                            <li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                                <i class="fas fa-check-circle" style="color: #1F7A6B; margin-right: 10px;"></i>
+                                <strong>Preserve Heritage</strong> - Keep traditional crafts alive for future generations
+                            </li>
+                            <li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                                <i class="fas fa-check-circle" style="color: #1F7A6B; margin-right: 10px;"></i>
+                                <strong>Fair Trade</strong> - Transparent pricing and ethical business practices
+                            </li>
+                            <li style="padding-bottom: 0; border-bottom: none;">
+                                <i class="fas fa-check-circle" style="color: #1F7A6B; margin-right: 10px;"></i>
+                                <strong>Global Reach</strong> - Connect talented makers to buyers worldwide
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Values Section -->
+    <section class="values-section py-5" style="background-color: #f8f9fa;">
+        <div class="container">
+            <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 50px; color: #1F7A6B; font-weight: 700;">Our Core Values</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm border-0 h-100 text-center" style="transition: transform 0.3s, box-shadow 0.3s;">
+                        <div class="card-body p-4">
+                            <i class="fas fa-handshake" style="font-size: 3rem; color: #1F7A6B; margin-bottom: 20px;"></i>
+                            <h4 style="color: #1F7A6B; margin-bottom: 15px; font-weight: 700;">Authenticity</h4>
+                            <p style="color: #555; line-height: 1.6;">
+                                Every product on AfriBazaar is handcrafted by real African artisans. We verify authenticity and showcase the stories behind each creation.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm border-0 h-100 text-center" style="transition: transform 0.3s, box-shadow 0.3s;">
+                        <div class="card-body p-4">
+                            <i class="fas fa-leaf" style="font-size: 3rem; color: #1F7A6B; margin-bottom: 20px;"></i>
+                            <h4 style="color: #1F7A6B; margin-bottom: 15px; font-weight: 700;">Sustainability</h4>
+                            <p style="color: #555; line-height: 1.6;">
+                                We're committed to sustainable and ethical practices that benefit both artisans and the environment for generations to come.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm border-0 h-100 text-center" style="transition: transform 0.3s, box-shadow 0.3s;">
+                        <div class="card-body p-4">
+                            <i class="fas fa-globe" style="font-size: 3rem; color: #1F7A6B; margin-bottom: 20px;"></i>
+                            <h4 style="color: #1F7A6B; margin-bottom: 15px; font-weight: 700;">Community</h4>
+                            <p style="color: #555; line-height: 1.6;">
+                                We build a community of conscious consumers and talented artisans who value cultural exchange and mutual respect.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Numbers Section -->
+    <section class="impact-section py-5">
+        <div class="container">
+            <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 50px; color: #1F7A6B; font-weight: 700;">Our Impact</h2>
+            <div class="row text-center">
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div style="background: linear-gradient(135deg, #1F7A6B 0%, #16573c 100%); color: white; border-radius: 15px; padding: 40px 20px;">
+                        <h3 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 10px;">500+</h3>
+                        <p style="font-size: 1.1rem; margin: 0;">Artisans Empowered</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div style="background: linear-gradient(135deg, #16573c 0%, #0d3a26 100%); color: white; border-radius: 15px; padding: 40px 20px;">
+                        <h3 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 10px;">10K+</h3>
+                        <p style="font-size: 1.1rem; margin: 0;">Happy Customers</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div style="background: linear-gradient(135deg, #0d4436 0%, #051f1a 100%); color: white; border-radius: 15px; padding: 40px 20px;">
+                        <h3 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 10px;">50+</h3>
+                        <p style="font-size: 1.1rem; margin: 0;">Countries Reached</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div style="background: linear-gradient(135deg, #1F7A6B 0%, #16573c 100%); color: white; border-radius: 15px; padding: 40px 20px;">
+                        <h3 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 10px;">$2M+</h3>
+                        <p style="font-size: 1.1rem; margin: 0;">Traded Annually</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Artisans Section -->
+    <section class="featured-artisans py-5" style="background-color: #f8f9fa;">
+        <div class="container">
+            <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 50px; color: #1F7A6B; font-weight: 700;">Meet Our Artisans</h2>
+            <p style="text-align: center; font-size: 1.1rem; color: #555; margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto;">
+                Our marketplace is home to talented artisans from across Africa, each bringing their unique story and expertise. From Kente weavers in Ghana to leather craftspeople in Ethiopia, our artisans represent Africa's rich cultural heritage.
+            </p>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm border-0 overflow-hidden">
+                        <div style="background: linear-gradient(135deg, #1F7A6B 0%, #16573c 100%); height: 200px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user-circle" style="font-size: 5rem; color: rgba(255,255,255,0.3);"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 style="color: #1F7A6B; font-weight: 700; margin-bottom: 5px;">Master Weavers</h5>
+                            <p style="color: #999; font-size: 0.9rem; margin-bottom: 10px;">Traditional Kente Cloth</p>
+                            <p style="color: #555; line-height: 1.5;">
+                                Creating authentic Kente patterns that tell stories of African heritage and culture, passed down through generations.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm border-0 overflow-hidden">
+                        <div style="background: linear-gradient(135deg, #16573c 0%, #0d3a26 100%); height: 200px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-palette" style="font-size: 5rem; color: rgba(255,255,255,0.3);"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 style="color: #1F7A6B; font-weight: 700; margin-bottom: 5px;">Textile Artists</h5>
+                            <p style="color: #999; font-size: 0.9rem; margin-bottom: 10px;">Vibrant African Prints</p>
+                            <p style="color: #555; line-height: 1.5;">
+                                Crafting stunning Ankara, Bogolan, and other African textile designs that celebrate our cultural diversity.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm border-0 overflow-hidden">
+                        <div style="background: linear-gradient(135deg, #0d4436 0%, #051f1a 100%); height: 200px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-hammer" style="font-size: 5rem; color: rgba(255,255,255,0.3);"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 style="color: #1F7A6B; font-weight: 700; margin-bottom: 5px;">Craft Masters</h5>
+                            <p style="color: #999; font-size: 0.9rem; margin-bottom: 10px;">Jewelry & Wooden Art</p>
+                            <p style="color: #555; line-height: 1.5;">
+                                Handcrafting beautiful beaded jewelry, wooden sculptures, and traditional art pieces with meticulous attention to detail.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-5">
+                <a href="{% url 'products:artisan_listing' %}" class="btn btn-lg" style="background-color: #1F7A6B; color: white; border: none; padding: 12px 40px; font-weight: 600; border-radius: 8px; transition: background-color 0.3s;">
+                    <i class="fas fa-users me-2"></i>Meet All Our Artisans
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Shop With Us Section -->
+    <section class="why-shop py-5">
+        <div class="container">
+            <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 50px; color: #1F7A6B; font-weight: 700;">Why Shop With AfriBazaar</h2>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div style="padding: 30px; border-left: 4px solid #1F7A6B; background-color: #f8f9fa; border-radius: 8px;">
+                        <h4 style="color: #1F7A6B; font-weight: 700; margin-bottom: 10px;">
+                            <i class="fas fa-certificate me-2"></i>100% Authentic
+                        </h4>
+                        <p style="color: #555; line-height: 1.6; margin: 0;">
+                            Every product is handmade by verified African artisans. We guarantee authenticity and quality in every purchase.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div style="padding: 30px; border-left: 4px solid #1F7A6B; background-color: #f8f9fa; border-radius: 8px;">
+                        <h4 style="color: #1F7A6B; font-weight: 700; margin-bottom: 10px;">
+                            <i class="fas fa-hand-holding-heart me-2"></i>Fair Trade Prices
+                        </h4>
+                        <p style="color: #555; line-height: 1.6; margin: 0;">
+                            We ensure artisans receive fair compensation for their skill and labor, supporting sustainable livelihoods.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div style="padding: 30px; border-left: 4px solid #1F7A6B; background-color: #f8f9fa; border-radius: 8px;">
+                        <h4 style="color: #1F7A6B; font-weight: 700; margin-bottom: 10px;">
+                            <i class="fas fa-book-open me-2"></i>Artisan Stories
+                        </h4>
+                        <p style="color: #555; line-height: 1.6; margin: 0;">
+                            Learn the unique story behind each product and the artisan who created it. Every purchase connects cultures.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div style="padding: 30px; border-left: 4px solid #1F7A6B; background-color: #f8f9fa; border-radius: 8px;">
+                        <h4 style="color: #1F7A6B; font-weight: 700; margin-bottom: 10px;">
+                            <i class="fas fa-shipping-fast me-2"></i>Secure Delivery
+                        </h4>
+                        <p style="color: #555; line-height: 1.6; margin: 0;">
+                            We provide secure international shipping with tracking to ensure your purchases arrive safely and on time.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta-section py-5" style="background: linear-gradient(135deg, #1F7A6B 0%, #0d4436 100%); color: white; text-align: center;">
+        <div class="container">
+            <h2 style="font-size: 2.5rem; margin-bottom: 20px; font-weight: 700;">Ready to Support African Artisans?</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Explore our collection of authentic handcrafted products and make a direct difference in the lives of talented African artisans.
+            </p>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a href="{% url 'products:shop' %}" class="btn btn-light btn-lg px-5" style="font-weight: 600;">
+                    <i class="fas fa-shopping-bag me-2"></i>Shop Now
+                </a>
+                <a href="{% url 'products:artisan_listing' %}" class="btn btn-outline-light btn-lg px-5" style="font-weight: 600; border-width: 2px;">
+                    <i class="fas fa-users me-2"></i>Browse Artisans
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="footer-cta py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 text-center mb-4 mb-md-0">
+                    <i class="fas fa-box-open" style="font-size: 2.5rem; color: #1F7A6B; margin-bottom: 15px;"></i>
+                    <h5 style="color: #1F7A6B; font-weight: 700; margin-bottom: 10px;">Quality Products</h5>
+                    <p style="color: #555;">Handcrafted with care and attention to detail</p>
+                </div>
+                <div class="col-md-4 text-center mb-4 mb-md-0">
+                    <i class="fas fa-medal" style="font-size: 2.5rem; color: #1F7A6B; margin-bottom: 15px;"></i>
+                    <h5 style="color: #1F7A6B; font-weight: 700; margin-bottom: 10px;">Award Winning</h5>
+                    <p style="color: #555;">Recognized for excellence in fair trade practices</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="fas fa-heart" style="font-size: 2.5rem; color: #1F7A6B; margin-bottom: 15px;"></i>
+                    <h5 style="color: #1F7A6B; font-weight: 700; margin-bottom: 10px;">Community Driven</h5>
+                    <p style="color: #555;">Supporting artisans and preserving heritage</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    .about-page a {
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .about-page .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(31, 122, 107, 0.3) !important;
+    }
+
+    .about-page .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    @media (max-width: 768px) {
+        .about-page .hero-section {
+            padding: 50px 20px !important;
+        }
+
+        .about-page .hero-section h1 {
+            font-size: 2rem !important;
+        }
+
+        .about-page .hero-section p {
+            font-size: 1rem !important;
+        }
+    }
+</style>
+{% endblock %}

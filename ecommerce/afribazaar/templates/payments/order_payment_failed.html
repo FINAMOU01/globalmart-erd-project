@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Payment Status - AfriBazaar{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Status Alert -->
+            <div class="alert alert-warning alert-dismissible fade show" role="alert" style="border-left: 4px solid #ffc107;">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-clock me-3" style="font-size: 2rem;"></i>
+                    <div>
+                        <strong>Payment Pending</strong>
+                        <p class="mb-0">Your payment is awaiting confirmation. Your order has been created but requires verification.</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <!-- Status Details Card -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header" style="background-color: #ffc107; color: white;">
+                    <h5 class="mb-0">Payment Status</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="text-muted" style="font-size: 0.85rem;">Order Number</h6>
+                            <h5 style="color: #1F7A6B;">
+                                <strong>#{{ order.id }}</strong>
+                            </h5>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted" style="font-size: 0.85rem;">Current Status</h6>
+                            <h5>
+                                <span class="badge bg-warning text-dark" style="font-size: 0.9rem;">
+                                    Pending Confirmation
+                                </span>
+                            </h5>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    {% if payment.payment_method == 'BANK_TRANSFER' %}
+                    <!-- Bank Transfer Instructions -->
+                    <div class="alert alert-info" role="alert">
+                        <h6 class="alert-heading">
+                            <i class="fas fa-university me-2"></i>Bank Transfer Instructions
+                        </h6>
+                        <p class="mb-2">Please transfer the payment to the following account:</p>
+                        <div class="bg-light p-3 rounded mb-3" style="border-left: 3px solid #007bff;">
+                            <p class="mb-1"><strong>Bank:</strong> AfriBazaar Payment Services</p>
+                            <p class="mb-1"><strong>Country:</strong> Pan-Africa</p>
+                            <p class="mb-1"><strong>Account Number:</strong> 1234567890</p>
+                            <p class="mb-0"><strong>Reference (Important!):</strong> <code style="background-color: #f8f9fa; padding: 2px 6px; border-radius: 3px;">{{ payment.reference_number }}</code></p>
+                        </div>
+                        <p class="small text-muted mb-0">
+                            Please include the reference number in your payment to help us track your transfer.
+                            It may take 1-2 business days for the payment to be processed.
+                        </p>
+                    </div>
+                    {% endif %}
+
+                    <!-- Payment Details -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2">Payment Method</h6>
+                            <p class="mb-0">
+                                <i class="fas fa-hourglass-end me-2" style="color: #ffc107;"></i>
+                                <strong>{{ payment.get_payment_method_display }}</strong>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2">Amount Due</h6>
+                            <p class="mb-0">
+                                <strong>{{ payment.currency.symbol }} {{ payment.amount_in_currency|floatformat:2 }}</strong>
+                                <br>
+                                <small class="text-muted">(USD {{ payment.amount_in_usd|floatformat:2 }})</small>
+                            </p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2">Payment Initiated</h6>
+                            <p class="mb-0">{{ payment.created_at|date:"M d, Y - H:i" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2">Payment Reference</h6>
+                            <p class="mb-0"><strong>{{ payment.reference_number }}</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Items Summary -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header" style="background-color: #f8f9fa; border-bottom: 2px solid #e0e0e0;">
+                    <h6 class="mb-0" style="color: #1F7A6B;">Order Items</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-borderless mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th class="text-end">Price</th>
+                                    <th class="text-end">Qty</th>
+                                    <th class="text-end">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order.items.all %}
+                                <tr>
+                                    <td>{{ item.product.name }}</td>
+                                    <td class="text-end">USD {{ item.price }}</td>
+                                    <td class="text-end">{{ item.quantity }}</td>
+                                    <td class="text-end fw-bold">USD {{ item.get_subtotal }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <hr class="my-3">
+
+                    <div class="row">
+                        <div class="col-md-6 offset-md-6">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Order Total:</span>
+                                <span><strong>USD {{ order.get_items_total|floatformat:2 }}</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Important Information -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h6 class="mb-3" style="color: #1F7A6B;">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Important Information
+                    </h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-info-circle me-2" style="color: #ffc107;"></i>
+                            Your order has been created and is being held pending payment.
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-clock me-2" style="color: #ffc107;"></i>
+                            We will hold your order for <strong>7 days</strong>. Please complete payment within this period.
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check me-2" style="color: #ffc107;"></i>
+                            Once we receive your payment, we'll send a confirmation email immediately.
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope me-2" style="color: #ffc107;"></i>
+                            You can view this order anytime from your <a href="{% url 'accounts:customer_dashboard' %}" class="text-decoration-none">dashboard</a>.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Contact Support -->
+            <div class="alert alert-light border text-center mb-4" role="alert">
+                <h6 class="mb-2" style="color: #1F7A6B;">Need Help?</h6>
+                <p class="text-muted small mb-0">
+                    Contact our support team at <strong>support@afribazaar.com</strong> or call <strong>+1-800-BAZAAR-1</strong>
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-grid gap-2 d-sm-flex justify-content-center">
+                <a href="{% url 'payments:order_payment' order.id %}" class="btn btn-warning btn-lg px-4">
+                    <i class="fas fa-redo me-2"></i>Retry Payment
+                </a>
+                <a href="{% url 'accounts:customer_dashboard' %}" class="btn btn-outline-secondary btn-lg px-4">
+                    <i class="fas fa-chart-line me-2"></i>Go to Orders
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

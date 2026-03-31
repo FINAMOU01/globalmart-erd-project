@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from .models import Product, Category
+from .models import Product, Category, ArtisanRating
 
 User = get_user_model()
 
@@ -13,7 +13,7 @@ class ProductForm(forms.ModelForm):
     
     class Meta:
         model = Product
-        fields = ['name', 'description', 'category', 'price', 'stock_quantity', 'image', 'attributes', 'is_featured']
+        fields = ['name', 'description', 'category', 'price', 'currency_code', 'stock_quantity', 'image', 'attributes', 'is_featured']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -32,9 +32,13 @@ class ProductForm(forms.ModelForm):
             }),
             'price': forms.NumberInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Price (USD)',
+                'placeholder': 'Price',
                 'step': '0.01',
                 'min': '0',
+                'required': True,
+            }),
+            'currency_code': forms.Select(attrs={
+                'class': 'form-control',
                 'required': True,
             }),
             'stock_quantity': forms.NumberInput(attrs={
@@ -46,18 +50,37 @@ class ProductForm(forms.ModelForm):
             'image': forms.FileInput(attrs={
                 'class': 'form-control',
                 'accept': 'image/*',
-                'required': True,
             }),
-            'attributes': forms.Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': '{"color":"red","size":"M","material":"Ankara"}',
-                'rows': 3,
-                'help_text': 'JSON format: {"color":"red","size":"M"}',
-            }),
+            'attributes': forms.HiddenInput(),
             'is_featured': forms.CheckboxInput(attrs={
                 'class': 'form-check-input',
             }),
         }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['attributes'].required = False
+        self.fields['is_featured'].required = False
+        
+        # Enhance currency choices with country flags (for form display)
+        flag_choices = [
+            ('USD', 'USD - US Dollar'),
+            ('EUR', 'EUR - Euro'),
+            ('GBP', 'GBP - British Pound'),
+            ('XAF', 'XAF - CFA Franc (Central)'),
+            ('NGN', 'NGN - Nigerian Naira'),
+            ('GHS', 'GHS - Ghanaian Cedi'),
+            ('KES', 'KES - Kenyan Shilling'),
+            ('ZAR', 'ZAR - South African Rand'),
+            ('EGP', 'EGP - Egyptian Pound'),
+            ('MAD', 'MAD - Moroccan Dirham'),
+        ]
+        self.fields['currency_code'].choices = flag_choices
+        
+        # Make image optional when editing (if instance exists)
+        if self.instance and self.instance.pk:
+            self.fields['image'].required = False
+            self.fields['image'].widget.attrs['required'] = False
     
     def clean_attributes(self):
         """
@@ -74,14 +97,9 @@ class ProductForm(forms.ModelForm):
                     raise forms.ValidationError("Attributes must be valid JSON format.")
         
         return attributes
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['attributes'].required = False
-        self.fields['is_featured'].required = False
 
 
-class ArtisanProfileForm(forms.ModelForm):
+class ArtisanProfileForm(forms.Form):
     """
     Form for artisans to update their profile information.
     """
@@ -126,10 +144,6 @@ class ArtisanProfileForm(forms.ModelForm):
         })
     )
     
-    class Meta:
-        model = None  # We'll handle User fields manually
-        fields = []
-    
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
@@ -143,7 +157,7 @@ class ArtisanProfileForm(forms.ModelForm):
     
     def save(self, commit=True):
         """
-        Save both user data and artisan profile data.
+        Save user data.
         """
         if self.user:
             self.user.first_name = self.cleaned_data.get('first_name', '')
@@ -201,3 +215,22 @@ class ArtisanBioForm(forms.Form):
                     raise forms.ValidationError("Social links must be valid JSON format.")
         
         return social_links
+
+
+class ArtisanRatingForm(forms.ModelForm):
+    """
+    Form for rating artisans
+    """
+    class Meta:
+        model = ArtisanRating
+        fields = ['rating', 'comment']
+        widgets = {
+            'rating': forms.RadioSelect(attrs={
+                'class': 'form-check-input',
+            }),
+            'comment': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Share your experience with this artisan (optional)',
+                'rows': 4,
+            }),
+        }

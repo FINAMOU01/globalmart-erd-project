@@ -1,0 +1,416 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Products - AfriBazaar Seller{% endblock %}
+
+{% block content %}
+<div class="artisan-dashboard-wrapper">
+    <!-- Top Navigation Bar -->
+    <nav class="artisan-top-nav">
+        <div class="container-fluid px-4">
+            <div class="d-flex justify-content-between align-items-center py-3">
+                <div class="nav-brand">
+                    <i class="fas fa-store me-2"></i>
+                    <span>AfriBazaar Seller</span>
+                </div>
+                <div class="nav-actions">
+                    <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light me-2">
+                        <i class="fas fa-home me-1"></i> Home
+                    </a>
+                    <a href="{% url 'products:add_product' %}" class="btn btn-sm btn-success me-2">
+                        <i class="fas fa-plus-circle me-1"></i> Add Product
+                    </a>
+                    <a href="{% url 'accounts:logout' %}" class="btn btn-sm btn-outline-danger">
+                        <i class="fas fa-sign-out-alt me-1"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid dashboard-main">
+        <div class="row g-0">
+            <!-- Sidebar -->
+            <div class="col-lg-2 artisan-sidebar">
+                <div class="sidebar-menu">
+                    <div class="menu-section">
+                        <div class="menu-title">MAIN</div>
+                        <a href="{% url 'products:artisan_dashboard' %}" class="menu-item">
+                            <i class="fas fa-chart-line me-2"></i> Dashboard
+                        </a>
+                        <a href="{% url 'products:artisan_orders' %}" class="menu-item">
+                            <i class="fas fa-shopping-box me-2"></i> Orders
+                        </a>
+                    </div>
+
+                    <div class="menu-section">
+                        <div class="menu-title">PRODUCTS</div>
+                        <a href="{% url 'products:artisan_products' %}" class="menu-item active">
+                            <i class="fas fa-list me-2"></i> My Products
+                        </a>
+                        <a href="{% url 'products:add_product' %}" class="menu-item">
+                            <i class="fas fa-plus me-2"></i> Add New
+                        </a>
+                    </div>
+
+                    <div class="menu-section">
+                        <div class="menu-title">ACCOUNT</div>
+                        <a href="{% url 'products:edit_artisan_profile' %}" class="menu-item">
+                            <i class="fas fa-user-circle me-2"></i> Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-10 artisan-content">
+                <!-- Page Header -->
+                <div class="section-header">
+                    <div>
+                        <h2 class="section-title"><i class="fas fa-list me-2"></i>My Products</h2>
+                        <p class="text-muted mt-2">Total: <strong>{{ total_products }}</strong> products | Inventory Value: <strong>USD {{ total_inventory_value|floatformat:0 }}</strong></p>
+                    </div>
+                    <a href="{% url 'products:add_product' %}" class="btn btn-success">
+                        <i class="fas fa-plus me-2"></i> Add Product
+                    </a>
+                </div>
+
+                <!-- Search & Filter Section -->
+                <div style="background: white; border-radius: 14px; padding: 20px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                    <form method="get">
+                        <div class="row g-3">
+                            <!-- Search -->
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <span class="input-group-text" style="background-color: #1F7A6B; border: none; color: white;">
+                                        <i class="fas fa-search"></i>
+                                    </span>
+                                    <input 
+                                        type="text" 
+                                        name="q" 
+                                        class="form-control" 
+                                        placeholder="Search by name or description..."
+                                        value="{{ search_query }}"
+                                        style="border-left: none;"
+                                    >
+                                </div>
+                            </div>
+
+                            <!-- Category Filter -->
+                            <div class="col-md-3">
+                                <select name="category" class="form-select" style="border-color: #1F7A6B;">
+                                    <option value="">All Categories</option>
+                                    {% for category in categories %}
+                                    <option value="{{ category.id }}" {% if category.id|stringformat:"s" == category_filter %}selected{% endif %}>
+                                        {{ category.name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Stock Filter -->
+                            <div class="col-md-2">
+                                <select name="stock" class="form-select" style="border-color: #1F7A6B;">
+                                    <option value="">All Stock</option>
+                                    <option value="in" {% if stock_filter == 'in' %}selected{% endif %}>In Stock</option>
+                                    <option value="low" {% if stock_filter == 'low' %}selected{% endif %}>Low Stock (&lt;5)</option>
+                                    <option value="out" {% if stock_filter == 'out' %}selected{% endif %}>Out of Stock</option>
+                                </select>
+                            </div>
+
+                            <!-- Search Button -->
+                            <div class="col-md-2 d-flex gap-2">
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="fas fa-filter me-1"></i>Filter
+                                </button>
+                                {% if search_query or category_filter or stock_filter %}
+                                <a href="{% url 'products:artisan_products' %}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Products Table -->
+                {% if products %}
+                <div style="background: white; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-borderless mb-0">
+                            <thead style="background-color: #f8f9fa; border-bottom: 2px solid #1F7A6B;">
+                                <tr>
+                                    <th style="color: #1F7A6B;">Product</th>
+                                    <th style="color: #1F7A6B;">Category</th>
+                                    <th style="color: #1F7A6B;">Price</th>
+                                    <th style="color: #1F7A6B;">Stock</th>
+                                    <th style="color: #1F7A6B;">Status</th>
+                                    <th style="color: #1F7A6B;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in products %}
+                                <tr style="border-bottom: 1px solid #e0e0e0;">
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if product.image %}
+                                            <img src="{{ product.image.url }}" alt="{{ product.name }}" 
+                                                 style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px; margin-right: 12px;">
+                                            {% else %}
+                                            <div style="width: 50px; height: 50px; background-color: #f0f0f0; border-radius: 6px; margin-right: 12px; display: flex; align-items: center; justify-content: center;">
+                                                <i class="fas fa-image text-muted"></i>
+                                            </div>
+                                            {% endif %}
+                                            <div>
+                                                <strong>{{ product.name }}</strong>
+                                                <br>
+                                                <small class="text-muted">ID: #{{ product.id }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ product.category.name }}</td>
+                                    <td><strong>USD {{ product.price|floatformat:2 }}</strong></td>
+                                    <td>
+                                        <span class="badge {% if product.stock_quantity > 10 %}bg-success{% elif product.stock_quantity > 0 %}bg-warning{% else %}bg-danger{% endif %}">
+                                            {{ product.stock_quantity }} items
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if product.stock_quantity == 0 %}
+                                        <span class="badge bg-danger">Out of Stock</span>
+                                        {% elif product.stock_quantity < 5 %}
+                                        <span class="badge bg-warning text-dark">Low Stock</span>
+                                        {% else %}
+                                        <span class="badge bg-success">In Stock</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a href="{% url 'products:product_detail' product.id %}" class="btn btn-outline-primary" title="View">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{% url 'products:edit_product' product.id %}" class="btn btn-outline-warning" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{% url 'products:delete_product' product.id %}" class="btn btn-outline-danger" title="Delete" onclick="return confirm('Are you sure?')">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% else %}
+                <!-- Empty State -->
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-inbox"></i>
+                    </div>
+                    <h4>No Products Found</h4>
+                    <p>
+                        {% if search_query or category_filter or stock_filter %}
+                            No products match your filters. Try adjusting your search criteria.
+                        {% else %}
+                            Start adding products to your store!
+                        {% endif %}
+                    </p>
+                    {% if search_query or category_filter or stock_filter %}
+                    <a href="{% url 'products:artisan_products' %}" class="btn btn-outline-secondary me-2">
+                        <i class="fas fa-times me-1"></i> Clear Filters
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'products:add_product' %}" class="btn btn-success">
+                        <i class="fas fa-plus me-1"></i> Add First Product
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* Dashboard Wrapper */
+    .artisan-dashboard-wrapper {
+        background: #ecf0f3;
+        min-height: 100vh;
+        padding-top: 0;
+    }
+
+    /* Top Navigation */
+    .artisan-top-nav {
+        background: linear-gradient(135deg, #1F7A6B 0%, #16573c 100%);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .nav-brand {
+        color: white;
+        font-size: 1.3rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+
+    .nav-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    /* Dashboard Main */
+    .dashboard-main {
+        margin-top: 0;
+    }
+
+    /* Sidebar */
+    .artisan-sidebar {
+        background: white;
+        border-right: 2px solid #1F7A6B;
+        min-height: calc(100vh - 150px);
+        position: sticky;
+        top: 20px;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .sidebar-menu {
+        padding: 30px 0;
+    }
+
+    .menu-section {
+        margin-bottom: 35px;
+        padding: 0 15px;
+    }
+
+    .menu-title {
+        font-size: 0.7rem;
+        font-weight: 800;
+        color: #1F7A6B;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 15px;
+        padding: 0 10px;
+    }
+
+    .menu-item {
+        display: flex;
+        align-items: center;
+        padding: 14px 15px;
+        color: #555;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        margin-bottom: 7px;
+        font-weight: 500;
+        border-left: 4px solid transparent;
+    }
+
+    .menu-item:hover {
+        background: #f5f5f5;
+        color: #1F7A6B;
+        border-left-color: #1F7A6B;
+        transform: translateX(5px);
+    }
+
+    .menu-item.active {
+        background: linear-gradient(135deg, #e8f5f2 0%, #f0f8f6 100%);
+        color: #1F7A6B;
+        border-left-color: #1F7A6B;
+        font-weight: 600;
+    }
+
+    /* Main Content Area */
+    .artisan-content {
+        padding: 40px;
+        background: #ecf0f3;
+    }
+
+    /* Section Header */
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+        padding-bottom: 25px;
+        border-bottom: 3px solid #e8f5f2;
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+        color: #1F7A6B;
+        margin: 0;
+        font-weight: 700;
+    }
+
+    /* Table Styling */
+    .table-hover tbody tr:hover {
+        background-color: rgba(31, 122, 107, 0.05);
+    }
+
+    .btn-group-sm .btn {
+        padding: 4px 8px;
+        font-size: 0.85rem;
+    }
+
+    .btn-group-sm .btn:hover {
+        transform: translateY(-2px);
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: linear-gradient(135deg, #e8f5f2 0%, #f0faf9 100%);
+        border: 3px dashed #1F7A6B;
+        border-radius: 14px;
+        margin: 40px 0;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        color: #1F7A6B;
+        margin-bottom: 20px;
+    }
+
+    .empty-state h4 {
+        color: #1F7A6B;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .empty-state p {
+        color: #666;
+        margin-bottom: 30px;
+        font-size: 1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+        .artisan-sidebar {
+            display: none;
+        }
+
+        .artisan-content {
+            padding: 20px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .section-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .nav-actions {
+            font-size: 0.85rem;
+        }
+    }
+</style>
+{% endblock %}

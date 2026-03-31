@@ -11,7 +11,7 @@
     .auth-page {
         min-height: 100vh;
         display: flex;
-        background: #F5F3EE;
+        background: linear-gradient(135deg, #F5F3EE 0%, #FAFAF8 100%);
         font-family: 'Poppins', sans-serif;
         margin-top: 80px;
     }
@@ -19,12 +19,12 @@
     /* ===== LEFT DECORATIVE PANEL ===== */
     .auth-panel-left {
         flex: 1;
-        background: linear-gradient(145deg, #D4AF37 0%, #C44A2F 100%);
-        display: none;
+        background: linear-gradient(145deg, #1E1E1E 0%, #4A4A4A 100%);
+        display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 60px 50px;
+        padding: 80px 60px;
         position: relative;
         overflow: hidden;
     }
@@ -38,6 +38,7 @@
         border: 60px solid rgba(212, 175, 55, 0.12);
         top: -100px;
         right: -100px;
+        animation: float-animation 10s ease-in-out infinite;
     }
 
     .auth-panel-left::after {
@@ -46,9 +47,10 @@
         width: 300px;
         height: 300px;
         border-radius: 50%;
-        border: 40px solid rgba(196, 74, 47, 0.15);
+        border: 40px solid rgba(212, 175, 55, 0.15);
         bottom: -80px;
         left: -60px;
+        animation: float-animation 8s ease-in-out infinite;
     }
 
     .panel-logo {
@@ -57,19 +59,26 @@
         gap: 12px;
         margin-bottom: 50px;
         z-index: 1;
+        animation: slideInDown 0.7s ease;
     }
 
     .panel-logo-icon {
-        width: 52px;
-        height: 52px;
-        background: linear-gradient(135deg, #C44A2F, #D4AF37);
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #D4AF37, #C44A2F);
         border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
-        font-size: 1.4rem;
-        box-shadow: 0 4px 15px rgba(196, 74, 47, 0.4);
+        font-size: 1.6rem;
+        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    .panel-logo-icon:hover {
+        transform: scale(1.08);
     }
 
     .panel-logo-text {
@@ -81,21 +90,23 @@
 
     .panel-headline {
         color: white;
-        font-size: 2.6rem;
-        font-weight: 700;
+        font-size: 3rem;
+        font-weight: 800;
         line-height: 1.25;
-        margin-bottom: 20px;
+        margin-bottom: 16px;
         z-index: 1;
         text-align: center;
+        animation: slideInDown 0.8s ease 0.1s both;
     }
 
     .panel-sub {
         color: rgba(255,255,255,0.85);
         font-size: 1rem;
-        line-height: 1.7;
+        line-height: 1.8;
         text-align: center;
         z-index: 1;
         max-width: 320px;
+        animation: slideInUp 0.8s ease 0.2s both;
     }
 
     .panel-features {
@@ -106,16 +117,21 @@
 
     .panel-features li {
         color: rgba(255,255,255,0.9);
-        font-size: 0.9rem;
-        margin-bottom: 12px;
+        font-size: 0.95rem;
+        margin-bottom: 14px;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
+        animation: fadeInUp 0.6s ease forwards;
     }
+
+    .panel-features li:nth-child(1) { animation-delay: 0.3s; }
+    .panel-features li:nth-child(2) { animation-delay: 0.4s; }
+    .panel-features li:nth-child(3) { animation-delay: 0.5s; }
 
     .panel-features i {
         color: #D4AF37;
-        font-size: 1.1rem;
+        font-size: 1.2rem;
     }
 
     /* ===== RIGHT FORM PANEL ===== */
@@ -124,8 +140,8 @@
         display: flex;
         align-items: flex-start;
         justify-content: center;
-        padding: 40px 30px;
-        padding-top: 20px;
+        padding: 60px 40px;
+        padding-top: 40px;
         overflow-y: auto;
         min-height: calc(100vh - 80px);
     }
@@ -133,8 +149,8 @@
     .auth-form-box {
         width: 100%;
         max-width: 440px;
-        animation: fadeInUp 0.5s ease forwards;
-        margin-top: 20px;
+        animation: fadeInUp 0.6s ease forwards;
+        margin-top: 0;
     }
 
     @keyframes fadeInUp {
@@ -142,29 +158,13 @@
         to   { opacity: 1; transform: translateY(0); }
     }
 
-    .form-eyebrow {
-        color: #C44A2F;
-        font-size: 0.8rem;
-        font-weight: 600;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        margin-bottom: 10px;
-    }
-
     .form-title {
         color: #1E1E1E;
-        font-size: 2rem;
-        font-weight: 700;
-        margin-bottom: 8px;
+        font-size: 2.4rem;
+        font-weight: 800;
+        margin-bottom: 10px;
         line-height: 1.2;
-    }
-
-    .form-subtitle {
-        display: none;
-    }
-
-    .form-eyebrow {
-        display: none;
+        letter-spacing: -0.2px;
     }
 
     /* ===== MESSAGES ===== */
@@ -196,117 +196,151 @@
 
     /* ===== FORM FIELDS ===== */
     .form-group {
-        margin-bottom: 14px;
+        margin-bottom: 24px;
+        animation: fadeInUp 0.6s ease forwards;
     }
+
+    .form-group:nth-child(1) { animation-delay: 0.1s; }
+    .form-group:nth-child(2) { animation-delay: 0.15s; }
+    .form-group:nth-child(3) { animation-delay: 0.2s; }
+    .form-group:nth-child(4) { animation-delay: 0.25s; }
+    .form-group:nth-child(5) { animation-delay: 0.3s; }
+    .form-group:nth-child(6) { animation-delay: 0.35s; }
+    .form-group:nth-child(7) { animation-delay: 0.4s; }
+    .form-group:nth-child(8) { animation-delay: 0.45s; }
 
     .form-group label {
         display: block;
         color: #333333;
-        font-size: 0.875rem;
-        font-weight: 600;
-        margin-bottom: 8px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        letter-spacing: 0.2px;
     }
 
-    .form-group input {
+    .form-group input,
+    .form-group textarea {
         width: 100%;
-        padding: 12px 14px;
-        border: 2px solid #E5E5E5;
-        border-radius: 10px;
+        padding: 14px 16px;
+        border: 2px solid #E8E6E0;
+        border-radius: 12px;
         font-size: 0.9rem;
         font-family: 'Poppins', sans-serif;
         color: #1E1E1E;
         background: #FFFFFF;
-        transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         outline: none;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
 
-    .form-group input:focus {
-        border-color: #C44A2F;
-        box-shadow: 0 0 0 4px rgba(196,74,47,0.12);
+    .form-group input:focus,
+    .form-group textarea:focus {
+        border-color: #1F7A6B;
+        box-shadow: 0 0 0 5px rgba(31,122,107,0.12), 0 4px 16px rgba(31,122,107,0.15);
+        background: #F8FDFC;
+        transform: translateY(-2px);
     }
 
     .form-group input::placeholder {
-        color: #AAAAAA;
+        color: #A8A8A8;
     }
 
     .error-message {
         color: #C44A2F;
-        font-size: 0.75rem;
-        margin-top: 4px;
+        font-size: 0.8rem;
+        margin-top: 6px;
         display: flex;
         align-items: center;
         gap: 4px;
+        font-weight: 600;
     }
 
     /* ===== SUBMIT BUTTON ===== */
     .btn-submit {
         width: 100%;
-        padding: 14px;
-        background: #C44A2F;
+        padding: 16px 24px;
+        background: linear-gradient(135deg, #1F7A6B 0%, #166054 100%);
         color: white;
         border: none;
-        border-radius: 25px;
+        border-radius: 12px;
         font-size: 1rem;
-        font-weight: 600;
+        font-weight: 700;
         font-family: 'Poppins', sans-serif;
         cursor: pointer;
-        transition: all 0.3s ease;
-        letter-spacing: 0.3px;
-        box-shadow: 0 4px 15px rgba(196,74,47,0.3);
-        margin-top: 10px;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        letter-spacing: 0.4px;
+        box-shadow: 0 6px 20px rgba(31,122,107,0.3);
+        margin-top: 16px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-submit::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.6s ease;
     }
 
     .btn-submit:hover {
-        background: #A33D26;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(196,74,47,0.4);
+        background: linear-gradient(135deg, #166054 0%, #124A41 100%);
+        transform: translateY(-4px);
+        box-shadow: 0 10px 28px rgba(31,122,107,0.4);
+    }
+
+    .btn-submit:hover::before {
+        left: 100%;
     }
 
     .btn-submit:active {
-        transform: scale(0.98);
-    }
-
-    /* ===== DIVIDER ===== */
-    .auth-divider {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin: 20px 0;
-    }
-
-    .auth-divider span {
-        flex: 1;
-        height: 1px;
-        background: #E5E5E5;
-    }
-
-    .auth-divider p {
-        color: #AAAAAA;
-        font-size: 0.8rem;
+        transform: translateY(-1px);
     }
 
     /* ===== FOOTER LINKS ===== */
     .auth-links {
         text-align: center;
-        margin-top: 8px;
+        margin-top: 24px;
+        animation: fadeInUp 0.8s ease 0.5s both;
     }
 
     .auth-links p {
         color: #666666;
-        font-size: 0.875rem;
+        font-size: 0.95rem;
         margin-bottom: 8px;
     }
 
     .auth-links a {
-        color: #C44A2F;
-        font-weight: 600;
+        color: #1F7A6B;
+        font-weight: 700;
         text-decoration: none;
-        transition: color 0.2s;
+        position: relative;
+        transition: color 0.3s ease;
+        letter-spacing: 0.2px;
+    }
+
+    .auth-links a::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: #1F7A6B;
+        transform: scaleX(0);
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transform-origin: left;
+    }
+
+    .auth-links a:hover::after {
+        transform: scaleX(1);
     }
 
     .auth-links a:hover {
-        color: #A33D26;
-        text-decoration: underline;
+        color: #166054;
     }
 
     /* ===== RESPONSIVE ===== */
@@ -325,6 +359,23 @@
     .footer {
         display: none !important;
     }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes slideInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float-animation {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(30px); }
+    }
+    }
 </style>
 
 {% endblock %}
@@ -332,184 +383,116 @@
 {% block content %}
 
 <div class="auth-page">
-
-    <!-- LEFT PANEL -->
+    <!-- Left Decorative Panel -->
     <div class="auth-panel-left">
-        <div class="panel-logo">
-            <div class="panel-logo-icon">
-                <i class="fas fa-palette"></i>
-            </div>
-            <span class="panel-logo-text">AfriBazaar</span>
-        </div>
-        <h2 class="panel-headline">Sell Global 🎨</h2>
-        <p class="panel-sub">
-            Share your authentic African craft with collectors worldwide and grow your business from home.
-        </p>
+        <a href="/" class="panel-logo">
+            <div class="panel-logo-icon">✨</div>
+            <div class="panel-logo-text">AfriBazaar</div>
+        </a>
+        <h2 class="panel-headline">Showcase Your Craft</h2>
+        <p class="panel-sub">Join thousands of artisans selling authentic handcrafted products globally.</p>
         <ul class="panel-features">
-            <li><i class="fas fa-star"></i> Commission-based earnings</li>
-            <li><i class="fas fa-star"></i> Global reach & exposure</li>
-            <li><i class="fas fa-star"></i> Secure payments</li>
-            <li><i class="fas fa-star"></i> Marketing support</li>
+            <li><i class="fas fa-check"></i> Easy Product Management</li>
+            <li><i class="fas fa-check"></i> Reach Global Customers</li>
+            <li><i class="fas fa-check"></i> Secure Payment Processing</li>
         </ul>
     </div>
 
-    <!-- RIGHT FORM PANEL -->
+    <!-- Right Form Panel -->
     <div class="auth-panel-right">
         <div class="auth-form-box">
-
-            <p class="form-eyebrow">AfriBazaar</p>
-            <h1 class="form-title">Start Selling</h1>
-            <p class="form-subtitle">Create your artisan account</p>
+            <h2 class="form-title">Register Your Shop</h2>
 
             <!-- Messages -->
             {% if messages %}
             <div class="messages-box">
                 {% for message in messages %}
                 <div class="alert alert-{{ message.tags }}">
-                    {% if message.tags == 'error' or message.tags == 'danger' %}
-                        <i class="fas fa-exclamation-circle"></i>
-                    {% else %}
-                        <i class="fas fa-check-circle"></i>
-                    {% endif %}
-                    {{ message }}
+                    <span>{{ message }}</span>
                 </div>
                 {% endfor %}
             </div>
             {% endif %}
 
-            <!-- Form -->
-            <form method="post" novalidate>
+            <!-- Registration Form -->
+            <form method="POST" class="auth-form">
                 {% csrf_token %}
 
+                <!-- Username -->
                 <div class="form-group">
-                    <label for="id_username">Business Name / Username</label>
-                    <input
-                        type="text"
-                        name="username"
-                        id="id_username"
-                        placeholder="Your business/artist name"
-                        value="{{ form.username.value|default:'' }}"
-                        required
-                    >
+                    <label for="id_username">Username</label>
+                    {{ form.username }}
                     {% if form.username.errors %}
-                        <div class="error-message">
-                            <i class="fas fa-exclamation-circle"></i>
-                            {{ form.username.errors|first }}
-                        </div>
+                    <div class="error-message">
+                        <span>{{ form.username.errors.0 }}</span>
+                    </div>
                     {% endif %}
                 </div>
 
+                <!-- Email -->
                 <div class="form-group">
-                    <label for="id_email">Email</label>
-                    <input
-                        type="email"
-                        name="email"
-                        id="id_email"
-                        placeholder="your@email.com"
-                        value="{{ form.email.value|default:'' }}"
-                        required
-                    >
+                    <label for="id_email">Email Address</label>
+                    {{ form.email }}
                     {% if form.email.errors %}
-                        <div class="error-message">
-                            <i class="fas fa-exclamation-circle"></i>
-                            {{ form.email.errors|first }}
-                        </div>
+                    <div class="error-message">
+                        <span>{{ form.email.errors.0 }}</span>
+                    </div>
                     {% endif %}
                 </div>
 
+                <!-- Phone -->
                 <div class="form-group">
-                    <label for="id_phone">Phone</label>
-                    <input
-                        type="tel"
-                        name="phone"
-                        id="id_phone"
-                        placeholder="+1 (555) 000-0000"
-                        value="{{ form.phone.value|default:'' }}"
-                    >
+                    <label for="id_phone">Phone Number</label>
+                    {{ form.phone }}
                     {% if form.phone.errors %}
-                        <div class="error-message">
-                            <i class="fas fa-exclamation-circle"></i>
-                            {{ form.phone.errors|first }}
-                        </div>
+                    <div class="error-message">
+                        <span>{{ form.phone.errors.0 }}</span>
+                    </div>
                     {% endif %}
                 </div>
 
+                <!-- Address -->
                 <div class="form-group">
-                    <label for="id_address">Address / Studio Location</label>
-                    <input
-                        type="text"
-                        name="address"
-                        id="id_address"
-                        placeholder="Your studio or business address"
-                        value="{{ form.address.value|default:'' }}"
-                    >
+                    <label for="id_address">Address</label>
+                    {{ form.address }}
                     {% if form.address.errors %}
-                        <div class="error-message">
-                            <i class="fas fa-exclamation-circle"></i>
-                            {{ form.address.errors|first }}
-                        </div>
+                    <div class="error-message">
+                        <span>{{ form.address.errors.0 }}</span>
+                    </div>
                     {% endif %}
                 </div>
 
+                <!-- Password -->
                 <div class="form-group">
                     <label for="id_password1">Password</label>
-                    <input
-                        type="password"
-                        name="password1"
-                        id="id_password1"
-                        placeholder="Enter your password"
-                        autocomplete="new-password"
-                        required
-                    >
+                    {{ form.password1 }}
                     {% if form.password1.errors %}
-                        <div class="error-message">
-                            <i class="fas fa-exclamation-circle"></i>
-                            {{ form.password1.errors|first }}
-                        </div>
+                    <div class="error-message">
+                        <span>{{ form.password1.errors.0 }}</span>
+                    </div>
                     {% endif %}
                 </div>
 
                 <div class="form-group">
                     <label for="id_password2">Confirm Password</label>
-                    <input
-                        type="password"
-                        name="password2"
-                        id="id_password2"
-                        placeholder="Confirm your password"
-                        autocomplete="new-password"
-                        required
-                    >
+                    {{ form.password2 }}
                     {% if form.password2.errors %}
-                        <div class="error-message">
-                            <i class="fas fa-exclamation-circle"></i>
-                            {{ form.password2.errors|first }}
-                        </div>
+                    <div class="error-message">
+                        <span>{{ form.password2.errors.0 }}</span>
+                    </div>
                     {% endif %}
                 </div>
 
-                <button type="submit" class="btn-submit">
-                    Start Selling &nbsp;<i class="fas fa-arrow-right"></i>
-                </button>
+                <!-- Submit Button -->
+                <button type="submit" class="btn-submit">Create Shop Account</button>
             </form>
 
-            <div class="auth-divider">
-                <span></span>
-                <p>Already have an account?</p>
-                <span></span>
-            </div>
-
             <div class="auth-links">
-                <p>
-                    <a href="{% url 'accounts:login' %}">Sign in here</a>
-                </p>
-                <p>
-                    Looking to shop?
-                    <a href="{% url 'accounts:customer_register' %}">Shop as customer</a>
-                </p>
+                <p>Already have an account? <a href="{% url 'accounts:login' %}">Sign in here</a></p>
+                <p><a href="{% url 'accounts:register' %}">Choose different account type</a></p>
             </div>
-
         </div>
     </div>
-
 </div>
+
 {% endblock %}

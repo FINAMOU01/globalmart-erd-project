@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Payment Confirmation - AfriBazaar{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Success Message -->
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-check-circle me-3" style="font-size: 2rem;"></i>
+                    <div>
+                        <strong>Payment Successful!</strong>
+                        <p class="mb-0">Your order has been confirmed and will be processed shortly.</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <!-- Payment Details Card -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header" style="background-color: #1F7A6B; color: white;">
+                    <h5 class="mb-0">Payment Confirmation</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="text-muted" style="font-size: 0.85rem;">Order Number</h6>
+                            <h5 style="color: #1F7A6B;">
+                                <strong>#{{ order.id }}</strong>
+                            </h5>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted" style="font-size: 0.85rem;">Payment Reference</h6>
+                            <h5>{{ payment.reference_number }}</h5>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Payment Info -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2">Payment Method</h6>
+                            <p class="mb-0">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>{{ payment.get_payment_method_display }}</strong>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2">Payment Status</h6>
+                            <p class="mb-0">
+                                <span class="badge bg-success" style="font-size: 0.9rem;">
+                                    {{ payment.get_payment_status_display }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Amount Paid -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2">Amount Paid</h6>
+                            <p class="mb-0">
+                                <strong>{{ payment.currency.symbol }} {{ payment.amount_in_currency|floatformat:2 }}</strong>
+                                <br>
+                                <small class="text-muted">(USD {{ payment.amount_in_usd|floatformat:2 }})</small>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2">Payment Time</h6>
+                            <p class="mb-0">{{ payment.updated_at|date:"M d, Y - H:i" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Details -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header" style="background-color: #f8f9fa; border-bottom: 2px solid #e0e0e0;">
+                    <h6 class="mb-0" style="color: #1F7A6B;">Order Items</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-borderless mb-0">
+                            <thead style="background-color: #f8f9fa;">
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Qty</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order_items %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if item.product.image %}
+                                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" 
+                                                     style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; margin-right: 10px;" 
+                                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                <div style="display: none; width: 40px; height: 40px; background: linear-gradient(135deg, #1F7A6B 0%, #16573c 100%); border-radius: 4px; margin-right: 10px; align-items: center; justify-content: center;">
+                                                    <i class="fas fa-box text-white" style="font-size: 0.8rem;"></i>
+                                                </div>
+                                            {% else %}
+                                                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #1F7A6B 0%, #16573c 100%); border-radius: 4px; margin-right: 10px; display: flex; align-items: center; justify-content: center;">
+                                                    <i class="fas fa-box text-white" style="font-size: 0.8rem;"></i>
+                                                </div>
+                                            {% endif %}
+                                            <strong>{{ item.product.name }}</strong>
+                                        </div>
+                                    </td>
+                                    <td>USD {{ item.price }}</td>
+                                    <td>x{{ item.quantity }}</td>
+                                    <td><strong>USD {{ item.get_subtotal }}</strong></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <hr class="my-3">
+
+                    <div class="row">
+                        <div class="col-md-6 offset-md-6">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Subtotal:</span>
+                                <span>USD {{ order.get_items_total|floatformat:2 }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between" style="border-top: 2px solid #e0e0e0; padding-top: 10px;">
+                                <strong>Total:</strong>
+                                <strong style="color: #1F7A6B; font-size: 1.1rem;">USD {{ order.get_items_total|floatformat:2 }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transaction History -->
+            {% if transactions %}
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header" style="background-color: #f8f9fa; border-bottom: 2px solid #e0e0e0;">
+                    <h6 class="mb-0" style="color: #1F7A6B;">Transaction History</h6>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        {% for trans in transactions %}
+                        <div class="timeline-item mb-3 pb-3" style="border-bottom: 1px solid #e0e0e0;">
+                            <div class="d-flex align-items-start">
+                                <div class="timeline-marker me-3" style="width: 30px; height: 30px; border-radius: 50%; background-color: {% if trans.event_type == 'SUCCESS' %}#28a745{% elif trans.event_type == 'INITIATED' %}#007bff{% elif trans.event_type == 'FAILED' %}#dc3545{% else %}#ffc107{% endif %}; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0;">
+                                    <i class="fas fa-{% if trans.event_type == 'SUCCESS' %}check{% elif trans.event_type == 'INITIATED' %}clock{% elif trans.event_type == 'FAILED' %}times{% else %}info{% endif %}"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">{{ trans.get_event_type_display }}</h6>
+                                    <p class="text-muted small mb-1">{{ trans.notes }}</p>
+                                    <small class="text-muted">{{ trans.created_at|date:"M d, Y - H:i:s" }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- What's Next -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h6 class="mb-3" style="color: #1F7A6B;">What's Next?</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-check me-2" style="color: #1F7A6B;"></i>
+                            <strong>Confirmation Email:</strong> A receipt has been sent to your email.
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-box me-2" style="color: #1F7A6B;"></i>
+                            <strong>Order Processing:</strong> Your items are being prepared for shipment.
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-truck me-2" style="color: #1F7A6B;"></i>
+                            <strong>Shipping:</strong> You'll receive tracking info within 24-48 hours.
+                        </li>
+                        <li>
+                            <i class="fas fa-info-circle me-2" style="color: #1F7A6B;"></i>
+                            <strong>Questions?</strong> Check your dashboard or contact support.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-grid gap-2 d-sm-flex justify-content-center">
+                <a href="{% url 'accounts:customer_dashboard' %}" class="btn btn-success btn-lg px-4">
+                    <i class="fas fa-chart-line me-2"></i>Go to Dashboard
+                </a>
+                <a href="{% url 'products:shop' %}" class="btn btn-outline-secondary btn-lg px-4">
+                    <i class="fas fa-arrow-left me-2"></i>Continue Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .timeline-item:last-child {
+        border-bottom: none !important;
+    }
+</style>
+{% endblock %}

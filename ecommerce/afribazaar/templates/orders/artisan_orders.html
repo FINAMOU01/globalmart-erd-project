@@ -4,147 +4,573 @@
 {% block title %}My Orders - AfriBazaar Artisan{% endblock %}
 
 {% block content %}
-<div class="orders-container">
-    <!-- Page Header -->
-    <section class="orders-header" style="background: linear-gradient(135deg, #1F7A6B 0%, #C44A2F 100%);">
-        <div class="container py-5">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <h1 class="display-5 text-white fw-bold mb-3">
-                        <i class="fas fa-shopping-box"></i> Customer Orders
-                    </h1>
-                    <p class="lead text-white">Orders for your products</p>
+<div class="artisan-dashboard-wrapper">
+    <!-- Top Navigation Bar -->
+    <nav class="artisan-top-nav">
+        <div class="container-fluid px-4">
+            <div class="d-flex justify-content-between align-items-center py-3">
+                <div class="nav-brand">
+                    <i class="fas fa-shopping-box me-2"></i>
+                    <span>Customer Orders</span>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <div class="order-stats">
-                        <div class="stat-box">
-                            <div class="stat-value">{{ orders|length }}</div>
-                            <div class="stat-label">Orders</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-value">{{ total_items_sold }}</div>
-                            <div class="stat-label">Items Sold</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-value">USD {{ total_sales|floatformat:2 }}</div>
-                            <div class="stat-label">Total Sales</div>
-                        </div>
-                    </div>
+                <div class="nav-actions">
+                    <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light me-2">
+                        <i class="fas fa-home me-1"></i> Home
+                    </a>
+                    <a href="{% url 'products:artisan_dashboard' %}" class="btn btn-sm btn-outline-light">
+                        <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+                    </a>
                 </div>
             </div>
         </div>
-    </section>
+    </nav>
 
-    <!-- Orders Content -->
-    <div class="container py-5">
-        <div class="row">
+    <div class="container-fluid dashboard-main">
+        <div class="row g-0">
             <!-- Sidebar -->
-            <div class="col-md-3 mb-4">
-                <div class="list-group sticky-top">
-                    <a href="{% url 'products:artisan_dashboard' %}" class="list-group-item list-group-item-action">
-                        <i class="fas fa-chart-bar"></i> Dashboard
-                    </a>
-                    <a href="{% url 'products:artisan_orders' %}" class="list-group-item list-group-item-action active">
-                        <i class="fas fa-shopping-box"></i> Orders
-                    </a>
-                    <a href="{% url 'products:add_product' %}" class="list-group-item list-group-item-action">
-                        <i class="fas fa-plus-circle"></i> Add Product
-                    </a>
-                    <a href="{% url 'products:edit_artisan_profile' %}" class="list-group-item list-group-item-action">
-                        <i class="fas fa-user-edit"></i> Edit Profile
-                    </a>
-                    <a href="{% url 'accounts:logout' %}" class="list-group-item list-group-item-action">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
+            <div class="col-lg-2 artisan-sidebar">
+                <div class="sidebar-menu">
+                    <div class="menu-section">
+                        <div class="menu-title">MAIN</div>
+                        <a href="{% url 'products:artisan_dashboard' %}" class="menu-item">
+                            <i class="fas fa-chart-line me-2"></i> Dashboard
+                        </a>
+                        <a href="{% url 'products:artisan_orders' %}" class="menu-item active">
+                            <i class="fas fa-shopping-box me-2"></i> Orders
+                        </a>
+                    </div>
+
+                    <div class="menu-section">
+                        <div class="menu-title">PRODUCTS</div>
+                        <a href="{% url 'products:add_product' %}" class="menu-item">
+                            <i class="fas fa-plus me-2"></i> Add New
+                        </a>
+                    </div>
+
+                    <div class="menu-section">
+                        <div class="menu-title">ACCOUNT</div>
+                        <a href="{% url 'products:edit_artisan_profile' %}" class="menu-item">
+                            <i class="fas fa-user-circle me-2"></i> Profile
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <!-- Orders List -->
-            <div class="col-md-9">
-                {% if orders %}
-                    <div class="table-responsive">
-                        <table class="table table-hover table-bordered">
-                            <thead class="table-dark">
+            <!-- Main Content -->
+            <div class="col-lg-10 artisan-content">
+                <!-- Header Stats -->
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon orders-icon">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number">{{ orders|length }}</div>
+                            <div class="stat-title">Total Orders</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon inventory-icon">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number">{{ total_items_sold }}</div>
+                            <div class="stat-title">Items Sold</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon sales-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number">USD {{ total_sales|floatformat:0 }}</div>
+                            <div class="stat-title">Total Revenue</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Section -->
+                <div class="orders-section">
+                    <div class="section-header">
+                        <h3 class="section-title"><i class="fas fa-shopping-box me-2"></i> Orders</h3>
+                    </div>
+
+                    {% if orders %}
+                    <div class="orders-table-container">
+                        <table class="orders-table">
+                            <thead>
                                 <tr>
                                     <th>Order ID</th>
                                     <th>Customer</th>
                                     <th>Status</th>
-                                    <th>Total</th>
-                                    <th>Date</th>
+                                    <th>Items</th>
+                                    <th>Total Amount</th>
+                                    <th>Order Date</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for order in orders %}
-                                    <tr>
-                                        <td><strong>#{{ order.id }}</strong></td>
-                                        <td>{{ order.customer.get_full_name }}</td>
-                                        <td>
-                                            <span class="badge bg-{% if order.status == 'delivered' %}success{% elif order.status == 'shipped' %}info{% elif order.status == 'cancelled' %}danger{% else %}warning{% endif %}">
-                                                {{ order.get_status_display }}
-                                            </span>
-                                        </td>
-                                        <td><strong>USD {{ order.total_price|floatformat:2 }}</strong></td>
-                                        <td>{{ order.created_at|date:"M d, Y" }}</td>
-                                        <td>
-                                            <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-sm btn-primary">
-                                                <i class="fas fa-eye"></i> View
-                                            </a>
-                                        </td>
-                                    </tr>
+                                <tr class="order-row">
+                                    <td class="order-id">
+                                        <strong>#{{ order.id }}</strong>
+                                    </td>
+                                    <td class="order-customer">
+                                        <div class="customer-info">
+                                            <div class="customer-name">{{ order.customer.get_full_name|default:order.customer.username }}</div>
+                                            <small class="customer-email">{{ order.customer.email }}</small>
+                                        </div>
+                                    </td>
+                                    <td class="order-status">
+                                        <span class="status-badge status-{{ order.status }}">
+                                            {{ order.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td class="order-items">
+                                        {{ order.items.count }}
+                                    </td>
+                                    <td class="order-total">
+                                        <strong>USD {{ order.total_price|floatformat:2 }}</strong>
+                                    </td>
+                                    <td class="order-date">
+                                        {{ order.created_at|date:"M d, Y" }}
+                                    </td>
+                                    <td class="order-action">
+                                        <a href="{% url 'orders:order_detail' order.id %}" class="btn-view">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
-                {% else %}
-                    <div class="alert alert-info text-center py-5">
-                        <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
+                    {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-inbox"></i>
+                        </div>
                         <h4>No Orders Yet</h4>
-                        <p>Your products haven't been ordered yet. Keep creating quality products!</p>
-                        <a href="{% url 'products:add_product' %}" class="btn btn-primary mt-3">
-                            <i class="fas fa-plus"></i> Add Your First Product
-                        </a>
+                        <p>When customers order your products, they'll appear here</p>
                     </div>
-                {% endif %}
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <style>
-    .orders-header {
-        color: white;
-        padding: 40px 0;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
-    
-    .order-stats {
+
+    .artisan-dashboard-wrapper {
+        background: white;
+        min-height: 100vh;
+        padding-top: 0;
+    }
+
+    /* Top Navigation */
+    .artisan-top-nav {
+        background: linear-gradient(135deg, #1F7A6B 0%, #16573c 100%);
+        color: white;
+        box-shadow: 0 2px 8px rgba(31, 122, 107, 0.2);
+        margin-bottom: 20px;
+        height: auto;
+    }
+
+    .nav-brand {
+        font-size: 1.2rem;
+        font-weight: 600;
         display: flex;
+        align-items: center;
+    }
+
+    .nav-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .dashboard-main {
+        margin-top: 0;
+    }
+
+    /* Sidebar */
+    .artisan-sidebar {
+        background: white;
+        border-right: 2px solid #1F7A6B;
+        min-height: calc(100vh - 150px);
+        padding: 30px 20px;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .sidebar-menu {
+        list-style: none;
+    }
+
+    .menu-section {
+        margin-bottom: 30px;
+    }
+
+    .menu-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 12px;
+        padding-left: 10px;
+    }
+
+    .menu-item {
+        display: flex;
+        align-items: center;
+        padding: 10px 12px;
+        color: #666;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+
+    .menu-item:hover {
+        background: #f5f5f5;
+        color: #1F7A6B;
+    }
+
+    .menu-item.active {
+        background: #e8f5f2;
+        color: #1F7A6B;
+        font-weight: 600;
+    }
+
+    /* Main Content */
+    .artisan-content {
+        padding: 30px;
+        background: white;
+    }
+
+    /* Stats Grid */
+    .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 20px;
-        justify-content: flex-end;
-        flex-wrap: wrap;
+        margin-bottom: 40px;
     }
-    
-    .stat-box {
-        background: rgba(255, 255, 255, 0.1);
-        padding: 15px 20px;
+
+    .stat-card {
+        background: white;
         border-radius: 8px;
-        min-width: 120px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        border-left: 4px solid #1F7A6B;
     }
-    
-    .stat-value {
-        font-size: 24px;
-        font-weight: bold;
+
+    .stat-card:hover {
+    }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
         color: white;
+        flex-shrink: 0;
     }
-    
-    .stat-label {
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.8);
+
+    .inventory-icon {
+        background: linear-gradient(135deg, #1F7A6B 0%, #16573c 100%);
+    }
+
+    .sales-icon {
+        background: linear-gradient(135deg, #1F7A6B 0%, #16573c 100%);
+    }
+
+    .orders-icon {
+        background: linear-gradient(135deg, #1F7A6B 0%, #16573c 100%);
+    }
+
+    .stat-info {
+        flex: 1;
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .stat-title {
+        font-size: 0.85rem;
+        color: #999;
         margin-top: 5px;
     }
-    
-    .table-hover tbody tr:hover {
-        background-color: #f5f5f5;
+
+    /* Orders Section */
+    .orders-section {
+        background: white;
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+        color: #333;
+        margin: 0;
+        font-weight: 600;
+    }
+
+    /* Orders Table */
+    .orders-table-container {
+        overflow-x: auto;
+    }
+
+    .orders-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .orders-table thead {
+        background: #f9f9f9;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .orders-table th {
+        padding: 12px 15px;
+        text-align: left;
+        font-weight: 600;
+        color: #333;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+    }
+
+    .orders-table tbody tr {
+        border-bottom: 1px solid #e0e0e0;
+        transition: background 0.2s ease;
+    }
+
+    .orders-table tbody tr:hover {
+        background: #f9f9f9;
+    }
+
+    .orders-table td {
+        padding: 12px 15px;
+        color: #666;
+    }
+
+    .order-id {
+        font-weight: 600;
+        color: #1F7A6B;
+    }
+
+    .customer-info {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .customer-name {
+        font-weight: 500;
+        color: #333;
+    }
+
+    .customer-email {
+        color: #999;
+        font-size: 0.9rem;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #d97706;
+    }
+
+    .status-confirmed {
+        background: #dbeafe;
+        color: #0284c7;
+    }
+
+    .status-processing {
+        background: #fce7f3;
+        color: #db2777;
+    }
+
+    .status-shipped {
+        background: #cffafe;
+        color: #0891b2;
+    }
+
+    .status-delivered {
+        background: #dcfce7;
+        color: #16a34a;
+    }
+
+    .status-cancelled {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .order-total {
+        color: #1F7A6B;
+        font-weight: 600;
+    }
+
+    .btn-view {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 12px;
+        background: #1F7A6B;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        transition: all 0.2s ease;
+    }
+
+    .btn-view:hover {
+        background: #16573c;
+        color: white;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        color: #ddd;
+        margin-bottom: 20px;
+    }
+
+    .empty-state h4 {
+        color: #666;
+        margin-bottom: 10px;
+    }
+
+    .empty-state p {
+        color: #999;
+        margin-bottom: 30px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+        .artisan-sidebar {
+            display: none;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .artisan-content {
+            padding: 20px;
+        }
+
+        .stats-container {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .orders-section {
+            padding: 20px;
+        }
+
+        .stat-card {
+            padding: 15px;
+        }
+
+        .stat-number {
+            font-size: 1.3rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+        }
+
+        .orders-table th,
+        .orders-table td {
+            padding: 10px;
+            font-size: 0.8rem;
+        }
+
+        .btn-view {
+            padding: 5px 10px;
+            font-size: 0.75rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .artisan-content {
+            padding: 15px;
+        }
+
+        .orders-table-container {
+            font-size: 0.8rem;
+        }
+
+        .orders-table th {
+            display: none;
+        }
+
+        .order-row {
+            display: block;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            padding: 15px;
+        }
+
+        .orders-table tbody tr {
+            display: block;
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        .orders-table tbody td {
+            display: block;
+            text-align: right;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .orders-table tbody td:before {
+            content: attr(data-label);
+            float: left;
+            font-weight: 600;
+            color: #333;
+        }
+    }
     }
 </style>
 {% endblock %}

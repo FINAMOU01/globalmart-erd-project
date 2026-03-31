@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Order Confirmation - AfriBazaar{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Success Message -->
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-check-circle me-3" style="font-size: 1.5rem;"></i>
+                    <div>
+                        <strong>Order Placed Successfully!</strong>
+                        <p class="mb-0">Thank you for your purchase. Your order has been received and is being processed.</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <!-- Order Details Card -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header" style="background-color: #1F7A6B; color: white;">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h5 class="mb-0">Order Confirmation</h5>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <span class="badge bg-light text-dark" style="font-size: 0.9rem;">
+                                Status: <strong>{{ order.get_status_display }}</strong>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Order Info -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="text-muted" style="font-size: 0.85rem;">Order Number</h6>
+                            <h5 style="color: #1F7A6B;">
+                                <strong>#{{ order.id }}</strong>
+                            </h5>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted" style="font-size: 0.85rem;">Order Date</h6>
+                            <h5>{{ order.created_at|date:"M d, Y - H:i" }}</h5>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Order Items -->
+                    <h6 class="mb-3" style="color: #1F7A6B;">Order Items</h6>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-borderless mb-0">
+                            <thead style="background-color: #f8f9fa;">
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order_items %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if item.product.image %}
+                                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" 
+                                                     style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; margin-right: 10px;" 
+                                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                <div style="display: none; width: 40px; height: 40px; background: linear-gradient(135deg, #1F7A6B 0%, #16573c 100%); border-radius: 4px; margin-right: 10px; display: none; align-items: center; justify-content: center;">
+                                                    <i class="fas fa-box text-white" style="font-size: 0.8rem;"></i>
+                                                </div>
+                                            {% else %}
+                                                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #1F7A6B 0%, #16573c 100%); border-radius: 4px; margin-right: 10px; display: flex; align-items: center; justify-content: center;">
+                                                    <i class="fas fa-box text-white" style="font-size: 0.8rem;"></i>
+                                                </div>
+                                            {% endif %}
+                                            <div>
+                                                <strong>{{ item.product.name }}</strong>
+                                                <br>
+                                                <small class="text-muted">by {{ item.product.artisan.username }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>USD {{ item.price }}</td>
+                                    <td>x{{ item.quantity }}</td>
+                                    <td>
+                                        <strong>USD {{ item.get_subtotal }}</strong>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Order Summary -->
+                    <div class="row mb-4">
+                        <div class="col-md-6 offset-md-6">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Subtotal:</span>
+                                <span>USD {{ order.get_items_total }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Shipping:</span>
+                                <span class="text-success">FREE</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span>Tax:</span>
+                                <span>USD 0.00</span>
+                            </div>
+                            <div class="d-flex justify-content-between" style="border-top: 2px solid #e0e0e0; padding-top: 10px;">
+                                <strong>Total:</strong>
+                                <strong style="color: #1F7A6B; font-size: 1.1rem;">USD {{ order.get_items_total }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proceed to Payment -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body text-center">
+                        <h6 class="mb-3" style="color: #1F7A6B;">Ready to Complete Your Purchase?</h6>
+                        <p class="text-muted">Proceed to payment to confirm your order and arrange delivery.</p>
+                        <a href="{% url 'payments:order_payment' order.id %}" class="btn btn-success btn-lg px-5">
+                            <i class="fas fa-credit-card me-2"></i>Proceed to Payment
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h6 class="mb-3" style="color: #1F7A6B;">What's Next?</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-envelope me-2" style="color: #1F7A6B;"></i>
+                            <strong>Confirmation Email:</strong> A confirmation email has been sent to your inbox.
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-box me-2" style="color: #1F7A6B;"></i>
+                            <strong>Order Processing:</strong> Your order is being prepared by our artisans.
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-truck me-2" style="color: #1F7A6B;"></i>
+                            <strong>Shipping:</strong> You'll receive tracking information once your order ships.
+                        </li>
+                        <li>
+                            <i class="fas fa-question-circle me-2" style="color: #1F7A6B;"></i>
+                            <strong>Questions?</strong> Check your dashboard or contact us for support.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-grid gap-2 d-sm-flex justify-content-center">
+                <a href="{% url 'accounts:customer_dashboard' %}" class="btn btn-success btn-lg px-4">
+                    <i class="fas fa-chart-line me-2"></i>View My Orders
+                </a>
+                <a href="{% url 'products:shop' %}" class="btn btn-outline-secondary btn-lg px-4">
+                    <i class="fas fa-arrow-left me-2"></i>Continue Shopping
+                </a>
+            </div>
+
+            <!-- Order Tracking Info -->
+            <div class="alert alert-info mt-4" role="alert">
+                <div class="d-flex">
+                    <i class="fas fa-info-circle me-3" style="margin-top: 2px;"></i>
+                    <div>
+                        <strong>Track Your Order:</strong> You can track your order status anytime from your <a href="{% url 'accounts:customer_dashboard' %}" class="alert-link">dashboard</a>. 
+                        We'll update you every step of the way!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        box-shadow: 0 0.5rem 1rem rgba(31, 122, 107, 0.15) !important;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(31, 122, 107, 0.05);
+    }
+</style>
+{% endblock %}

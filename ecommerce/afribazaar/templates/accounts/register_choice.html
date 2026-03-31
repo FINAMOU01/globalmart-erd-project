@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Join AfriBazaar - Choose Account Type{% endblock %}
+{% block title %}Join AfriBazaar - Choose Your Role{% endblock %}
 
 {% block extra_css %}
 
@@ -10,83 +10,104 @@
 
     .register-page {
         min-height: 100vh;
-        background: #F5F3EE;
+        background: linear-gradient(135deg, #F5F3EE 0%, #FAFAF8 100%);
         font-family: 'Poppins', sans-serif;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 60px 20px;
+        padding: 80px 20px;
         position: relative;
         overflow: hidden;
+        margin-top: 80px;
     }
 
     /* Decorative background blobs */
     .register-page::before {
         content: '';
         position: absolute;
-        width: 500px;
-        height: 500px;
+        width: 600px;
+        height: 600px;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(196,74,47,0.06) 0%, transparent 70%);
-        top: -100px;
-        right: -100px;
+        background: radial-gradient(circle, rgba(196,74,47,0.08) 0%, transparent 70%);
+        top: -200px;
+        right: -150px;
         pointer-events: none;
+        animation: float-animation 8s ease-in-out infinite;
     }
 
     .register-page::after {
         content: '';
         position: absolute;
-        width: 400px;
-        height: 400px;
+        width: 500px;
+        height: 500px;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(212,175,55,0.07) 0%, transparent 70%);
-        bottom: -80px;
-        left: -80px;
+        background: radial-gradient(circle, rgba(212,175,55,0.1) 0%, transparent 70%);
+        bottom: -150px;
+        left: -100px;
         pointer-events: none;
+        animation: float-animation-reverse 10s ease-in-out infinite;
+    }
+
+    @keyframes float-animation {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-30px); }
+    }
+
+    @keyframes float-animation-reverse {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(30px); }
     }
 
     /* ===== HEADER ===== */
     .register-header {
         text-align: center;
-        margin-bottom: 50px;
+        margin-bottom: 60px;
         z-index: 1;
-        animation: fadeInUp 0.5s ease forwards;
+        animation: slideInDown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .register-logo {
         display: inline-flex;
         align-items: center;
-        gap: 10px;
-        margin-bottom: 24px;
+        gap: 14px;
+        margin-bottom: 32px;
         text-decoration: none;
+        animation: slideInUp 0.6s ease 0.1s both;
     }
 
     .register-logo-icon {
-        width: 46px;
-        height: 46px;
+        width: 54px;
+        height: 54px;
         background: linear-gradient(135deg, #C44A2F, #D4AF37);
-        border-radius: 10px;
+        border-radius: 14px;
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
-        font-size: 1.2rem;
-        box-shadow: 0 4px 12px rgba(196,74,47,0.35);
+        font-size: 1.3rem;
+        box-shadow: 0 6px 20px rgba(196,74,47,0.3);
+        transition: all 0.3s ease;
+    }
+
+    .register-logo:hover .register-logo-icon {
+        transform: scale(1.08);
+        box-shadow: 0 8px 28px rgba(196,74,47,0.4);
     }
 
     .register-logo-text {
         color: #1E1E1E;
-        font-size: 1.5rem;
-        font-weight: 700;
+        font-size: 1.7rem;
+        font-weight: 800;
     }
 
     .register-header h1 {
         color: #1E1E1E;
-        font-size: 2.4rem;
-        font-weight: 700;
-        margin-bottom: 12px;
-        line-height: 1.2;
+        font-size: 2.8rem;
+        font-weight: 800;
+        margin-bottom: 16px;
+        line-height: 1.1;
+        animation: slideInUp 0.7s ease 0.2s both;
     }
 
     .register-header h1 span {
@@ -95,31 +116,42 @@
 
     .register-header p {
         color: #666666;
-        font-size: 1rem;
+        font-size: 1.05rem;
+        animation: slideInUp 0.7s ease 0.3s both;
+    }
+
+    @keyframes slideInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
     }
 
     /* ===== CARDS GRID ===== */
     .register-cards {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 28px;
-        max-width: 860px;
+        gap: 40px;
+        max-width: 1000px;
         width: 100%;
         z-index: 1;
-        animation: fadeInUp 0.6s ease 0.1s both;
+        animation: fadeInUp 0.7s ease 0.4s both;
     }
 
     .register-card {
         background: #FFFFFF;
         border-radius: 20px;
-        padding: 40px 32px;
-        box-shadow: 0 4px 20px rgba(30,30,30,0.07);
-        border: 2px solid transparent;
+        padding: 48px 40px;
+        box-shadow: 0 4px 20px rgba(30,30,30,0.06);
+        border: 2px solid #F5F3F0;
         text-decoration: none;
         color: inherit;
         display: flex;
         flex-direction: column;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         position: relative;
         overflow: hidden;
     }
@@ -128,25 +160,40 @@
         content: '';
         position: absolute;
         top: 0; left: 0; right: 0;
-        height: 4px;
+        height: 6px;
         background: linear-gradient(90deg, #C44A2F, #D4AF37);
         transform: scaleX(0);
-        transition: transform 0.3s ease;
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         transform-origin: left;
+    }
+
+    .register-card::after {
+        content: '';
+        position: absolute;
+        top: 0; right: 0; bottom: 0; left: 0;
+        background: radial-gradient(circle at top right, rgba(196,74,47,0.05), transparent);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        pointer-events: none;
     }
 
     .register-card:hover {
         border-color: #C44A2F;
-        transform: translateY(-6px);
-        box-shadow: 0 12px 35px rgba(196,74,47,0.18);
+        transform: translateY(-10px);
+        box-shadow: 0 20px 50px rgba(196,74,47,0.15);
     }
 
     .register-card:hover::before {
         transform: scaleX(1);
     }
 
+    .register-card:hover::after {
+        opacity: 1;
+    }
+
     .artisan-card:hover {
         border-color: #1E1E1E;
+        box-shadow: 0 20px 50px rgba(30,30,30,0.12);
     }
 
     .artisan-card::before {
@@ -155,38 +202,43 @@
 
     /* Card icon */
     .card-icon-wrap {
-        width: 64px;
-        height: 64px;
+        width: 72px;
+        height: 72px;
         border-radius: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.6rem;
-        margin-bottom: 20px;
+        font-size: 2rem;
+        margin-bottom: 24px;
+        transition: all 0.3s ease;
     }
 
     .customer-card .card-icon-wrap {
-        background: rgba(196,74,47,0.1);
+        background: linear-gradient(135deg, rgba(196,74,47,0.12) 0%, rgba(196,74,47,0.04) 100%);
         color: #C44A2F;
     }
 
     .artisan-card .card-icon-wrap {
-        background: rgba(30,30,30,0.08);
+        background: linear-gradient(135deg, rgba(30,30,30,0.1) 0%, rgba(30,30,30,0.04) 100%);
         color: #1E1E1E;
     }
 
+    .register-card:hover .card-icon-wrap {
+        transform: scale(1.1) translateY(-4px);
+    }
+
     .card-title {
-        font-size: 1.45rem;
-        font-weight: 700;
+        font-size: 1.6rem;
+        font-weight: 800;
         color: #1E1E1E;
-        margin-bottom: 8px;
+        margin-bottom: 12px;
     }
 
     .card-desc {
         color: #666666;
-        font-size: 0.875rem;
-        line-height: 1.6;
-        margin-bottom: 24px;
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin-bottom: 28px;
     }
 
     /* Features list */
@@ -199,12 +251,18 @@
 
     .card-features li {
         color: #333333;
-        font-size: 0.875rem;
-        padding: 6px 0;
+        font-size: 0.9rem;
+        padding: 8px 0;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
         border-bottom: 1px solid #F5F3EE;
+        transition: all 0.3s ease;
+    }
+
+    .card-features li:hover {
+        transform: translateX(6px);
+        color: #1E1E1E;
     }
 
     .card-features li:last-child {
@@ -212,23 +270,24 @@
     }
 
     .feature-check {
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 0.65rem;
         flex-shrink: 0;
+        font-weight: 800;
     }
 
     .customer-card .feature-check {
-        background: rgba(196,74,47,0.1);
+        background: rgba(196,74,47,0.15);
         color: #C44A2F;
     }
 
     .artisan-card .feature-check {
-        background: rgba(31,122,107,0.1);
+        background: rgba(31,122,107,0.15);
         color: #1F7A6B;
     }
 
@@ -236,96 +295,125 @@
     .card-btn {
         display: block;
         width: 100%;
-        padding: 14px 20px;
-        border-radius: 25px;
+        padding: 16px 24px;
+        border-radius: 12px;
         text-align: center;
-        font-weight: 600;
-        font-size: 0.95rem;
+        font-weight: 700;
+        font-size: 0.98rem;
         text-decoration: none;
-        transition: all 0.3s ease;
-        letter-spacing: 0.3px;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        letter-spacing: 0.4px;
         border: none;
         cursor: pointer;
         font-family: 'Poppins', sans-serif;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card-btn::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.6s ease;
     }
 
     .customer-card .card-btn {
-        background: #C44A2F;
+        background: linear-gradient(135deg, #C44A2F 0%, #A33D26 100%);
         color: white;
-        box-shadow: 0 4px 15px rgba(196,74,47,0.3);
+        box-shadow: 0 6px 20px rgba(196,74,47,0.3);
     }
 
     .customer-card .card-btn:hover {
-        background: #A33D26;
-        box-shadow: 0 6px 20px rgba(196,74,47,0.4);
-        transform: translateY(-2px);
+        background: linear-gradient(135deg, #A33D26 0%, #8A2D1F 100%);
+        box-shadow: 0 10px 28px rgba(196,74,47,0.4);
+        transform: translateY(-3px);
+    }
+
+    .customer-card .card-btn:hover::before {
+        left: 100%;
     }
 
     .artisan-card .card-btn {
-        background: #1E1E1E;
+        background: linear-gradient(135deg, #1E1E1E 0%, #333333 100%);
         color: white;
-        box-shadow: 0 4px 15px rgba(30,30,30,0.2);
+        box-shadow: 0 6px 20px rgba(30,30,30,0.2);
     }
 
     .artisan-card .card-btn:hover {
-        background: #333333;
-        box-shadow: 0 6px 20px rgba(30,30,30,0.3);
-        transform: translateY(-2px);
+        background: linear-gradient(135deg, #333333 0%, #4A4A4A 100%);
+        box-shadow: 0 10px 28px rgba(30,30,30,0.3);
+        transform: translateY(-3px);
+    }
+
+    .artisan-card .card-btn:hover::before {
+        left: 100%;
     }
 
     /* ===== FOOTER LINK ===== */
     .register-footer {
         text-align: center;
-        margin-top: 36px;
+        margin-top: 48px;
         z-index: 1;
-        animation: fadeInUp 0.6s ease 0.2s both;
+        animation: fadeInUp 0.8s ease 0.6s both;
     }
 
     .register-footer p {
         color: #666666;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
+        margin: 0;
     }
 
     .register-footer a {
         color: #C44A2F;
-        font-weight: 600;
+        font-weight: 700;
         text-decoration: none;
-        transition: color 0.2s;
+        position: relative;
+        transition: color 0.3s ease;
+        letter-spacing: 0.3px;
+    }
+
+    .register-footer a::before {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: #C44A2F;
+        transform: scaleX(0);
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transform-origin: left;
+    }
+
+    .register-footer a:hover::before {
+        transform: scaleX(1);
     }
 
     .register-footer a:hover {
         color: #A33D26;
-        text-decoration: underline;
-    }
-
-    /* ===== ANIMATION ===== */
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(24px); }
-        to   { opacity: 1; transform: translateY(0); }
     }
 
     /* ===== RESPONSIVE ===== */
-    @media (max-width: 720px) {
+    @media (max-width: 768px) {
         .register-cards {
             grid-template-columns: 1fr;
-            gap: 20px;
-            max-width: 460px;
+            gap: 24px;
         }
 
         .register-header h1 {
-            font-size: 1.9rem;
-        }
-
-        .register-card {
-            padding: 32px 24px;
+            font-size: 1.8rem;
         }
     }
 
-    @media (max-width: 480px) {
-        .register-page { padding: 40px 16px; }
-        .register-header h1 { font-size: 1.6rem; }
-        .register-card { padding: 28px 20px; }
-        .card-title { font-size: 1.25rem; }
+    .footer {
+        display: none !important;
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(24px); }
+        to   { opacity: 1; transform: translateY(0); }
     }
 </style>
 
@@ -334,92 +422,48 @@
 {% block content %}
 
 <div class="register-page">
-
-    <!-- HEADER -->
     <div class="register-header">
-        <a href="{% url 'home' %}" class="register-logo">
-            <div class="register-logo-icon">
-                <i class="fas fa-shopping-bag"></i>
-            </div>
+        <a href="/" class="register-logo">
+            <div class="register-logo-icon">🛍️</div>
             <span class="register-logo-text">AfriBazaar</span>
         </a>
-        <h1>Join <span>AfriBazaar</span> 🌍</h1>
-        <p>Choose the account type that suits you best</p>
+        <h1>Join <span>AfriBazaar</span></h1>
+        <p>Choose your account type to get started</p>
     </div>
 
-    <!-- CARDS -->
     <div class="register-cards">
-
         <!-- Customer Card -->
         <a href="{% url 'accounts:customer_register' %}" class="register-card customer-card">
-            <div class="card-icon-wrap">
-                <i class="fas fa-shopping-bag"></i>
-            </div>
-            <h2 class="card-title">I'm a Customer</h2>
-            <p class="card-desc">
-                Discover and purchase authentic African products from talented artisans across the continent.
-            </p>
+            <div class="card-icon-wrap">👥</div>
+            <h3 class="card-title">Customer</h3>
+            <p class="card-desc">Discover and purchase from talented artisans</p>
             <ul class="card-features">
-                <li>
-                    <span class="feature-check"><i class="fas fa-check"></i></span>
-                    Browse 2,000+ authentic products
-                </li>
-                <li>
-                    <span class="feature-check"><i class="fas fa-check"></i></span>
-                    Secure & easy checkout
-                </li>
-                <li>
-                    <span class="feature-check"><i class="fas fa-check"></i></span>
-                    Track your orders
-                </li>
-                <li>
-                    <span class="feature-check"><i class="fas fa-check"></i></span>
-                    Save your favourites
-                </li>
+                <li><span class="feature-check">✔</span>Browse unique products</li>
+                <li><span class="feature-check">✔</span>Track your orders</li>
+                <li><span class="feature-check">✔</span>Secure checkout</li>
+                <li><span class="feature-check">✔</span>Save favorites</li>
             </ul>
-            <span class="card-btn">
-                Register as Customer &nbsp;<i class="fas fa-arrow-right"></i>
-            </span>
+            <button class="card-btn">Create Customer Account</button>
         </a>
 
         <!-- Artisan Card -->
         <a href="{% url 'accounts:artisan_register' %}" class="register-card artisan-card">
-            <div class="card-icon-wrap">
-                <i class="fas fa-palette"></i>
-            </div>
-            <h2 class="card-title">I'm an Artisan</h2>
-            <p class="card-desc">
-                Showcase your authentic African crafts to a global audience of collectors and cultural enthusiasts.
-            </p>
+            <div class="card-icon-wrap">✨</div>
+            <h3 class="card-title">Artisan</h3>
+            <p class="card-desc">Sell your handcrafted products globally</p>
             <ul class="card-features">
-                <li>
-                    <span class="feature-check"><i class="fas fa-check"></i></span>
-                    Sell to global buyers
-                </li>
-                <li>
-                    <span class="feature-check"><i class="fas fa-check"></i></span>
-                    Easy product management
-                </li>
-                <li>
-                    <span class="feature-check"><i class="fas fa-check"></i></span>
-                    Artisan dashboard
-                </li>
-                <li>
-                    <span class="feature-check"><i class="fas fa-check"></i></span>
-                    Verified artisan badge
-                </li>
+                <li><span class="feature-check">✔</span>Start your shop</li>
+                <li><span class="feature-check">✔</span>Manage inventory</li>
+                <li><span class="feature-check">✔</span>Reach customers</li>
+                <li><span class="feature-check">✔</span>Track sales</li>
             </ul>
-            <span class="card-btn">
-                Register as Artisan &nbsp;<i class="fas fa-arrow-right"></i>
-            </span>
+            <button class="card-btn">Create Artisan Account</button>
         </a>
-
     </div>
 
-    <!-- FOOTER -->
     <div class="register-footer">
         <p>Already have an account? <a href="{% url 'accounts:login' %}">Sign in here</a></p>
     </div>
-
 </div>
+
 {% endblock %}

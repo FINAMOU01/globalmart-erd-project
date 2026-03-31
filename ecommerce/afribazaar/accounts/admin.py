@@ -26,12 +26,15 @@ class CustomerProfileAdmin(admin.ModelAdmin):
 @admin.register(ArtisanProfile)
 class ArtisanProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'phone', 'is_verified', 'date_joined')
-    search_fields = ('user__username', 'phone')
+    search_fields = ('user__username', 'phone', 'bio')
     readonly_fields = ('date_joined',)
     list_filter = ('is_verified', 'date_joined')
     fieldsets = (
         ('User Information', {
             'fields': ('user',)
+        }),
+        ('Biography', {
+            'fields': ('bio',)
         }),
         ('Contact Information', {
             'fields': ('phone', 'address')

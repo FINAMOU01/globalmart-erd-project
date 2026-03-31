@@ -1,0 +1,419 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Meet Our Artisans - AfriBazaar{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Artisan Listing Page Styles */
+    .artisan-listing-page {
+        min-height: 100vh;
+        background: #F5F3EE;
+        padding-top: 20px;
+        padding-bottom: 60px;
+    }
+
+    .artisan-header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .artisan-header h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        color: #1E1E1E;
+        margin-bottom: 16px;
+        letter-spacing: -0.5px;
+    }
+
+    .artisan-header p {
+        font-size: 1.1rem;
+        color: #666666;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.8;
+    }
+
+    .artisans-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 40px;
+        margin-bottom: 60px;
+    }
+
+    .artisan-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(30,30,30,0.08);
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        border: 2px solid transparent;
+    }
+
+    .artisan-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 16px 40px rgba(196,74,47,0.15);
+        border-color: #C44A2F;
+    }
+
+    .artisan-card-header {
+        position: relative;
+        height: 200px;
+        background: linear-gradient(135deg, #C44A2F 0%, #D4AF37 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .artisan-card-header::before {
+        content: '';
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.1);
+        top: -30px;
+        right: -30px;
+    }
+
+    .artisan-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #D4AF37 0%, #C44A2F 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border: 4px solid rgba(255,255,255,0.3);
+        position: relative;
+        z-index: 2;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        flex-shrink: 0;
+    }
+
+    .artisan-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .artisan-avatar-placeholder {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #D4AF37 0%, #C44A2F 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2.5rem;
+        font-weight: 800;
+    }
+
+    .artisan-card-body {
+        padding: 28px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .artisan-name {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #1E1E1E;
+        margin-bottom: 6px;
+        letter-spacing: -0.3px;
+    }
+
+    .artisan-location {
+        font-size: 0.9rem;
+        color: #C44A2F;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .artisan-location i {
+        font-size: 1rem;
+    }
+
+    .artisan-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 16px;
+        padding: 12px 0;
+        border-top: 1px solid #F0F0F0;
+        border-bottom: 1px solid #F0F0F0;
+    }
+
+    .stat {
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: #C44A2F;
+        display: block;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        color: #888888;
+        displayed: block;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .artisan-desc {
+        font-size: 0.9rem;
+        color: #666666;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        flex: 1;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .artisan-buttons {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .view-profile-btn,
+    .view-products-btn {
+        padding: 12px 16px;
+        border: none;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+        font-family: 'Poppins', sans-serif;
+        display: block;
+    }
+
+    .view-profile-btn {
+        background: linear-gradient(135deg, #C44A2F 0%, #A33D26 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(196,74,47,0.25);
+    }
+
+    .view-profile-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(196,74,47,0.35);
+    }
+
+    .view-products-btn {
+        background: white;
+        color: #C44A2F;
+        border: 2px solid #C44A2F;
+    }
+
+    .view-products-btn:hover {
+        background: rgba(196,74,47,0.05);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+    }
+
+    .empty-state-icon {
+        font-size: 4rem;
+        color: #C44A2F;
+        margin-bottom: 20px;
+    }
+
+    .empty-state h2 {
+        font-size: 1.8rem;
+        color: #1E1E1E;
+        margin-bottom: 10px;
+    }
+
+    .empty-state p {
+        color: #666666;
+        font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .artisan-header h1 {
+            font-size: 2rem;
+        }
+
+        .artisans-grid {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .artisan-card-body {
+            padding: 16px;
+        }
+
+        .artisan-name {
+            font-size: 1rem;
+        }
+
+        .artisan-products {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .product-thumbnail {
+            height: 60px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .artisan-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .artisans-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .artisan-stats {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    .verified-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #1F7A6B;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        z-index: 3;
+    }
+
+    .artisan-card-header {
+        position: relative;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="artisan-listing-page">
+    <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+        
+        <!-- Header -->
+        <div class="artisan-header">
+            <h1><i class="fas fa-palette"></i> Meet Our Artisans</h1>
+            <p>Discover talented artisans from across Africa creating authentic handmade crafts, fashion, and cultural artifacts. Each artisan brings their unique story, skills, and passion to their work.</p>
+        </div>
+
+        <!-- Artisans Grid -->
+        {% if artisans %}
+            <div class="artisans-grid">
+                {% for artisan_info in artisans %}
+                    <div class="artisan-card">
+                        <!-- Header with Avatar -->
+                        <div class="artisan-card-header">
+                            {% if artisan_info.profile.is_verified %}
+                                <div class="verified-badge">
+                                    <i class="fas fa-check-circle"></i> Verified
+                                </div>
+                            {% endif %}
+                            <div class="artisan-avatar">
+                                {% if artisan_info.profile and artisan_info.profile.profile_picture %}
+                                    <img src="{{ artisan_info.profile.profile_picture.url }}" 
+                                         alt="{{ artisan_info.user.get_full_name }}"
+                                         style="width: 100%; height: 100%; object-fit: cover;"
+                                         onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';">
+                                    <div class="artisan-avatar-placeholder" style="display: none;">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                {% else %}
+                                    <div class="artisan-avatar-placeholder">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="artisan-card-body">
+                            <h2 class="artisan-name">{{ artisan_info.user.get_full_name }}</h2>
+                            
+                            {% if artisan_info.profile %}
+                                {% if artisan_info.profile.address %}
+                                    <div class="artisan-location">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        {{ artisan_info.profile.address|truncatewords:3 }}
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+
+                            <!-- Stats -->
+                            <div class="artisan-stats">
+                                <div class="stat">
+                                    <span class="stat-number">{{ artisan_info.product_count }}</span>
+                                    <span class="stat-label">Products</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-number">⭐ 4.8</span>
+                                    <span class="stat-label">Rating</span>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="artisan-buttons">
+                                <a href="{% url 'products:shop' %}?artisan={{ artisan_info.user.id }}" class="view-products-btn">
+                                    <i class="fas fa-shopping-bag"></i> View All Products
+                                </a>
+                                <a href="{% url 'products:artisan_detail' artisan_info.user.id %}" class="view-profile-btn">
+                                    <i class="fas fa-user"></i> View Profile
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="fas fa-inbox"></i>
+                </div>
+                <h2>No Artisans Yet</h2>
+                <p>We're still onboarding talented artisans. Please check back soon!</p>
+            </div>
+        {% endif %}
+
+        <!-- Stats Summary -->
+        {% if artisans %}
+            <div style="background: white; border-radius: 20px; padding: 40px; text-align: center; box-shadow: 0 4px 20px rgba(30,30,30,0.08);">
+                <h2 style="font-size: 1.6rem; font-weight: 800; color: #1E1E1E; margin-bottom: 30px;">
+                    Supporting {{ total_artisans }} Talented Artisans
+                </h2>
+                <p style="color: #666666; font-size: 1.05rem; line-height: 1.8; max-width: 600px; margin: 0 auto;">
+                    By shopping with our artisans, you're supporting authentic African craftsmanship and helping preserve traditional cultures while creating sustainable livelihoods.
+                </p>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}
