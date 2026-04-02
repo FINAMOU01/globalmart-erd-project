@@ -130,7 +130,7 @@ a:hover {
 }
 
 .afribazaar-navbar .nav-link {
-    color: #000000 !important;
+    color: #FFFFFF !important;
     font-weight: 600;
     transition: all 0.3s ease;
     margin: 0 var(--spacing-md);
@@ -149,7 +149,7 @@ a:hover {
 
 .afribazaar-navbar .nav-link i {
     font-size: 1.1rem;
-    color: #000000 !important;
+    color: #FFFFFF !important;
 }
 
 .afribazaar-navbar .nav-link:hover i,
