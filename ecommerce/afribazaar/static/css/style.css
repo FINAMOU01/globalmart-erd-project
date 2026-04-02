@@ -149,6 +149,12 @@ a:hover {
 
 .afribazaar-navbar .nav-link i {
     font-size: 1.1rem;
+    color: #000000 !important;
+}
+
+.afribazaar-navbar .nav-link:hover i,
+.afribazaar-navbar .nav-link.active i {
+    color: var(--color-gold) !important;
 }
 
 .afribazaar-navbar .badge {
