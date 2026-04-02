@@ -117,7 +117,7 @@ a:hover {
 
 /* ==================== NAVBAR ==================== */
 .afribazaar-navbar {
-    background: linear-gradient(90deg, var(--color-emerald) 0%, var(--color-black) 100%);
+    background: #FFFFFF;
     box-shadow: var(--shadow-md);
     padding: var(--spacing-md) 0;
 }
@@ -166,13 +166,13 @@ a:hover {
 }
 
 .afribazaar-navbar .dropdown-menu {
-    background: linear-gradient(135deg, #1F7A6B 0%, #16573c 100%) !important;
+    background: #FFFFFF !important;
     border: 2px solid var(--color-gold);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .afribazaar-navbar .dropdown-menu .dropdown-item {
-    color: #ffffff !important;
+    color: #000000 !important;
     font-weight: 500;
     transition: all 0.2s ease;
 }
@@ -1206,11 +1206,12 @@ button {
     font-size: 1.35rem;
     font-weight: 600;
     margin-bottom: var(--spacing-xs);
+    color: var(--color-white);
 }
 
 .category-count {
     font-size: 0.9rem;
-    color: var(--color-gray-300);
+    color: var(--color-gold);
     margin-bottom: var(--spacing-sm);
 }
 
