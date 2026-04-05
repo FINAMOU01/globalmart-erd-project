@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'cloudinary',
-    'cloudinary_storage',
 
     'users',
     'products',
@@ -148,16 +147,16 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
-# Media files (User uploads) - Cloudinary
+# Media files (User uploads) - Store locally
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Cloudinary Configuration (for direct API usage)
 cloudinary.config(
     cloud_name=config('CLOUDINARY_CLOUD_NAME', default=''),
     api_key=config('CLOUDINARY_API_KEY', default=''),
     api_secret=config('CLOUDINARY_API_SECRET', default='')
 )
-
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
-MEDIA_URL = '/media/'
-CLOUDINARY_URL = config('CLOUDINARY_URL', default='')
 
 # Custom user model
 AUTH_USER_MODEL = 'users.CustomUser'
