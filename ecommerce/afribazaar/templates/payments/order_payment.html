@@ -154,7 +154,7 @@
                     </div>
                 </div>
 
-                <!-- Payment Details (Simulated) -->
+                <!-- Payment Details (Dynamic based on method) -->
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-header" style="background-color: #f8f9fa; border-bottom: 2px solid #e0e0e0;">
                         <h6 class="mb-0" style="color: #1F7A6B;">Payment Details</h6>
@@ -166,49 +166,113 @@
                             No real funds will be charged.
                         </div>
 
-                        <!-- Card Holder Name -->
-                        <div class="mb-3">
-                            <label for="cardholder" class="form-label">Full Name</label>
-                            <input 
-                                type="text" 
-                                class="form-control" 
-                                id="cardholder" 
-                                placeholder="John Doe"
-                                value="{{ request.user.get_full_name }}"
-                            >
-                        </div>
-
-                        <!-- Card Number -->
-                        <div class="mb-3">
-                            <label for="card_number" class="form-label">Card / Phone Number</label>
-                            <input 
-                                type="text" 
-                                class="form-control" 
-                                id="card_number" 
-                                placeholder="4532 1234 5678 9010"
-                            >
-                            <small class="text-muted">Use 4532 1234 5678 9010 for testing</small>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="expiry" class="form-label">Exp Date (MM/YY)</label>
+                        <!-- CARD Payment Fields -->
+                        <div id="payment-card-fields" style="display: none;">
+                            <!-- Card Holder Name -->
+                            <div class="mb-3">
+                                <label for="cardholder" class="form-label">Full Name</label>
                                 <input 
                                     type="text" 
                                     class="form-control" 
-                                    id="expiry" 
-                                    placeholder="12/25"
+                                    id="cardholder" 
+                                    placeholder="John Doe"
+                                    value="{{ request.user.get_full_name }}"
                                 >
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="cvv" class="form-label">CVV</label>
+
+                            <!-- Card Number -->
+                            <div class="mb-3">
+                                <label for="card_number" class="form-label">Card Number</label>
                                 <input 
                                     type="text" 
                                     class="form-control" 
-                                    id="cvv" 
-                                    placeholder="123"
-                                    maxlength="4"
+                                    id="card_number" 
+                                    placeholder="4532 1234 5678 9010"
                                 >
+                                <small class="text-muted">Use 4532 1234 5678 9010 for testing</small>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="expiry" class="form-label">Exp Date (MM/YY)</label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="expiry" 
+                                        placeholder="12/25"
+                                    >
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="cvv" class="form-label">CVV</label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="cvv" 
+                                        placeholder="123"
+                                        maxlength="4"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MOBILE MONEY Payment Fields -->
+                        <div id="payment-mobile-fields" style="display: none;">
+                            <!-- Mobile Phone Number -->
+                            <div class="mb-3">
+                                <label for="mobile_number" class="form-label">Mobile Money Number</label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="mobile_number" 
+                                    placeholder="+237 6XX XXX XXX"
+                                >
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle"></i>
+                                    Enter your MTN, Orange, or M-Pesa number (include country code)
+                                </small>
+                            </div>
+
+                            <!-- Mobile Provider -->
+                            <div class="mb-3">
+                                <label for="mobile_provider" class="form-label">Mobile Provider</label>
+                                <select class="form-select" id="mobile_provider">
+                                    <option value="MTN">MTN</option>
+                                    <option value="Orange">Orange</option>
+                                    <option value="Vodacom">Vodacom</option>
+                                    <option value="MPesa">M-Pesa</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- BANK TRANSFER Info -->
+                        <div id="payment-bank-fields" style="display: none;">
+                            <div class="alert alert-warning">
+                                <h6 class="alert-heading">
+                                    <i class="fas fa-university me-2"></i>Bank Transfer Details
+                                </h6>
+                                <p class="mb-1"><strong>Bank:</strong> AfriBank International</p>
+                                <p class="mb-1"><strong>Account:</strong> 0012-3456-7890</p>
+                                <p class="mb-1"><strong>Reference:</strong> ORDER-{{ order.id }}</p>
+                                <hr>
+                                <small>
+                                    <i class="fas fa-hourglass-half me-1"></i>
+                                    Please note: Bank transfers may take 1-2 days to process. 
+                                    Your order status will be updated once payment is received.
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- CASH ON DELIVERY Info -->
+                        <div id="payment-cod-fields" style="display: none;">
+                            <div class="alert alert-success">
+                                <h6 class="alert-heading">
+                                    <i class="fas fa-check-circle me-2"></i>Cash on Delivery
+                                </h6>
+                                <p class="mb-0">
+                                    You can pay in cash when your order arrives at your door. 
+                                    No payment is required now. Your order will be confirmed immediately.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -276,34 +340,157 @@
 </style>
 
 <script>
-    // Currency converter - live update amounts
-    document.querySelectorAll('.currency-select').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
+    const ORDER_TOTAL_USD = {{ order_total_usd|floatformat:2 }};
+    
+    // Currency symbols mapping
+    const CURRENCY_SYMBOLS = {
+        'USD': '$',
+        'EUR': '€',
+        'XAF': 'FCFA',
+        'NGN': '₦',
+        'GHS': '₵',
+        'KES': 'KSh',
+        'ZAR': 'R',
+        'GBP': '£',
+        'EGP': 'E£',
+        'MAD': 'د.م.'
+    };
+
+    // ═════════════════════════════════════════════════════════════════
+    // 1. PAYMENT METHOD HANDLING
+    // ═════════════════════════════════════════════════════════════════
+    
+    function handlePaymentMethodChange(selectedMethod) {
+        console.log('Payment method changed to:', selectedMethod);
+        
+        // Hide all payment sections
+        const cardSection = document.getElementById('payment-card-fields');
+        const mobileSection = document.getElementById('payment-mobile-fields');
+        const bankSection = document.getElementById('payment-bank-fields');
+        const codSection = document.getElementById('payment-cod-fields');
+        
+        // Hide all first
+        if (cardSection) cardSection.style.display = 'none';
+        if (mobileSection) mobileSection.style.display = 'none';
+        if (bankSection) bankSection.style.display = 'none';
+        if (codSection) codSection.style.display = 'none';
+        
+        // Show appropriate section based on method
+        switch (selectedMethod) {
+            case 'CARD':
+                if (cardSection) cardSection.style.display = 'block';
+                console.log('✓ Showing card payment fields');
+                break;
+            case 'MOBILE_MONEY':
+                if (mobileSection) mobileSection.style.display = 'block';
+                console.log('✓ Showing mobile money fields');
+                break;
+            case 'BANK_TRANSFER':
+                if (bankSection) bankSection.style.display = 'block';
+                console.log('✓ Showing bank transfer info');
+                break;
+            case 'CASH_ON_DELIVERY':
+                if (codSection) codSection.style.display = 'block';
+                console.log('✓ Showing cash on delivery info');
+                break;
+        }
+    }
+    
+    // Add listeners to payment method radios
+    document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            handlePaymentMethodChange(this.value);
+        });
+    });
+    
+    // Initialize on page load
+    const initialMethod = document.querySelector('input[name="payment_method"]:checked');
+    if (initialMethod) {
+        handlePaymentMethodChange(initialMethod.value);
+    }
+
+    // ═════════════════════════════════════════════════════════════════
+    // 2. CURRENCY CONVERSION
+    // ═════════════════════════════════════════════════════════════════
+    
+    async function convertCurrency(currencyCode) {
+        console.log('Converting to currency:', currencyCode);
+        
+        if (currencyCode === 'USD') {
+            // USD - no conversion needed
+            updateAmountDisplay('USD', ORDER_TOTAL_USD, '$');
+            return;
+        }
+        
+        try {
+            const apiUrl = "{% url 'payments:api_convert' %}?from=USD&to=" + encodeURIComponent(currencyCode) + "&amount=" + ORDER_TOTAL_USD;
+            console.log('API URL:', apiUrl);
+            
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            
+            console.log('API Response:', data);
+            
+            if (data.success && data.rate && data.symbol) {
+                updateAmountDisplay(currencyCode, data.amount, data.symbol);
+                // Update individual currency display boxes
+                updateAllCurrencyAmounts(currencyCode, data.rate, data.symbol);
+            } else {
+                console.error('Conversion error:', data.error || 'Unknown error');
+                updateAmountDisplay(currencyCode, ORDER_TOTAL_USD, '$');
+            }
+        } catch (error) {
+            console.error('Error converting currency:', error);
+            updateAmountDisplay(currencyCode, ORDER_TOTAL_USD, '$');
+        }
+    }
+    
+    function updateAmountDisplay(currencyCode, amount, symbol) {
+        const displayAmount = document.getElementById('display-amount');
+        const displayCurrency = document.getElementById('display-currency');
+        
+        if (displayAmount) {
+            displayAmount.textContent = parseFloat(amount).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+        if (displayCurrency) {
+            displayCurrency.textContent = symbol;
+        }
+    }
+    
+    function updateAllCurrencyAmounts(selectedCurrency, rate, symbol) {
+        const allCurrencies = document.querySelectorAll('[id^="currency_"]');
+        
+        allCurrencies.forEach(currencyRadio => {
+            const currCode = currencyRadio.value;
+            const amountDisplay = document.getElementById('amount_' + currCode);
+            
+            if (amountDisplay && currCode !== 'USD') {
+                // Only update if currency is selected
+                const isSelected = currencyRadio.checked;
+                if (isSelected) {
+                    const converted = (ORDER_TOTAL_USD * rate).toFixed(2);
+                    amountDisplay.textContent = symbol + ' ' + converted;
+                }
+            }
+        });
+    }
+    
+    // Add listeners to currency radios
+    document.querySelectorAll('.currency-select').forEach(radio => {
+        radio.addEventListener('change', function() {
             if (this.checked) {
-                const currencyCode = this.value;
-                const fromUSD = {{ order_total_usd|floatformat:2 }};
-                
-                // Call conversion API
-                fetch("{% url 'payments:api_convert' %}?from_code=USD&to_code=" + currencyCode + "&amount=" + fromUSD)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            document.getElementById('display-amount').textContent = data.amount.toFixed(2);
-                            // Update symbol based on currency
-                            const symbols = {
-                                'USD': '$',
-                                'EUR': '€',
-                                'XAF': 'FCFA',
-                                'NGN': '₦',
-                                'GHS': '₵',
-                                'KES': 'KSh',
-                                'ZAR': 'R'
-                            };
-                            document.getElementById('display-currency').textContent = symbols[currencyCode] || currencyCode;
-                        }
-                    });
+                convertCurrency(this.value);
             }
         });
     });
+    
+    // Initialize on page load with current currency
+    const initialCurrency = document.querySelector('.currency-select:checked');
+    if (initialCurrency && initialCurrency.value !== 'USD') {
+        convertCurrency(initialCurrency.value);
+    }
 </script>
 {% endblock %}
