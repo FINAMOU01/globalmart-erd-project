@@ -282,7 +282,13 @@ def api_convert(request):
         to       – target currency code (e.g. XAF)
 
     Returns JSON:
-        { "success": true, "amount": 1234.56, "formatted": "FCFA 1,234.56" }
+        { 
+            "success": true, 
+            "amount": 1234.56, 
+            "rate": 655.957,
+            "symbol": "FCFA",
+            "formatted": "FCFA 1,234.56" 
+        }
     or on error:
         { "success": false, "error": "..." }
 
@@ -298,6 +304,7 @@ def api_convert(request):
 
         if to_code == "USD":
             result = usd_amount
+            rate = Decimal("1.0")
         else:
             rate_obj = get_latest_rate(to_code)
             if rate_obj is None or rate_obj.rate_to_usd == 0:
@@ -305,15 +312,25 @@ def api_convert(request):
                     {"success": False, "error": f"No exchange rate for {to_code}"}
                 )
             result = (usd_amount / rate_obj.rate_to_usd).quantize(Decimal("0.01"))
+            rate = rate_obj.rate_to_usd
 
         try:
             target_currency = Currency.objects.get(currency_code=to_code)
-            formatted = f"{target_currency.symbol} {result:,.2f}"
+            formatted = f"{target_currency.symbol} {float(result):,.2f}"
+            symbol = target_currency.symbol
         except Currency.DoesNotExist:
-            formatted = f"{to_code} {result:,.2f}"
+            formatted = f"{to_code} {float(result):,.2f}"
+            symbol = to_code
 
         return JsonResponse(
-            {"success": True, "amount": float(result), "formatted": formatted}
+            {
+                "success": True, 
+                "amount": float(result), 
+                "rate": float(rate),
+                "symbol": symbol,
+                "formatted": formatted,
+                "currency_code": to_code
+            }
         )
 
     except Exception as exc:

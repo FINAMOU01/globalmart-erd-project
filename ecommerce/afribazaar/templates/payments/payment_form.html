@@ -503,15 +503,27 @@
 </div>
 
 <script>
+    console.log('Payment form script loading...');
+    
     const ORDER_AMOUNT_USD = {{ order_amount_usd }};
+    
+    // DOM Elements
     const currencySelect = document.getElementById('id_currency_code');
     const displayAmount = document.getElementById('displayAmount');
-    const summaryTotal = document.getElementById('summaryTotal');
-    const currencyCode = document.getElementById('currencyCode');
     const currencySymbol = document.getElementById('currencySymbol');
+    const currencyCodeDisplay = document.getElementById('currencyCode');
+    const summaryTotal = document.getElementById('summaryTotal');
     const summarySymbol = document.getElementById('summarySymbol');
+    const conversionRateDisplay = document.getElementById('conversionRate');
     const methodRadios = document.querySelectorAll('input[name="payment_method"]');
     const btnLabel = document.getElementById('btnLabel');
+
+    console.log('Elements loaded:', {
+        currencySelect: !!currencySelect,
+        displayAmount: !!displayAmount,
+        summaryTotal: !!summaryTotal,
+        methodRadios: methodRadios.length
+    });
 
     const methodToLabel = {
         CARD: 'Process Card Payment',
@@ -520,34 +532,154 @@
         CASH_ON_DELIVERY: 'Place Order (Pay on Delivery)',
     };
 
-    // Update payment method label
+    // ═══════════════════════════════════════════════════════════════
+    // 1. PAYMENT METHOD HANDLING - Show/Hide correct fields
+    // ═══════════════════════════════════════════════════════════════
+    
+    function hideAllPaymentFields() {
+        const cardFields = document.getElementById('card-fields');
+        const mobileFields = document.getElementById('mobile-fields');
+        
+        if (cardFields) {
+            cardFields.classList.add('d-none');
+            cardFields.style.display = 'none';
+        }
+        if (mobileFields) {
+            mobileFields.classList.add('d-none');
+            mobileFields.style.display = 'none';
+        }
+    }
+
+    function showPaymentFields(method) {
+        console.log('Showing payment fields for method:', method);
+        hideAllPaymentFields();
+        
+        if (method === 'CARD') {
+            const cardFields = document.getElementById('card-fields');
+            if (cardFields) {
+                cardFields.classList.remove('d-none');
+                cardFields.style.display = 'block';
+                console.log('✓ Card fields shown');
+            }
+        } else if (method === 'MOBILE_MONEY') {
+            const mobileFields = document.getElementById('mobile-fields');
+            if (mobileFields) {
+                mobileFields.classList.remove('d-none');
+                mobileFields.style.display = 'block';
+                console.log('✓ Mobile Money fields shown');
+            }
+        }
+        
+        // Update button label
+        btnLabel.textContent = methodToLabel[method] || 'Process Payment';
+    }
+
+    // Setup payment method change listeners
     methodRadios.forEach(radio => {
-        radio.addEventListener('change', () => {
-            btnLabel.textContent = methodToLabel[radio.value] || 'Process Payment';
+        radio.addEventListener('change', function() {
+            console.log('Payment method changed to:', this.value);
+            showPaymentFields(this.value);
         });
     });
 
-    // Handle currency conversion
-    currencySelect.addEventListener('change', async function() {
-        const currencyCode = this.value;
-        if (!currencyCode) return;
+    // ═══════════════════════════════════════════════════════════════
+    // 2. CURRENCY CONVERSION - Real-time amount update
+    // ═══════════════════════════════════════════════════════════════
+
+    async function loadCurrencyRate(targetCulrencyCode) {
+        console.log('Loading rate for currency:', targetCulrencyCode);
+        
+        if (targetCulrencyCode === 'USD') {
+            updateAmountDisplay('USD', 1.0, '$');
+            return;
+        }
 
         try {
-            const response = await fetch('{% url "payments:api_convert" %}?from=USD&to=' + currencyCode + '&amount=' + ORDER_AMOUNT_USD);
+            const apiUrl = '{% url "payments:api_convert" %}?from=USD&to=' + encodeURIComponent(targetCulrencyCode) + '&amount=' + ORDER_AMOUNT_USD;
+            console.log('Fetching API:', apiUrl);
+            
+            const response = await fetch(apiUrl);
             const data = await response.json();
             
-            if (data.converted_amount && data.rate) {
-                const converted = (ORDER_AMOUNT_USD * data.rate).toFixed(2);
-                displayAmount.textContent = converted;
-                summaryTotal.textContent = `${data.symbol} ${converted}`;
-                document.getElementById('currencyCode').textContent = currencyCode;
-                currencySymbol.textContent = data.symbol || '$';
-                summarySymbol.textContent = data.symbol || '$';
-                document.getElementById('conversionRate').textContent = data.rate.toFixed(4);
+            console.log('API Response:', data);
+            
+            if (data.success && data.rate && data.symbol) {
+                updateAmountDisplay(targetCulrencyCode, parseFloat(data.rate), data.symbol);
+            } else if (!data.success) {
+                console.error('API Error:', data.error);
+                updateAmountDisplay(targetCulrencyCode, 1, '$');
             }
         } catch (error) {
             console.error('Error converting currency:', error);
+            updateAmountDisplay(targetCulrencyCode, 1, '$');
         }
-    });
+    }
+
+    function updateAmountDisplay(currencyCodeValue, rate, symbol) {
+        console.log('Updating display:', { currencyCodeValue, rate, symbol });
+        
+        const converted = (ORDER_AMOUNT_USD * rate).toFixed(2);
+        const formattedAmount = parseFloat(converted).toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        
+        // Update main display
+        if (displayAmount) displayAmount.textContent = converted;
+        if (currencySymbol) currencySymbol.textContent = symbol;
+        if (currencyCodeDisplay) currencyCodeDisplay.textContent = currencyCodeValue;
+        
+        // Update summary sidebar
+        if (summaryTotal) summaryTotal.innerHTML = `<span id="summarySymbol">${symbol}</span> ${formattedAmount}`;
+        if (conversionRateDisplay) conversionRateDisplay.textContent = rate.toFixed(4);
+        
+        console.log('✓ Display updated:', { converted, symbol, formattedAmount });
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // 3. EVENT LISTENERS
+    // ═══════════════════════════════════════════════════════════════
+
+    if (currencySelect) {
+        currencySelect.addEventListener('change', function() {
+            const selectedCode = this.value;
+            console.log('Currency changed to:', selectedCode);
+            
+            if (selectedCode && selectedCode !== '') {
+                loadCurrencyRate(selectedCode);
+            }
+        });
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // 4. PAGE LOAD INITIALIZATION
+    // ═══════════════════════════════════════════════════════════════
+
+    function initializePaymentForm() {
+        console.log('Initializing payment form...');
+        
+        // Set initial payment method display
+        const checkedRadio = document.querySelector('input[name="payment_method"]:checked');
+        if (checkedRadio) {
+            console.log('Initial payment method:', checkedRadio.value);
+            showPaymentFields(checkedRadio.value);
+        }
+        
+        // Load initial currency
+        if (currencySelect && currencySelect.value) {
+            console.log('Initial currency:', currencySelect.value);
+            loadCurrencyRate(currencySelect.value);
+        }
+        
+        console.log('✓ Form initialization complete');
+    }
+
+    // Run initialization when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializePaymentForm);
+    } else {
+        // DOM is already ready
+        initializePaymentForm();
+    }
 </script>
 {% endblock %}
