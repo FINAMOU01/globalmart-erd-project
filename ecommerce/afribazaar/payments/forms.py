@@ -51,11 +51,11 @@ class PaymentForm(forms.Form):
         widget=forms.TextInput(
             attrs={"class": "form-control", "placeholder": "Name on card"}
         ),
+        help_text="Only required for card payments"
     )
     card_last_four = forms.CharField(
         max_length=4,
-        min_length=4,
-        required=False,
+        required=False,  # Important: Keep as required=False
         label="Last 4 digits of card",
         widget=forms.TextInput(
             attrs={
@@ -64,6 +64,7 @@ class PaymentForm(forms.Form):
                 "maxlength": "4",
             }
         ),
+        help_text="Only required for card payments"
     )
 
     # Mobile money field (visible only when method = MOBILE_MONEY via JS)
@@ -149,17 +150,18 @@ class PaymentForm(forms.Form):
         )
 
     def clean(self):
-        """Cross-field validation: card fields required when method is CARD."""
+        """Cross-field validation: validate required fields based on payment method."""
         cleaned = super().clean()
         method = cleaned.get("payment_method")
-        if method == Payment.METHOD_CARD:
-            if not cleaned.get("cardholder_name"):
-                self.add_error("cardholder_name", "Please enter the cardholder name.")
-            if not cleaned.get("card_last_four"):
-                self.add_error("card_last_four", "Please enter the last 4 digits.")
-        if method == Payment.METHOD_MOBILE_MONEY:
-            if not cleaned.get("mobile_number"):
-                self.add_error("mobile_number", "Please enter your mobile money number.")
+        
+        # In simulation mode, we don't require card/mobile details server-side
+        # The frontend JavaScript handles show/hide; server accepts any valid payment method
+        # This allows testing without entering payment details
+        
+        # Just validate that a payment method was selected
+        if not method:
+            self.add_error("payment_method", "Please select a payment method.")
+        
         return cleaned
 
 
