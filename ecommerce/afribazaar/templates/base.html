@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
         /* ===== CRITICAL INLINE CSS (WhiteNoise workaround) ===== */
         
@@ -573,6 +574,24 @@
             // Navigate to set-currency endpoint
             window.location.href = `/products/set-currency/${currencyCode}/`;
         }
+
+        // Success message toast notifications
+        document.addEventListener('DOMContentLoaded', function() {
+            // Find all success alerts and auto-dismiss them after 5 seconds
+            const successAlerts = document.querySelectorAll('.alert-success');
+            successAlerts.forEach(function(alert) {
+                setTimeout(function() {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }, 5000);
+            });
+
+            // Show a subtle toast notification if there's a success message
+            const hasSuccessMessage = document.querySelector('.alert-success');
+            if (hasSuccessMessage) {
+                console.log('✅ Payment success message displayed');
+            }
+        });
     </script>
     {% block extra_js %}{% endblock %}
 </body>

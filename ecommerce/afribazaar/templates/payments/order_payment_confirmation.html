@@ -7,8 +7,28 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <!-- Success Message -->
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <!-- Django Messages Display -->
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show animate__animated animate__slideInDown" role="alert" style="border-left: 4px solid; margin-bottom: 20px;">
+                <div class="d-flex align-items-center">
+                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'warning' %}fa-exclamation-triangle{% elif message.tags == 'info' %}fa-info-circle{% else %}fa-times-circle{% endif %} me-3" style="font-size: 1.5rem;"></i>
+                    <div class="flex-grow-1">
+                        <strong>
+                            {% if message.tags == 'success' %}Success!
+                            {% elif message.tags == 'warning' %}Pending
+                            {% elif message.tags == 'info' %}Information
+                            {% else %}Error{% endif %}
+                        </strong>
+                        <p class="mb-0">{{ message }}</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% else %}
+            <!-- Fallback Success Message -->
+            <div class="alert alert-success alert-dismissible fade show animate__animated animate__slideInDown" role="alert" style="border-left: 4px solid #28a745;">
                 <div class="d-flex align-items-center">
                     <i class="fas fa-check-circle me-3" style="font-size: 2rem;"></i>
                     <div>
@@ -18,6 +38,7 @@
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+            {% endif %}
 
             <!-- Payment Details Card -->
             <div class="card shadow-sm border-0 mb-4">
@@ -82,9 +103,20 @@
             <!-- Order Details -->
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-header" style="background-color: #f8f9fa; border-bottom: 2px solid #e0e0e0;">
-                    <h6 class="mb-0" style="color: #1F7A6B;">Order Items</h6>
+                    <h6 class="mb-0" style="color: #1F7A6B;">Order Status & Items</h6>
                 </div>
                 <div class="card-body">
+                    <!-- Order Status Alert -->
+                    <div class="alert alert-info" role="alert" style="margin-bottom: 20px;">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-info-circle me-3" style="font-size: 1.5rem;"></i>
+                            <div class="flex-grow-1">
+                                <strong>Order Status Updated:</strong>
+                                <p class="mb-0">Your order status is now: <span class="badge bg-success" style="font-size: 0.9rem;">{{ order.get_status_display }}</span></p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="table-responsive">
                         <table class="table table-hover table-borderless mb-0">
                             <thead style="background-color: #f8f9fa;">
@@ -195,7 +227,7 @@
 
             <!-- Action Buttons -->
             <div class="d-grid gap-2 d-sm-flex justify-content-center">
-                <a href="{% url 'accounts:customer_dashboard' %}" class="btn btn-success btn-lg px-4">
+                <a href="{% url 'accounts:customer_dashboard' %}?refresh=true" class="btn btn-success btn-lg px-4" id="dashboardBtn">
                     <i class="fas fa-chart-line me-2"></i>Go to Dashboard
                 </a>
                 <a href="{% url 'products:shop' %}" class="btn btn-outline-secondary btn-lg px-4">
@@ -205,6 +237,29 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Log confirmation page view
+    console.log('✅ Payment Confirmation Page Loaded');
+    console.log('📦 Order ID: {{ order.id }}');
+    console.log('✓ Order Status: {{ order.status|upper }}');
+    console.log('💰 Total: USD {{ payment.amount_in_usd }}');
+    
+    // Dashboard button click handler
+    document.getElementById('dashboardBtn').addEventListener('click', function() {
+        console.log('➜ Navigating to dashboard...');
+        // Add a small delay to ensure the page is ready
+        setTimeout(function() {
+            window.location.href = this.href;
+        }.bind(this), 100);
+    });
+
+    // Auto mark the success in page lifecycle
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('✅ Confirmation page fully loaded');
+        console.log('📋 Order #{{ order.id }} status is now: {{ order.get_status_display }}');
+    });
+</script>
 
 <style>
     .timeline-item:last-child {

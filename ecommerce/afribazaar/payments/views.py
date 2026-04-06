@@ -462,7 +462,10 @@ def order_payment_view(request, order_id):
         order.total_price = order_total_usd
         order.save()
         
-        messages.success(request, f"Payment successful! Order #{order_id} confirmed.")
+        # Refresh from database to confirm save
+        order.refresh_from_db()
+        
+        messages.success(request, f"✅ Payment successful! Order #{order_id} status is now: CONFIRMED")
         return redirect('payments:order_payment_confirmation', order_id=order_id)
     
     elif method == Payment.METHOD_CASH_ON_DELIVERY:
@@ -478,7 +481,10 @@ def order_payment_view(request, order_id):
         order.total_price = order_total_usd
         order.save()
         
-        messages.success(request, f"Order #{order_id} confirmed! We'll collect payment on delivery.")
+        # Refresh from database to confirm save
+        order.refresh_from_db()
+        
+        messages.success(request, f"✅ Order #{order_id} confirmed! Status updated to: CONFIRMED. We'll collect payment on delivery.")
         return redirect('payments:order_payment_confirmation', order_id=order_id)
     
     elif method == Payment.METHOD_BANK_TRANSFER:
@@ -501,6 +507,9 @@ def order_payment_confirmation_view(request, order_id):
     Template: payments/order_payment_confirmation.html
     """
     order = get_object_or_404(Order, id=order_id, customer=request.user)
+    
+    # Refresh from database to get latest status
+    order.refresh_from_db()
     
     # Get payment for this order
     payment = Payment.objects.filter(order_id=order_id).first()
