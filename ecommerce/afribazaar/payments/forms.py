@@ -10,6 +10,8 @@ Forms:
 """
 
 from django import forms
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Fieldset, Row, Column, HTML, Div, Submit, Reset
 from .models import Payment, Currency
 
 
@@ -47,7 +49,7 @@ class PaymentForm(forms.Form):
         required=False,
         label="Cardholder Name",
         widget=forms.TextInput(
-            attrs={"class": "form-input", "placeholder": "Name on card"}
+            attrs={"class": "form-control", "placeholder": "Name on card"}
         ),
     )
     card_last_four = forms.CharField(
@@ -57,7 +59,7 @@ class PaymentForm(forms.Form):
         label="Last 4 digits of card",
         widget=forms.TextInput(
             attrs={
-                "class": "form-input",
+                "class": "form-control",
                 "placeholder": "e.g. 4242",
                 "maxlength": "4",
             }
@@ -70,9 +72,81 @@ class PaymentForm(forms.Form):
         required=False,
         label="Mobile Money Number",
         widget=forms.TextInput(
-            attrs={"class": "form-input", "placeholder": "+237 6XX XXX XXX"}
+            attrs={"class": "form-control", "placeholder": "+237 6XX XXX XXX"}
         ),
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "post"
+        self.helper.form_class = "payment-form"
+        self.helper.form_tag = True
+        self.helper.layout = Layout(
+            HTML('<div class="payment-container">'),
+            HTML('<div class="payment-header"><h3 class="mb-4">Complete Payment</h3></div>'),
+            
+            # Hidden order_id
+            'order_id',
+            
+            # Currency Selection
+            Fieldset(
+                'Currency Selection',
+                Row(
+                    Column('currency_code', css_class='col-md-6'),
+                    css_class='row'
+                ),
+                css_class='fieldset-payment mb-4'
+            ),
+            
+            # Payment Method Selection
+            Fieldset(
+                'Payment Method',
+                'payment_method',
+                css_class='fieldset-payment mb-4'
+            ),
+            
+            # Card Payment Fields (hidden by default, shown via JS)
+            Div(
+                Fieldset(
+                    'Card Details',
+                    Row(
+                        Column('cardholder_name', css_class='col-md-6'),
+                        Column('card_last_four', css_class='col-md-6'),
+                        css_class='row'
+                    ),
+                    css_class='fieldset-payment'
+                ),
+                id='card-fields',
+                css_class='payment-method-fields d-none'
+            ),
+            
+            # Mobile Money Fields (hidden by default, shown via JS)
+            Div(
+                Fieldset(
+                    'Mobile Money Details',
+                    'mobile_number',
+                    css_class='fieldset-payment'
+                ),
+                id='mobile-fields',
+                css_class='payment-method-fields d-none'
+            ),
+            
+            # Buttons
+            Row(
+                Column(
+                    Submit('submit', 'Process Payment', css_class='btn btn-primary btn-lg w-100'),
+                    css_class='col-md-6'
+                ),
+                Column(
+                    Reset('reset', 'Clear Form', css_class='btn btn-outline-secondary btn-lg w-100'),
+                    css_class='col-md-6'
+                ),
+                css_class='row g-2 mt-4'
+            ),
+            
+            HTML('</div>'),
+        )
 
     def clean(self):
         """Cross-field validation: card fields required when method is CARD."""

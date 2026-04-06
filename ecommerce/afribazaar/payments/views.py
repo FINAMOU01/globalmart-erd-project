@@ -83,7 +83,7 @@ def payment_page(request):
             "chosen_currency": chosen_currency,
             "active_currencies": get_active_currencies(),
         }
-        return render(request, "payments/payment_page.html", context)
+        return render(request, "payments/payment_form.html", context)
 
     # ── POST: process the payment ─────────────────────────────────────────────
     form = PaymentForm(request.POST)
@@ -96,7 +96,7 @@ def payment_page(request):
             "chosen_currency": chosen_currency,
             "active_currencies": get_active_currencies(),
         }
-        return render(request, "payments/payment_page.html", context)
+        return render(request, "payments/payment_form.html", context)
 
     # Extract validated data
     currency = form.cleaned_data["currency_code"]

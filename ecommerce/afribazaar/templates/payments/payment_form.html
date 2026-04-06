@@ -1,0 +1,553 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Payment - AfriBazaar{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --color-primary: #C44A2F;
+        --color-gold: #D4AF37;
+        --color-light: #F5F5F5;
+        --color-dark: #333333;
+        --color-success: #27ae60;
+        --color-error: #c0392b;
+    }
+
+    .payment-wrapper {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+        padding: 2rem 1rem 4rem;
+    }
+
+    .payment-container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .breadcrumb-payment {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+        font-size: 0.875rem;
+        color: #666;
+    }
+
+    .breadcrumb-payment a {
+        color: var(--color-primary);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .breadcrumb-payment a:hover {
+        text-decoration: underline;
+    }
+
+    .payment-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+        align-items: start;
+    }
+
+    @media (max-width: 768px) {
+        .payment-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .payment-form-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .payment-form-header {
+        background: linear-gradient(135deg, var(--color-primary), #d85a3b);
+        color: white;
+        padding: 1.5rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+    .payment-form-header i {
+        font-size: 1.4rem;
+    }
+
+    .payment-form-body {
+        padding: 2rem;
+    }
+
+    /* Crispy form customization */
+    .fieldset-payment {
+        margin-bottom: 2rem;
+        padding: 1.5rem 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .fieldset-payment:last-child {
+        border-bottom: none;
+    }
+
+    .fieldset-payment > legend {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-dark);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid var(--color-gold);
+    }
+
+    .form-control,
+    .form-select {
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        font-family: 'Poppins', sans-serif;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 0.2rem rgba(196, 74, 47, 0.15);
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: var(--color-dark);
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .form-text.text-muted {
+        font-size: 0.85rem;
+        color: #999;
+    }
+
+    /* Radio buttons styling */
+    .form-check-input {
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 2px solid #ddd;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .form-check-input:checked {
+        background-color: var(--color-primary);
+        border-color: var(--color-primary);
+    }
+
+    .form-check-label {
+        cursor: pointer;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Payment method cards */
+    .payment-methods {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .payment-method-card {
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        padding: 1rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #fafafa;
+    }
+
+    .payment-method-card:hover {
+        border-color: var(--color-gold);
+        background: #fffbf0;
+    }
+
+    .payment-method-card input[type="radio"]:checked + .payment-method-label {
+        color: var(--color-primary);
+        font-weight: 600;
+    }
+
+    .payment-method-card input[type="radio"]:checked ~ .payment-method-icon {
+        color: var(--color-primary);
+        transform: scale(1.1);
+    }
+
+    .payment-method-card input[type="radio"] {
+        display: none;
+    }
+
+    .payment-method-icon {
+        font-size: 2rem;
+        color: var(--color-primary);
+        margin-bottom: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .payment-method-label {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--color-dark);
+    }
+
+    /* Order summary sidebar */
+    .order-summary-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        position: sticky;
+        top: 2rem;
+    }
+
+    .order-summary-header {
+        background: linear-gradient(135deg, var(--color-gold), #e0a020);
+        color: white;
+        padding: 1.5rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+    .order-summary-body {
+        padding: 1.5rem;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #eee;
+        font-size: 0.95rem;
+        color: var(--color-dark);
+    }
+
+    .summary-row:last-child {
+        border-bottom: none;
+    }
+
+    .summary-row.total {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--color-primary);
+        padding-top: 1rem;
+        border-top: 2px solid var(--color-gold);
+    }
+
+    .amount-badge {
+        background: linear-gradient(135deg, var(--color-primary), #d85a3b);
+        color: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .amount-label {
+        font-size: 0.85rem;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .amount-value {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin: 0.5rem 0;
+    }
+
+    .amount-currency {
+        font-size: 0.95rem;
+        opacity: 0.85;
+    }
+
+    /* Buttons */
+    .btn-pay {
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(135deg, var(--color-primary), #d85a3b);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        margin-top: 1rem;
+    }
+
+    .btn-pay:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(196, 74, 47, 0.3);
+    }
+
+    .btn-pay:active {
+        transform: translateY(0);
+    }
+
+    .security-badge {
+        text-align: center;
+        font-size: 0.8rem;
+        color: var(--color-success);
+        margin-top: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+    }
+
+    .security-badge i {
+        font-size: 1rem;
+    }
+
+    /* Error messages */
+    .errorlist {
+        list-style: none;
+        padding: 0;
+        margin: 0.5rem 0 0;
+    }
+
+    .errorlist li {
+        background: #fdecea;
+        color: var(--color-error);
+        padding: 0.6rem 0.8rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        border-left: 4px solid var(--color-error);
+    }
+
+    /* Success/info messages */
+    .alert {
+        border-radius: 8px;
+        border-left: 4px solid;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .alert-success {
+        background: #e8f5e9;
+        border-color: var(--color-success);
+        color: #27ae60;
+    }
+
+    .alert-error {
+        background: #fdecea;
+        border-color: var(--color-error);
+        color: var(--color-error);
+    }
+
+    .alert-info {
+        background: #e3f2fd;
+        border-color: #2196F3;
+        color: #1976D2;
+    }
+
+    /* Payment method details */
+    .payment-method-fields {
+        transition: all 0.3s ease;
+    }
+
+    .payment-method-fields.d-none {
+        display: none;
+    }
+
+    /* Badge for special info */
+    .info-box {
+        background: #f0f8ff;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-top: 1rem;
+        border-left: 4px solid #2196F3;
+        font-size: 0.9rem;
+        color: #0d47a1;
+    }
+
+    .info-box strong {
+        color: #1565c0;
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="payment-wrapper">
+    <div class="payment-container">
+
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb-payment">
+            <a href="/"><i class="fas fa-home"></i> Home</a>
+            <i class="fas fa-chevron-right"></i>
+            <a href="#">Cart</a>
+            <i class="fas fa-chevron-right"></i>
+            <span>Payment</span>
+        </nav>
+
+        <!-- Messages -->
+        {% if messages %}
+        {% for msg in messages %}
+        <div class="alert alert-{{ msg.tags|default:'info' }}">
+            {% if msg.tags == 'error' %}
+            <i class="fas fa-exclamation-circle"></i>
+            {% elif msg.tags == 'success' %}
+            <i class="fas fa-check-circle"></i>
+            {% else %}
+            <i class="fas fa-info-circle"></i>
+            {% endif %}
+            {{ msg }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <div class="payment-grid">
+
+            <!-- LEFT: Payment Form -->
+            <div class="payment-form-card">
+                <div class="payment-form-header">
+                    <i class="fas fa-lock"></i>
+                    Secure Payment
+                </div>
+                <div class="payment-form-body">
+                    <form method="post" id="paymentForm">
+                        {% csrf_token %}
+                        
+                        <!-- Display amount preview -->
+                        <div class="amount-badge">
+                            <div class="amount-label">Amount to Pay</div>
+                            <div class="amount-value">
+                                <span id="currencySymbol">$</span> <span id="displayAmount">{{ display_amount|floatformat:2 }}</span>
+                            </div>
+                            <div class="amount-currency" id="currencyCode">USD</div>
+                        </div>
+
+                        <!-- Render form using Crispy -->
+                        {% crispy form %}
+
+                        <!-- Submit button -->
+                        <button type="submit" class="btn-pay">
+                            <i class="fas fa-credit-card"></i>
+                            <span id="btnLabel">Process Payment</span>
+                        </button>
+
+                        <!-- Security badge -->
+                        <div class="security-badge">
+                            <i class="fas fa-shield-alt"></i>
+                            256-bit SSL Encryption
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- RIGHT: Order Summary -->
+            <div class="order-summary-card">
+                <div class="order-summary-header">
+                    <i class="fas fa-receipt"></i>
+                    Order Summary
+                </div>
+                <div class="order-summary-body">
+                    <div class="summary-row">
+                        <span>Order #:</span>
+                        <strong>{{ order_id }}</strong>
+                    </div>
+                    <div class="summary-row">
+                        <span>Subtotal (USD):</span>
+                        <span>${{ order_amount_usd|floatformat:2 }}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Shipping:</span>
+                        <span style="color: var(--color-success); font-weight: 600;">Free</span>
+                    </div>
+                    {% if discount %}
+                    <div class="summary-row">
+                        <span>Discount:</span>
+                        <span style="color: var(--color-primary);">-{{ discount }}%</span>
+                    </div>
+                    {% endif %}
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span id="summaryTotal">
+                            <span id="summarySymbol">$</span> {{ display_amount|floatformat:2 }}
+                        </span>
+                    </div>
+
+                    {% if chosen_currency.symbol %}
+                    <div class="info-box">
+                        <strong>Currency:</strong> 1 {{ chosen_currency.currency_code }} = 
+                        <span id="conversionRate">...</span> USD
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    const ORDER_AMOUNT_USD = {{ order_amount_usd }};
+    const currencySelect = document.getElementById('id_currency_code');
+    const displayAmount = document.getElementById('displayAmount');
+    const summaryTotal = document.getElementById('summaryTotal');
+    const currencyCode = document.getElementById('currencyCode');
+    const currencySymbol = document.getElementById('currencySymbol');
+    const summarySymbol = document.getElementById('summarySymbol');
+    const methodRadios = document.querySelectorAll('input[name="payment_method"]');
+    const btnLabel = document.getElementById('btnLabel');
+
+    const methodToLabel = {
+        CARD: 'Process Card Payment',
+        MOBILE_MONEY: 'Send Mobile Money',
+        BANK_TRANSFER: 'Confirm Transfer',
+        CASH_ON_DELIVERY: 'Place Order (Pay on Delivery)',
+    };
+
+    // Update payment method label
+    methodRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            btnLabel.textContent = methodToLabel[radio.value] || 'Process Payment';
+        });
+    });
+
+    // Handle currency conversion
+    currencySelect.addEventListener('change', async function() {
+        const currencyCode = this.value;
+        if (!currencyCode) return;
+
+        try {
+            const response = await fetch('{% url "payments:api_convert" %}?from=USD&to=' + currencyCode + '&amount=' + ORDER_AMOUNT_USD);
+            const data = await response.json();
+            
+            if (data.converted_amount && data.rate) {
+                const converted = (ORDER_AMOUNT_USD * data.rate).toFixed(2);
+                displayAmount.textContent = converted;
+                summaryTotal.textContent = `${data.symbol} ${converted}`;
+                document.getElementById('currencyCode').textContent = currencyCode;
+                currencySymbol.textContent = data.symbol || '$';
+                summarySymbol.textContent = data.symbol || '$';
+                document.getElementById('conversionRate').textContent = data.rate.toFixed(4);
+            }
+        } catch (error) {
+            console.error('Error converting currency:', error);
+        }
+    });
+</script>
+{% endblock %}
