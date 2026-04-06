@@ -407,8 +407,21 @@ def order_payment_view(request, order_id):
         return render(request, "payments/order_payment.html", context)
     
     # ── POST: Process the payment ─────────────────────────────────────────────
+    print("\n" + "="*80)
+    print(f"📋 PAYMENT FORM SUBMISSION RECEIVED")
+    print(f"Order ID: {order_id}")
+    print(f"POST Data: {request.POST}")
+    print("="*80)
+    
     form = PaymentForm(request.POST)
+    
+    print(f"Form Valid: {form.is_valid()}")
     if not form.is_valid():
+        print(f"❌ Form Errors: {form.errors}")
+        print(f"Non-field errors: {form.non_field_errors()}")
+        for field, errors in form.errors.items():
+            print(f"  Field '{field}': {errors}")
+        
         context = {
             "form": form,
             "order": order,
@@ -420,8 +433,12 @@ def order_payment_view(request, order_id):
         return render(request, "payments/order_payment.html", context)
     
     # Extract validated data
+    print("✅ Form is valid, extracting data...")
     currency = form.cleaned_data["currency_code"]
     method = form.cleaned_data["payment_method"]
+    
+    print(f"  Currency: {currency} (type: {type(currency)})")
+    print(f"  Payment Method: {method}")
     
     # Calculate amount in chosen currency
     amount_in_chosen = order_total_usd
@@ -440,6 +457,8 @@ def order_payment_view(request, order_id):
         payment_status=Payment.STATUS_PENDING,
     )
     
+    print(f"💳 Payment Created: {payment.id}")
+    
     # Log INITIATED transaction
     Transaction.objects.create(
         payment=payment,
@@ -450,6 +469,7 @@ def order_payment_view(request, order_id):
     # ── Simulate payment processing ───────────────────────────────────────────
     # Simulate: Card & Mobile Money succeed, Cash on Delivery is pending
     if method in (Payment.METHOD_CARD, Payment.METHOD_MOBILE_MONEY):
+        print(f"⚡ Processing {method} payment...")
         payment.mark_completed(reference=f"AFRI-{payment.pk:06d}")
         Transaction.objects.create(
             payment=payment,
@@ -458,6 +478,7 @@ def order_payment_view(request, order_id):
         )
         
         # Update order status to confirmed and set total price
+        print(f"✏️  Updating order status from '{order.status}' to 'confirmed'...")
         order.status = 'confirmed'
         order.total_price = order_total_usd
         order.save()
@@ -465,10 +486,14 @@ def order_payment_view(request, order_id):
         # Refresh from database to confirm save
         order.refresh_from_db()
         
+        print(f"✅ Order #{order_id} status after save: {order.status}")
+        print("="*80 + "\n")
+        
         messages.success(request, f"✅ Payment successful! Order #{order_id} status is now: CONFIRMED")
         return redirect('payments:order_payment_confirmation', order_id=order_id)
     
     elif method == Payment.METHOD_CASH_ON_DELIVERY:
+        print(f"⚡ Processing Cash on Delivery...")
         payment.mark_completed(reference=f"COD-{payment.pk:06d}")
         Transaction.objects.create(
             payment=payment,
@@ -477,6 +502,7 @@ def order_payment_view(request, order_id):
         )
         
         # Update order status to confirmed and set total price
+        print(f"✏️  Updating order status from '{order.status}' to 'confirmed'...")
         order.status = 'confirmed'
         order.total_price = order_total_usd
         order.save()
@@ -484,16 +510,21 @@ def order_payment_view(request, order_id):
         # Refresh from database to confirm save
         order.refresh_from_db()
         
+        print(f"✅ Order #{order_id} status after save: {order.status}")
+        print("="*80 + "\n")
+        
         messages.success(request, f"✅ Order #{order_id} confirmed! Status updated to: CONFIRMED. We'll collect payment on delivery.")
         return redirect('payments:order_payment_confirmation', order_id=order_id)
     
     elif method == Payment.METHOD_BANK_TRANSFER:
+        print(f"⚡ Processing Bank Transfer...")
         Transaction.objects.create(
             payment=payment,
             event_type=Transaction.EVENT_INITIATED,
             notes="Bank Transfer: awaiting payment.",
         )
         
+        print("="*80 + "\n")
         messages.warning(request, "Bank transfer initiated. Your order will be confirmed once we receive your payment.")
         return redirect('payments:order_payment_failed', order_id=order_id)
 
