@@ -56,8 +56,22 @@
             </div>
 
             <!-- Payment Form -->
-            <form method="post" class="needs-validation">
+            <form method="post" id="paymentForm" class="needs-validation">
                 {% csrf_token %}
+                
+                <!-- Display Form Errors if Any -->
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Form Errors:</strong>
+                    {% for error in form.non_field_errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+                
+                <!-- Hidden order_id field (required by form) -->
+                <input type="hidden" name="order_id" value="{{ order.id }}">
                 
                 <!-- Payment Method Selection -->
                 <div class="card shadow-sm border-0 mb-4">
@@ -84,6 +98,7 @@
                                     id="method_{{ value }}" 
                                     value="{{ value }}"
                                     {% if form.payment_method.value == value %}checked{% endif %}
+                                    required
                                 >
                                 <label class="form-check-label w-100" for="method_{{ value }}">
                                     <strong>{{ label }}</strong>
@@ -135,7 +150,8 @@
                                         name="currency_code" 
                                         id="currency_{{ currency.currency_code }}" 
                                         value="{{ currency.currency_code }}"
-                                        {% if form.currency_code.value == currency.currency_code %}checked{% endif %}
+                                        {% if form.currency_code.value == currency.currency_code or chosen_currency.currency_code == currency.currency_code %}checked{% endif %}
+                                        required
                                     >
                                     <label class="form-check-label w-100" for="currency_{{ currency.currency_code }}">
                                         <strong>{{ currency.currency_code }}</strong> - {{ currency.currency_name }}
@@ -297,7 +313,7 @@
 
                 <!-- Action Buttons -->
                 <div class="d-grid gap-2 d-sm-flex justify-content-center mb-4">
-                    <button type="submit" class="btn btn-success btn-lg px-5">
+                    <button type="submit" id="submitBtn" class="btn btn-success btn-lg px-5">
                         <i class="fas fa-check-circle me-2"></i>Complete Payment
                     </button>
                     <a href="{% url 'orders:cart_view' %}" class="btn btn-outline-secondary btn-lg px-4">
@@ -341,6 +357,7 @@
 
 <script>
     const ORDER_TOTAL_USD = {{ order_total_usd|floatformat:2 }};
+    const FORM_ELEMENT = document.getElementById('paymentForm');
     
     // Currency symbols mapping
     const CURRENCY_SYMBOLS = {
@@ -361,7 +378,7 @@
     // ═════════════════════════════════════════════════════════════════
     
     function handlePaymentMethodChange(selectedMethod) {
-        console.log('Payment method changed to:', selectedMethod);
+        console.log('🔄 Payment method changed to:', selectedMethod);
         
         // Hide all payment sections
         const cardSection = document.getElementById('payment-card-fields');
@@ -414,7 +431,7 @@
     // ═════════════════════════════════════════════════════════════════
     
     async function convertCurrency(currencyCode) {
-        console.log('Converting to currency:', currencyCode);
+        console.log('💱 Converting to currency:', currencyCode);
         
         if (currencyCode === 'USD') {
             // USD - no conversion needed
@@ -424,23 +441,23 @@
         
         try {
             const apiUrl = "{% url 'payments:api_convert' %}?from=USD&to=" + encodeURIComponent(currencyCode) + "&amount=" + ORDER_TOTAL_USD;
-            console.log('API URL:', apiUrl);
+            console.log('📡 API URL:', apiUrl);
             
             const response = await fetch(apiUrl);
             const data = await response.json();
             
-            console.log('API Response:', data);
+            console.log('📊 API Response:', data);
             
             if (data.success && data.rate && data.symbol) {
                 updateAmountDisplay(currencyCode, data.amount, data.symbol);
                 // Update individual currency display boxes
                 updateAllCurrencyAmounts(currencyCode, data.rate, data.symbol);
             } else {
-                console.error('Conversion error:', data.error || 'Unknown error');
+                console.error('❌ Conversion error:', data.error || 'Unknown error');
                 updateAmountDisplay(currencyCode, ORDER_TOTAL_USD, '$');
             }
         } catch (error) {
-            console.error('Error converting currency:', error);
+            console.error('❌ Error converting currency:', error);
             updateAmountDisplay(currencyCode, ORDER_TOTAL_USD, '$');
         }
     }
@@ -492,5 +509,80 @@
     if (initialCurrency && initialCurrency.value !== 'USD') {
         convertCurrency(initialCurrency.value);
     }
+
+    // ═════════════════════════════════════════════════════════════════
+    // 3. FORM SUBMISSION HANDLING
+    // ═════════════════════════════════════════════════════════════════
+
+    if (FORM_ELEMENT) {
+        FORM_ELEMENT.addEventListener('submit', function(e) {
+            console.log('📋 Form submission initiated');
+            
+            // Get selected values
+            const paymentMethod = document.querySelector('input[name="payment_method"]:checked');
+            const currencyCode = document.querySelector('input[name="currency_code"]:checked');
+            const orderId = document.querySelector('input[name="order_id"]');
+
+            // Validation
+            let errors = [];
+            
+            if (!paymentMethod || !paymentMethod.value) {
+                errors.push('❌ Please select a payment method');
+            } else {
+                console.log('✓ Payment method selected:', paymentMethod.value);
+            }
+
+            if (!currencyCode || !currencyCode.value) {
+                errors.push('❌ Please select a currency');
+            } else {
+                console.log('✓ Currency selected:', currencyCode.value);
+            }
+
+            if (!orderId || !orderId.value) {
+                errors.push('❌ Order ID is missing');
+            } else {
+                console.log('✓ Order ID:', orderId.value);
+            }
+
+            // If there are errors, prevent submission and show them
+            if (errors.length > 0) {
+                console.error('❌ Form validation errors:', errors);
+                e.preventDefault();
+                
+                // Show error alert
+                const errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-bottom: 20px;">' +
+                    '<strong>❌ Please fix the following errors:</strong>' +
+                    errors.map(err => '<div>' + err + '</div>').join('') +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+                    '</div>';
+                
+                const formTop = document.querySelector('.container.py-5');
+                if (formTop) {
+                    formTop.insertAdjacentHTML('afterbegin', errorHtml);
+                }
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return false;
+            }
+
+            // If all validations pass, disable button and show loading state
+            console.log('✅ All validations passed! Submitting form...');
+            const submitBtn = document.getElementById('submitBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing Payment...';
+            }
+
+            console.log('📤 Sending payment data to server...');
+            // Form will submit naturally after this point
+        });
+    }
+
+    // Log page initialization
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('✅ Payment form page loaded and ready');
+        console.log('Order Total (USD):', ORDER_TOTAL_USD);
+    });
 </script>
 {% endblock %}
