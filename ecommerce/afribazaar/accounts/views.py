@@ -76,6 +76,12 @@ def customer_profile_view(request):
     if request.method == 'POST':
         form = CustomerProfileUpdateForm(request.POST, request.FILES, instance=request.user.customerprofile)
         if form.is_valid():
+            # Save first_name and last_name to User model
+            request.user.first_name = request.POST.get('first_name', '')
+            request.user.last_name = request.POST.get('last_name', '')
+            request.user.save()
+            
+            # Save profile updates
             form.save()
             messages.success(request, 'Your profile has been updated!')
             return redirect('accounts:customer_profile')

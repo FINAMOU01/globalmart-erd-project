@@ -35,9 +35,9 @@
             padding: 0.75rem 1rem;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1rem;
+            justify-content: flex-start;
+            flex-wrap: nowrap;
+            gap: 0.75rem;
         }
         
         .logo {
@@ -48,8 +48,9 @@
             text-decoration: none;
             font-weight: 700;
             font-size: 1.3rem;
-            margin-right: 2rem;
+            margin-right: 1rem;
             white-space: nowrap;
+            flex-shrink: 0;
         }
         
         .logo-icon {
@@ -95,10 +96,10 @@
         .nav-menu {
             display: flex !important;
             list-style: none;
-            gap: 0.5rem;
+            gap: 0.25rem;
             margin: 0;
             padding: 0;
-            flex: 1;
+            flex: 0 0 auto;
         }
         
         .nav-item {
@@ -128,9 +129,8 @@
         .search-container {
             display: flex !important;
             gap: 0.5rem;
-            flex: 1;
-            max-width: 300px;
-            margin: 0 1rem;
+            flex: 0 0 280px;
+            margin: 0 1rem 0 0.5rem;
         }
         
         .search-input {
@@ -158,7 +158,9 @@
         .nav-actions {
             display: flex !important;
             align-items: center;
-            gap: 1rem;
+            gap: 0.75rem;
+            margin-left: auto;
+            flex-shrink: 0;
         }
         
         .cart-icon {
@@ -192,6 +194,7 @@
         .auth-buttons {
             display: flex !important;
             gap: 0.5rem;
+            flex-shrink: 0;
         }
         
         .auth-buttons .btn {
@@ -199,12 +202,21 @@
             font-size: 0.85rem !important;
         }
         
+        /* Hide mobile auth items on desktop */
+        .mobile-auth-item {
+            display: none !important;
+        }
+        
+        .mobile-auth-separator {
+            display: none !important;
+        }
+        
         /* Mobile Responsive */
         @media (max-width: 1024px) {
             .search-container {
-                flex: 0 1 100%;
-                max-width: 100%;
+                flex: 0 0 250px;
                 order: 3;
+                margin: 0 1rem 0 auto;
             }
         }
         
@@ -212,7 +224,7 @@
             .nav-container {
                 flex-wrap: nowrap !important;
                 padding: 0.5rem;
-                gap: 0 !important;
+                gap: 0.25rem !important;
             }
             
             .logo {
@@ -369,13 +381,6 @@
                 <li class="nav-item"><a href="{% url 'products:shop' %}" class="nav-link">Shop</a></li>
                 <li class="nav-item"><a href="{% url 'products:artisan_listing' %}" class="nav-link">Artisans</a></li>
                 <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
-                <li class="nav-item" style="display:none;" class="mobile-auth-separator"></li>
-                <li class="nav-item mobile-auth-item" style="display:none;">
-                    <a href="{% url 'accounts:login' %}" class="nav-link nav-auth-link">Login</a>
-                </li>
-                <li class="nav-item mobile-auth-item" style="display:none;">
-                    <a href="{% url 'accounts:register' %}" class="nav-link nav-auth-link">Sign Up</a>
-                </li>
             </ul>
             
             <!-- Search Bar -->

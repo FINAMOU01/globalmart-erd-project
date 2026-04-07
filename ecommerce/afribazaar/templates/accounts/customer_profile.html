@@ -402,7 +402,82 @@
         color: #CCCCCC;
     }
 
-    /* File upload */
+    /* File upload group */
+    .file-upload-group {
+        text-align: center;
+    }
+
+    .file-upload-label {
+        font-weight: 600;
+        color: #1E1E1E;
+        display: block;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+    }
+
+    .file-upload-input {
+        display: none;
+    }
+
+    .file-upload-btn {
+        display: inline-block;
+        padding: 10px 16px;
+        background: #000000;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.3s ease;
+    }
+
+    .file-upload-btn:hover {
+        background: #333333;
+    }
+
+    /* Button group */
+    .btn-group {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    .btn-group .btn {
+        flex: 1;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 25px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn.btn-primary {
+        background: #000000;
+        color: white;
+    }
+
+    .btn.btn-primary:hover {
+        background: #333333;
+        transform: translateY(-2px);
+    }
+
+    .btn.btn-secondary {
+        background: #1F7A6B;
+        color: white;
+    }
+
+    .btn.btn-secondary:hover {
+        background: #186b5d;
+        transform: translateY(-2px);
+    }
+
+    /* Old file upload (keeping for compatibility) */
     .file-upload-wrap {
         border: 2px dashed #E5E5E5;
         border-radius: 10px;
@@ -580,25 +655,19 @@
                     </div>
                 </div>
 
-                <!-- Quick Links Card -->
+                <!-- Personal Info Card -->
                 <div class="quick-card">
-                    <h4>Quick Links</h4>
-                    <a href="#" class="quick-link orders">
-                        <i class="fas fa-box"></i>
-                        My Orders
-                    </a>
-                    <a href="#" class="quick-link wishlist">
-                        <i class="fas fa-heart"></i>
-                        Wishlist
-                    </a>
-                    <a href="#" class="quick-link settings">
-                        <i class="fas fa-cog"></i>
-                        Settings
-                    </a>
-                    <a href="{% url 'accounts:logout' %}" class="quick-link logout">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Sign Out
-                    </a>
+                    <h4>Personal Information</h4>
+                    <div class="avatar-meta">
+                        <div class="avatar-meta-item">
+                            <i class="fas fa-user"></i>
+                            <strong>First Name:</strong> {{ user.first_name|default:"Not set" }}
+                        </div>
+                        <div class="avatar-meta-item">
+                            <i class="fas fa-user"></i>
+                            <strong>Last Name:</strong> {{ user.last_name|default:"Not set" }}
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -649,7 +718,7 @@
                 <div class="section-card">
                     <div class="section-card-header">
                         <div class="section-icon gold">
-                            <i class="fas fa-pen"></i>
+                            <i class="fas fa-edit"></i>
                         </div>
                         <div>
                             <h3>Edit Profile</h3>
@@ -659,49 +728,76 @@
 
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="edit-form-grid">
 
-                            <div class="form-group">
-                                <label for="id_phone">Phone Number</label>
-                                <input
-                                    type="tel"
-                                    name="phone"
-                                    id="id_phone"
-                                    placeholder="e.g. +233 24 000 0000"
-                                    value="{{ customer_profile.phone|default:'' }}"
-                                >
+                        <!-- Profile Picture Upload -->
+                        <div class="file-upload-group" style="margin-bottom: 24px; text-align: center; padding-bottom: 24px; border-bottom: 1px solid #E5E1D8;">
+                            <div class="file-upload-label">Profile Picture</div>
+                            <div style="margin-bottom: 12px; color: #777; font-size: 0.9rem;">Upload a new profile picture (JPG, PNG, GIF)</div>
+                            <input type="file" id="profile_picture" name="profile_picture" class="file-upload-input" accept="image/*" onchange="handleFileSelect(event)">
+                            <label for="profile_picture" class="file-upload-btn" onclick="document.getElementById('profile_picture').click();">
+                                <i class="fas fa-upload" style="margin-right: 6px;"></i><span id="upload-btn-text">Choose Image</span>
+                            </label>
+                            <div id="file-preview" style="margin-top: 12px; display: none;">
+                                <img id="preview-img" src="" style="max-width: 150px; max-height: 150px; border-radius: 8px; margin-bottom: 8px;">
+                                <div id="file-name" style="color: #000; font-size: 0.85rem; word-break: break-all;"></div>
                             </div>
-
-                            <div class="form-group full-width">
-                                <label for="id_address">Address</label>
-                                <textarea
-                                    name="address"
-                                    id="id_address"
-                                    rows="3"
-                                    placeholder="Enter your full address"
-                                >{{ customer_profile.address|default:'' }}</textarea>
-                            </div>
-
-                            <div class="form-group full-width">
-                                <label>Profile Picture</label>
-                                <div class="file-upload-wrap">
-                                    <input type="file" name="profile_picture" accept="image/*">
-                                    <div class="file-upload-icon">
-                                        <i class="fas fa-cloud-upload-alt"></i>
-                                    </div>
-                                    <div class="file-upload-text">
-                                        <span>Click to upload</span> or drag and drop<br>
-                                        PNG, JPG or WEBP (max 2MB)
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
 
-                        <button type="submit" class="btn-update">
-                            <i class="fas fa-save"></i>
-                            Save Changes
-                        </button>
+                        <!-- First Name -->
+                        <div class="form-group">
+                            <label for="id_first_name">First Name</label>
+                            <input
+                                type="text"
+                                name="first_name"
+                                id="id_first_name"
+                                placeholder="Enter your first name"
+                                value="{{ user.first_name|default:'' }}"
+                            >
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="form-group">
+                            <label for="id_last_name">Last Name</label>
+                            <input
+                                type="text"
+                                name="last_name"
+                                id="id_last_name"
+                                placeholder="Enter your last name"
+                                value="{{ user.last_name|default:'' }}"
+                            >
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="form-group">
+                            <label for="id_phone">Phone Number</label>
+                            <input
+                                type="tel"
+                                name="phone"
+                                id="id_phone"
+                                placeholder="+1 (555) 000-0000"
+                                value="{{ customer_profile.phone|default:'' }}"
+                            >
+                        </div>
+
+                        <!-- Address -->
+                        <div class="form-group">
+                            <label for="id_address">Address</label>
+                            <textarea
+                                name="address"
+                                id="id_address"
+                                placeholder="Enter your full address"
+                            >{{ customer_profile.address|default:'' }}</textarea>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save" style="margin-right: 6px;"></i>Save Changes
+                            </button>
+                            <a href="{% url 'home' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left" style="margin-right: 6px;"></i>Back to Home
+                            </a>
+                        </div>
                     </form>
                 </div>
 
@@ -711,5 +807,55 @@
 
     </div>
 </div>
+
+<script>
+function handleFileSelect(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('file-preview');
+    const previewImg = document.getElementById('preview-img');
+    const fileName = document.getElementById('file-name');
+    const uploadBtnText = document.getElementById('upload-btn-text');
+    
+    if (file) {
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            alert('Please select a valid image file (JPG, PNG, GIF)');
+            event.target.value = '';
+            preview.style.display = 'none';
+            uploadBtnText.textContent = 'Choose Image';
+            return;
+        }
+        
+        // Validate file size (max 5MB)
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        if (file.size > maxSize) {
+            alert('File size must be less than 5MB');
+            event.target.value = '';
+            preview.style.display = 'none';
+            uploadBtnText.textContent = 'Choose Image';
+            return;
+        }
+        
+        // Show preview
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            fileName.textContent = file.name;
+            preview.style.display = 'block';
+            uploadBtnText.textContent = 'File Selected ✓';
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.style.display = 'none';
+        uploadBtnText.textContent = 'Choose Image';
+    }
+}
+
+// Test if Pillow is installed on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Optional: Add any initialization code here
+    console.log('Profile page loaded');
+});
+</script>
 
 {% endblock %}
