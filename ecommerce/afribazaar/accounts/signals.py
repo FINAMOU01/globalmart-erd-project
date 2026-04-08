@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
-from .models import CustomerProfile, ArtisanProfile
+from .models import CustomerProfile, ArtisanProfile, Wallet
 
 User = get_user_model()
 
@@ -13,6 +13,7 @@ def create_user_profile(sender, instance, created, **kwargs):
             CustomerProfile.objects.create(user=instance)
         elif instance.role == 'artisan':
             ArtisanProfile.objects.create(user=instance)
+            Wallet.objects.create(artisan=instance)
 
 
 @receiver(post_save, sender=User)

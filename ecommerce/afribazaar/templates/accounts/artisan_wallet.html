@@ -1,0 +1,404 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Wallet - AfriBazaar Artisan{% endblock %}
+
+{% block extra_css %}
+
+<style>
+    * { box-sizing: border-box; }
+
+    .wallet-page {
+        min-height: 100vh;
+        background: #F5F3EE;
+        font-family: 'Poppins', sans-serif;
+        margin-top: 80px;
+        padding: 40px 20px;
+    }
+
+    .wallet-container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    /* ===== HEADER ===== */
+    .wallet-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .wallet-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #1E1E1E;
+        margin: 0;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #000000;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+        color: #333333;
+    }
+
+    /* ===== BALANCE CARD ===== */
+    .balance-card {
+        background: linear-gradient(135deg, #000000 0%, #333333 100%);
+        color: white;
+        border-radius: 16px;
+        padding: 40px;
+        margin-bottom: 40px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+
+    .balance-info {
+        flex: 1;
+        min-width: 250px;
+    }
+
+    .balance-label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .balance-amount {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 16px;
+    }
+
+    .balance-updated {
+        font-size: 0.85rem;
+        opacity: 0.8;
+    }
+
+    .balance-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: #D4AF37;
+        color: #000000;
+    }
+
+    .btn-primary:hover {
+        background: #E8C961;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(212, 175, 55, 0.4);
+    }
+
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 2px solid white;
+    }
+
+    .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+    }
+
+    /* ===== TRANSACTIONS SECTION ===== */
+    .transactions-section {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #1E1E1E;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .section-title i {
+        color: #000000;
+    }
+
+    /* ===== TRANSACTION TABLE ===== */
+    .transactions-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .transactions-table thead {
+        background: #F5F3EE;
+        border-bottom: 2px solid #E5E1D8;
+    }
+
+    .transactions-table th {
+        padding: 12px 16px;
+        text-align: left;
+        font-weight: 700;
+        color: #1E1E1E;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .transactions-table td {
+        padding: 16px;
+        border-bottom: 1px solid #E5E1D8;
+        color: #333333;
+    }
+
+    .transactions-table tbody tr:hover {
+        background: #FAFAF8;
+    }
+
+    .transaction-type {
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+    }
+
+    .type-credit {
+        background: rgba(31, 122, 107, 0.15);
+        color: #1F7A6B;
+    }
+
+    .type-credit::before {
+        content: "↑";
+        font-weight: 800;
+    }
+
+    .type-debit {
+        background: rgba(196, 74, 47, 0.15);
+        color: #C44A2F;
+    }
+
+    .type-debit::before {
+        content: "↓";
+        font-weight: 800;
+    }
+
+    .amount-credit {
+        color: #1F7A6B;
+        font-weight: 700;
+    }
+
+    .amount-debit {
+        color: #C44A2F;
+        font-weight: 700;
+    }
+
+    .transaction-date {
+        color: #777777;
+        font-size: 0.9rem;
+    }
+
+    .transaction-description {
+        color: #666666;
+        font-size: 0.9rem;
+    }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #777777;
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        color: #D4AF37;
+        margin-bottom: 16px;
+    }
+
+    .empty-state p {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+    }
+
+    .empty-state-hint {
+        font-size: 0.9rem;
+        color: #999999;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+        .wallet-page {
+            padding: 20px 16px;
+        }
+
+        .wallet-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .wallet-title {
+            font-size: 1.5rem;
+        }
+
+        .balance-card {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 24px;
+        }
+
+        .balance-amount {
+            font-size: 2rem;
+        }
+
+        .balance-actions {
+            width: 100%;
+        }
+
+        .btn {
+            flex: 1;
+            justify-content: center;
+        }
+
+        .transactions-section {
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .transactions-table {
+            font-size: 0.9rem;
+        }
+
+        .transactions-table th,
+        .transactions-table td {
+            padding: 12px 8px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+        }
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="wallet-page">
+    <div class="wallet-container">
+        <!-- Header -->
+        <div class="wallet-header">
+            <h1 class="wallet-title">💰 Your Wallet</h1>
+            <a href="{% url 'products:artisan_dashboard' %}" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Balance Card -->
+        <div class="balance-card">
+            <div class="balance-info">
+                <div class="balance-label">Total Balance</div>
+                <div class="balance-amount">
+                    {{ wallet.balance|floatformat:2 }} 
+                    <span style="font-size: 1.2rem; opacity: 0.8;">USD</span>
+                </div>
+                <div class="balance-updated">
+                    Last updated: {{ wallet.updated_at|date:"M d, Y H:i" }}
+                </div>
+            </div>
+            <div class="balance-actions">
+                <button type="button" class="btn btn-primary">
+                    <i class="fas fa-arrow-down"></i> Request Withdrawal
+                </button>
+                <a href="{% url 'products:artisan_dashboard' %}" class="btn btn-secondary">
+                    <i class="fas fa-store"></i> View Store
+                </a>
+            </div>
+        </div>
+
+        <!-- Transactions History -->
+        <div class="transactions-section">
+            <h2 class="section-title">
+                <i class="fas fa-history"></i> Transaction History
+            </h2>
+
+            {% if transactions %}
+                <table class="transactions-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Description</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions %}
+                        <tr>
+                            <td>
+                                <span class="transaction-type type-{{ transaction.type }}">
+                                    {{ transaction.get_type_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="{% if transaction.type == 'credit' %}amount-credit{% else %}amount-debit{% endif %}">
+                                    {% if transaction.type == 'credit' %}+{% else %}-{% endif %}
+                                    {{ transaction.amount|floatformat:2 }}
+                                </span>
+                            </td>
+                            <td class="transaction-description">
+                                {{ transaction.description|default:"—" }}
+                            </td>
+                            <td class="transaction-date">
+                                {{ transaction.created_at|date:"M d, Y H:i" }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>No transactions yet</p>
+                    <p class="empty-state-hint">Your transactions will appear here as you make sales</p>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

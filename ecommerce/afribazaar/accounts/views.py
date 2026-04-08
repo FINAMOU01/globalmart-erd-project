@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseForbidden
 from .forms import CustomerRegisterForm, ArtisanRegisterForm, UserLoginForm, CustomerProfileUpdateForm, ArtisanProfileUpdateForm
-from .models import CustomerProfile, ArtisanProfile
+from .models import CustomerProfile, ArtisanProfile, Wallet
 from orders.models import Order, Cart
 
 
@@ -143,3 +143,29 @@ def customer_dashboard_view(request):
 def artisan_profile_view(request):
     # Redirect to the functional artisan dashboard
     return redirect('products:artisan_dashboard')
+
+
+@login_required
+def artisan_wallet_dashboard(request):
+    """
+    Artisan wallet dashboard showing balance and transaction history.
+    Only accessible by logged-in artisans.
+    """
+    # Check if user is an artisan
+    if not request.user.is_artisan:
+        return HttpResponseForbidden("Only artisans can access the wallet dashboard.")
+    
+    # Get or create wallet
+    try:
+        wallet = Wallet.objects.get(artisan=request.user)
+    except Wallet.DoesNotExist:
+        wallet = Wallet.objects.create(artisan=request.user)
+    
+    # Get last 10 transactions (ordered by newest first)
+    transactions = wallet.transactions.all()[:10]
+    
+    context = {
+        'wallet': wallet,
+        'transactions': transactions,
+    }
+    return render(request, 'accounts/artisan_wallet.html', context)

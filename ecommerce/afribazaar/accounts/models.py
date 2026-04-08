@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from decimal import Decimal
 
 User = get_user_model()
 
@@ -58,3 +59,40 @@ class ArtisanProfile(models.Model):
         """Get total number of ratings"""
         from products.models import ArtisanRating
         return ArtisanRating.objects.filter(artisan=self.user).count()
+
+
+class Wallet(models.Model):
+    """Artisan wallet for storing balance and tracking earnings"""
+    artisan = models.OneToOneField(User, on_delete=models.CASCADE, related_name='wallet')
+    balance = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.artisan.username}'s Wallet - Balance: {self.balance}"
+
+    class Meta:
+        verbose_name = "Artisan Wallet"
+        verbose_name_plural = "Artisan Wallets"
+
+
+class Transaction(models.Model):
+    """Transaction history for wallet movements"""
+    TRANSACTION_TYPES = [
+        ('credit', 'Credit'),
+        ('debit', 'Debit'),
+    ]
+
+    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE, related_name='transactions')
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    type = models.CharField(max_length=10, choices=TRANSACTION_TYPES)
+    description = models.CharField(max_length=255, blank=True, help_text="Transaction description (e.g., Sale, Withdrawal)")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.wallet.artisan.username} - {self.type.upper()} {self.amount} on {self.created_at.strftime('%Y-%m-%d')}"
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = "Transaction"
+        verbose_name_plural = "Transactions"
