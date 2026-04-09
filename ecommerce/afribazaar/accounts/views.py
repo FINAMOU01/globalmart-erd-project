@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import HttpResponseForbidden
-from .forms import CustomerRegisterForm, ArtisanRegisterForm, UserLoginForm, CustomerProfileUpdateForm, ArtisanProfileUpdateForm
-from .models import CustomerProfile, ArtisanProfile, Wallet
+from django.http import HttpResponseForbidden, JsonResponse
+from .forms import CustomerRegisterForm, ArtisanRegisterForm, UserLoginForm, CustomerProfileUpdateForm, ArtisanProfileUpdateForm, WithdrawalRequestForm
+from .models import CustomerProfile, ArtisanProfile, Wallet, WithdrawalRequest
 from orders.models import Order, Cart
 
 
@@ -169,3 +169,54 @@ def artisan_wallet_dashboard(request):
         'transactions': transactions,
     }
     return render(request, 'accounts/artisan_wallet.html', context)
+
+
+@login_required
+def request_withdrawal(request):
+    """
+    Handle withdrawal requests for artisans.
+    Auto-approved and processes immediately.
+    """
+    # Check if user is an artisan
+    if not request.user.is_artisan:
+        return HttpResponseForbidden("Only artisans can request withdrawals.")
+    
+    # Get or create wallet
+    try:
+        wallet = Wallet.objects.get(artisan=request.user)
+    except Wallet.DoesNotExist:
+        wallet = Wallet.objects.create(artisan=request.user)
+    
+    if request.method == 'POST':
+        form = WithdrawalRequestForm(request.POST)
+        if form.is_valid():
+            withdrawal = form.save(commit=False)
+            withdrawal.artisan = request.user
+            withdrawal.wallet = wallet
+            
+            # Check wallet balance
+            if wallet.balance < form.cleaned_data['amount_requested']:
+                messages.error(request, f'Insufficient balance. Your balance: ${wallet.balance}')
+                return redirect('accounts:artisan_wallet')
+            
+            # Save the withdrawal request (signals will auto-process and create tax record)
+            withdrawal.save()
+            
+            if withdrawal.status == 'completed':
+                messages.success(request, f'✓ Withdrawal request processed! You will receive ${withdrawal.amount_after_tax} (Tax: ${withdrawal.tax_amount})')
+            else:
+                messages.error(request, 'Withdrawal request failed. Please check your balance.')
+            
+            return redirect('accounts:artisan_wallet')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = WithdrawalRequestForm()
+    
+    context = {
+        'form': form,
+        'wallet': wallet,
+        'minimum_amount': WithdrawalRequest.MINIMUM_WITHDRAWAL,
+        'tax_percentage': WithdrawalRequest.WITHDRAWAL_TAX_PERCENTAGE,
+    }
+    return render(request, 'accounts/request_withdrawal.html', context)
