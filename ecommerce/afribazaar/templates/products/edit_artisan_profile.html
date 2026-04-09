@@ -75,9 +75,9 @@
                         <!-- Profile Image -->
                         <div class="mb-3">
                             <label for="{{ bio_form.profile_image.id_for_label }}" class="form-label">Profile Image</label>
-                            {% if artisan_profile and artisan_profile.profile_image %}
+                            {% if artisan_profile and artisan_profile.profile_picture %}
                             <div class="current-image mb-2">
-                                <img src="{{ artisan_profile.profile_image.url }}" alt="Current Profile" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+                                <img src="{{ artisan_profile.profile_picture.url }}" alt="Current Profile" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
                                 <p class="text-muted small mt-2">Current Profile Image</p>
                             </div>
                             {% endif %}

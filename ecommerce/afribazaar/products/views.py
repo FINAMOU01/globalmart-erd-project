@@ -418,8 +418,11 @@ def edit_artisan_profile(request):
             if bio_form.cleaned_data.get('bio'):
                 artisan_profile.bio = bio_form.cleaned_data.get('bio')
             
+            # Handle profile image - use FILES directly if cleaned_data is empty
             if bio_form.cleaned_data.get('profile_image'):
-                artisan_profile.profile_image = bio_form.cleaned_data.get('profile_image')
+                artisan_profile.profile_picture = bio_form.cleaned_data.get('profile_image')
+            elif 'profile_image' in request.FILES:
+                artisan_profile.profile_picture = request.FILES['profile_image']
             
             if bio_form.cleaned_data.get('social_links'):
                 import json
