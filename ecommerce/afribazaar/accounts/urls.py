@@ -13,4 +13,5 @@ urlpatterns = [
     path('profile/customer/', views.customer_profile_view, name='customer_profile'),
     path('profile/artisan/', views.artisan_profile_view, name='artisan_profile'),
     path('wallet/artisan/', views.artisan_wallet_dashboard, name='artisan_wallet'),
+    path('wallet/request/', views.request_withdrawal, name='request_withdrawal'),
 ]

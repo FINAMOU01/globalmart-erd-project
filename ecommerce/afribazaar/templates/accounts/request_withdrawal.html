@@ -1,0 +1,433 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Request Withdrawal - AfriBazaar Artisan{% endblock %}
+
+{% block extra_css %}
+
+<style>
+    * { box-sizing: border-box; }
+
+    .withdrawal-page {
+        min-height: 100vh;
+        background: #F5F3EE;
+        font-family: 'Poppins', sans-serif;
+        margin-top: 80px;
+        padding: 40px 20px;
+    }
+
+    .withdrawal-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .withdrawal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        gap: 20px;
+    }
+
+    .withdrawal-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #1E1E1E;
+        margin: 0;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #000000;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+        color: #333333;
+    }
+
+    .withdrawal-form {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .info-box {
+        background: rgba(0, 0, 0, 0.05);
+        border-left: 4px solid #000000;
+        padding: 16px;
+        border-radius: 8px;
+        margin-bottom: 24px;
+        font-size: 0.9rem;
+        color: #333333;
+    }
+
+    .info-box strong {
+        display: block;
+        margin-bottom: 4px;
+        color: #1E1E1E;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 700;
+        color: #1E1E1E;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 12px 14px;
+        border: 2px solid #E5E1D8;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        font-family: 'Poppins', sans-serif;
+        color: #1E1E1E;
+        transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        border-color: #000000;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group small {
+        display: block;
+        margin-top: 6px;
+        color: #777777;
+        font-size: 0.85rem;
+    }
+
+    .payment-methods {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-top: 20px;
+        padding: 16px;
+        background: #F9F7F4;
+        border-radius: 8px;
+    }
+
+    .payment-method-info {
+        display: none;
+        padding: 12px;
+        background: white;
+        border-radius: 6px;
+        border: 1px solid #E5E1D8;
+        font-size: 0.9rem;
+    }
+
+    .payment-method-info.active {
+        display: block;
+    }
+
+    .error-list {
+        background: rgba(196, 74, 47, 0.1);
+        border: 1px solid rgba(196, 74, 47, 0.3);
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-bottom: 20px;
+        color: #C44A2F;
+        font-size: 0.9rem;
+    }
+
+    .error-list ul {
+        margin: 0;
+        padding-left: 20px;
+    }
+
+    .error-list li {
+        margin-bottom: 4px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 14px 24px;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-submit {
+        background: #000000;
+        color: white;
+    }
+
+    .btn-submit:hover {
+        background: #333333;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-cancel {
+        background: #E5E1D8;
+        color: #1E1E1E;
+    }
+
+    .btn-cancel:hover {
+        background: #D4C9BB;
+    }
+
+    .summary-box {
+        background: #F9F7F4;
+        border: 2px solid #E5E1D8;
+        border-radius: 8px;
+        padding: 16px;
+        margin-top: 24px;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 0.95rem;
+    }
+
+    .summary-row strong {
+        color: #1E1E1E;
+    }
+
+    .summary-row.total {
+        padding-top: 10px;
+        border-top: 1px solid #E5E1D8;
+        font-size: 1.1rem;
+    }
+
+    .summary-row.total strong {
+        font-weight: 800;
+        color: #000000;
+    }
+
+    @media (max-width: 768px) {
+        .withdrawal-page {
+            padding: 20px 16px;
+        }
+
+        .withdrawal-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .withdrawal-title {
+            font-size: 1.5rem;
+        }
+
+        .withdrawal-form {
+            padding: 20px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const methodSelect = document.getElementById('id_payment_method');
+    const amountInput = document.getElementById('id_amount_requested');
+    const bankFields = document.getElementById('bank-fields');
+    const mobileFields = document.getElementById('mobile-fields');
+    const summary = document.querySelector('.summary-box');
+
+    function updateForm() {
+        const method = methodSelect.value;
+        
+        // Show/hide fields based on payment method
+        if (method === 'bank_transfer') {
+            bankFields.style.display = 'block';
+            mobileFields.style.display = 'none';
+        } else if (method === 'mtn' || method === 'orange') {
+            bankFields.style.display = 'none';
+            mobileFields.style.display = 'block';
+        } else {
+            bankFields.style.display = 'none';
+            mobileFields.style.display = 'none';
+        }
+
+        // Update summary
+        updateSummary();
+    }
+
+    function updateSummary() {
+        const amount = parseFloat(amountInput.value) || 0;
+        const taxPercentage = 5;
+        const tax = amount * (taxPercentage / 100);
+        const afterTax = amount - tax;
+
+        document.getElementById('amount-display').textContent = amount.toFixed(2);
+        document.getElementById('tax-display').textContent = tax.toFixed(2);
+        document.getElementById('receive-display').textContent = afterTax.toFixed(2);
+    }
+
+    methodSelect.addEventListener('change', updateForm);
+    amountInput.addEventListener('input', updateSummary);
+
+    // Initialize form
+    updateForm();
+});
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="withdrawal-page">
+    <div class="withdrawal-container">
+        <!-- Header -->
+        <div class="withdrawal-header">
+            <h1 class="withdrawal-title">💸 Request Withdrawal</h1>
+            <a href="{% url 'accounts:artisan_wallet' %}" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Wallet
+            </a>
+        </div>
+
+        <!-- Withdrawal Form -->
+        <form method="post" class="withdrawal-form">
+            {% csrf_token %}
+
+            <!-- Info Box -->
+            <div class="info-box">
+                <strong>Current Balance:</strong>
+                ${{ wallet.balance|floatformat:2 }}
+            </div>
+
+            <div class="info-box">
+                <strong>Processing:</strong>
+                Auto-approved and processed immediately
+                <br>
+                <strong>Fee:</strong>
+                5% tax applies (supports platform maintenance)
+            </div>
+
+            <!-- Errors -->
+            {% if form.non_field_errors %}
+            <div class="error-list">
+                {% for error in form.non_field_errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Amount Field -->
+            <div class="form-group">
+                <label for="id_amount_requested">Amount to Withdraw *</label>
+                {{ form.amount_requested }}
+                <small>Minimum: $10 | Maximum: ${{ wallet.balance|floatformat:2 }}</small>
+                {% if form.amount_requested.errors %}
+                <div class="error-list" style="margin-top: 6px;">
+                    {{ form.amount_requested.errors }}
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Payment Method -->
+            <div class="form-group">
+                <label for="id_payment_method">Payment Method *</label>
+                {{ form.payment_method }}
+                {% if form.payment_method.errors %}
+                <div class="error-list" style="margin-top: 6px;">
+                    {{ form.payment_method.errors }}
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Bank Transfer Fields -->
+            <div id="bank-fields" style="display: none;">
+                <div class="form-group">
+                    <label for="id_bank_account_name">Account Holder Name *</label>
+                    {{ form.bank_account_name }}
+                    {% if form.bank_account_name.errors %}
+                    <div class="error-list" style="margin-top: 6px;">
+                        {{ form.bank_account_name.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_bank_account_number">Account Number *</label>
+                    {{ form.bank_account_number }}
+                    {% if form.bank_account_number.errors %}
+                    <div class="error-list" style="margin-top: 6px;">
+                        {{ form.bank_account_number.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Mobile Money Fields -->
+            <div id="mobile-fields" style="display: none;">
+                <div class="form-group">
+                    <label for="id_mobile_number">Mobile Number *</label>
+                    {{ form.mobile_number }}
+                    <small>Include country code (e.g., +256701234567)</small>
+                    {% if form.mobile_number.errors %}
+                    <div class="error-list" style="margin-top: 6px;">
+                        {{ form.mobile_number.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="summary-box">
+                <div class="summary-row">
+                    <span>Withdrawal Amount:</span>
+                    <strong>$<span id="amount-display">0.00</span></strong>
+                </div>
+                <div class="summary-row">
+                    <span>Platform Fee (5%):</span>
+                    <strong style="color: #C44A2F;">-$<span id="tax-display">0.00</span></strong>
+                </div>
+                <div class="summary-row total">
+                    <span>You will receive:</span>
+                    <strong>$<span id="receive-display">0.00</span></strong>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-submit">
+                    <i class="fas fa-check"></i> Request Withdrawal
+                </button>
+                <a href="{% url 'accounts:artisan_wallet' %}" class="btn btn-cancel">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

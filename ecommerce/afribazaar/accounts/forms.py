@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import CustomerProfile, ArtisanProfile
+from .models import CustomerProfile, ArtisanProfile, WithdrawalRequest
 
 User = get_user_model()
 
@@ -125,3 +125,56 @@ class ArtisanProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = ArtisanProfile
         fields = ['phone', 'address', 'profile_picture']
+
+
+class WithdrawalRequestForm(forms.ModelForm):
+    """Form for artisans to request withdrawals"""
+    
+    class Meta:
+        model = WithdrawalRequest
+        fields = ['amount_requested', 'payment_method', 'bank_account_name', 'bank_account_number', 'mobile_number']
+        widgets = {
+            'amount_requested': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter amount (minimum $10)',
+                'min': '10',
+                'step': '0.01',
+                'required': True
+            }),
+            'payment_method': forms.Select(attrs={
+                'class': 'form-control',
+                'required': True
+            }),
+            'bank_account_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Your full name',
+            }),
+            'bank_account_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Account number',
+            }),
+            'mobile_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Your mobile number',
+            }),
+        }
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        amount = cleaned_data.get('amount_requested')
+        payment_method = cleaned_data.get('payment_method')
+        
+        # Validate minimum amount
+        if amount and amount < 10:
+            raise forms.ValidationError('Minimum withdrawal amount is $10.')
+        
+        # Validate payment method requirements
+        if payment_method == 'bank_transfer':
+            if not cleaned_data.get('bank_account_name') or not cleaned_data.get('bank_account_number'):
+                raise forms.ValidationError('Bank account name and number are required for bank transfer.')
+        
+        elif payment_method in ['mtn', 'orange']:
+            if not cleaned_data.get('mobile_number'):
+                raise forms.ValidationError('Mobile number is required for mobile money.')
+        
+        return cleaned_data
