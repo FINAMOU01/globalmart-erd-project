@@ -402,42 +402,25 @@ def edit_artisan_profile(request):
     if not request.user.is_artisan:
         return HttpResponseForbidden("You must be an artisan to edit your profile.")
     
-    artisan_profile = getattr(request.user, 'artisan_profile', None)
+    try:
+        artisan_profile = request.user.artisanprofile
+    except:
+        from accounts.models import ArtisanProfile
+        artisan_profile = ArtisanProfile.objects.create(user=request.user)
     
     if request.method == 'POST':
         user_form = ArtisanProfileForm(request.POST, user=request.user)
-        bio_form = ArtisanBioForm(request.POST, request.FILES)
+        bio_form = ArtisanBioForm(request.POST, request.FILES, instance=artisan_profile)
         
         if user_form.is_valid() and bio_form.is_valid():
             user_form.save()
-            
-            # Create or update artisan profile
-            if not artisan_profile:
-                artisan_profile = request.user.artisan_profile
-            
-            if bio_form.cleaned_data.get('bio'):
-                artisan_profile.bio = bio_form.cleaned_data.get('bio')
-            
-            # Handle profile image - use FILES directly if cleaned_data is empty
-            if bio_form.cleaned_data.get('profile_image'):
-                artisan_profile.profile_picture = bio_form.cleaned_data.get('profile_image')
-            elif 'profile_image' in request.FILES:
-                artisan_profile.profile_picture = request.FILES['profile_image']
-            
-            if bio_form.cleaned_data.get('social_links'):
-                import json
-                artisan_profile.social_links = json.loads(bio_form.cleaned_data.get('social_links'))
-            
-            artisan_profile.save()
+            bio_form.save()
             
             messages.success(request, 'Profile updated successfully!')
             return redirect('products:artisan_dashboard')
     else:
         user_form = ArtisanProfileForm(user=request.user)
-        bio_form = ArtisanBioForm(initial={
-            'bio': artisan_profile.bio if artisan_profile else '',
-            'social_links': artisan_profile.social_links if artisan_profile else '',
-        })
+        bio_form = ArtisanBioForm(instance=artisan_profile)
     
     context = {
         'user_form': user_form,
