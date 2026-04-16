@@ -74,16 +74,17 @@
 
                         <!-- Profile Image -->
                         <div class="mb-3">
-                            <label for="{{ bio_form.profile_image.id_for_label }}" class="form-label">Profile Image</label>
-                            {% if artisan_profile and artisan_profile.profile_image %}
+                            <label for="{{ bio_form.profile_picture.id_for_label }}" class="form-label">Profile Image</label>
+                            {% if artisan_profile and artisan_profile.profile_picture %}
                             <div class="current-image mb-2">
-                                <img src="{{ artisan_profile.profile_image.url }}" alt="Current Profile" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+                                <img src="{{ artisan_profile.profile_picture.url }}" alt="Current Profile" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
                                 <p class="text-muted small mt-2">Current Profile Image</p>
                             </div>
                             {% endif %}
-                            {{ bio_form.profile_image }}
-                            {% if bio_form.profile_image.errors %}
-                            <div class="text-danger small mt-1">{{ bio_form.profile_image.errors }}</div>
+                            {{ bio_form.profile_picture }}
+                            <small class="form-text text-muted d-block mt-1">Supported formats: JPG, PNG. Max size: 5MB</small>
+                            {% if bio_form.profile_picture.errors %}
+                            <div class="text-danger small mt-1">{{ bio_form.profile_picture.errors }}</div>
                             {% endif %}
                         </div>
 

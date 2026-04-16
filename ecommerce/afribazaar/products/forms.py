@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from .models import Product, Category, ArtisanRating
+from accounts.models import ArtisanProfile
 
 User = get_user_model()
 
@@ -172,25 +173,12 @@ class ArtisanProfileForm(forms.Form):
         return self.user
 
 
-class ArtisanBioForm(forms.Form):
+class ArtisanBioForm(forms.ModelForm):
     """
-    Form for artisan profile bio and social links.
+    ModelForm for artisan profile bio, picture and social links.
+    Properly handles file uploads and saves to ArtisanProfile model.
     """
-    bio = forms.CharField(
-        required=False,
-        widget=forms.Textarea(attrs={
-            'class': 'form-control',
-            'placeholder': 'Tell your story...',
-            'rows': 5,
-        })
-    )
-    profile_image = forms.ImageField(
-        required=False,
-        widget=forms.FileInput(attrs={
-            'class': 'form-control',
-            'accept': 'image/*',
-        })
-    )
+    
     social_links = forms.CharField(
         required=False,
         widget=forms.Textarea(attrs={
@@ -199,6 +187,30 @@ class ArtisanBioForm(forms.Form):
             'rows': 3,
         })
     )
+    
+    class Meta:
+        model = ArtisanProfile
+        fields = ['bio', 'profile_picture', 'social_links']
+        widgets = {
+            'bio': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Tell your story...',
+                'rows': 5,
+            }),
+            'profile_picture': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*',
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Make profile_picture optional when editing
+        self.fields['profile_picture'].required = False
+        # Convert JSON dict to string for form display
+        if self.instance and self.instance.social_links:
+            import json
+            self.fields['social_links'].initial = json.dumps(self.instance.social_links)
     
     def clean_social_links(self):
         """
@@ -215,6 +227,24 @@ class ArtisanBioForm(forms.Form):
                     raise forms.ValidationError("Social links must be valid JSON format.")
         
         return social_links
+    
+    def save(self, commit=True):
+        """
+        Save the artisan profile with proper JSON handling for social_links.
+        """
+        instance = super().save(commit=False)
+        
+        # Handle social_links JSON
+        if self.cleaned_data.get('social_links'):
+            import json
+            try:
+                instance.social_links = json.loads(self.cleaned_data.get('social_links'))
+            except:
+                pass
+        
+        if commit:
+            instance.save()
+        return instance
 
 
 class ArtisanRatingForm(forms.ModelForm):

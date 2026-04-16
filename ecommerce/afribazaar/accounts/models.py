@@ -36,6 +36,7 @@ class ArtisanProfile(models.Model):
     address = models.TextField(blank=True)
     bio = models.TextField(blank=True, help_text="Description of your artisan work and experience")
     profile_picture = models.ImageField(upload_to='artisans/', blank=True, null=True)
+    social_links = models.JSONField(default=dict, blank=True, help_text="Social media links as JSON")
     is_verified = models.BooleanField(default=False)
     currency_preference = models.CharField(
         max_length=3,
