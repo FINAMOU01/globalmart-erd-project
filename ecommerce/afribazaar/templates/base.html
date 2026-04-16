@@ -228,6 +228,8 @@
         
         /* Navbar collapse menu */
         .navbar-collapse {
+            max-height: none !important;
+            overflow: visible !important;
             background: #FFFFFF !important;
             margin-top: 0 !important;
             padding-top: 0 !important;
@@ -235,6 +237,8 @@
         
         /* Navigation items */
         .navbar-nav {
+            max-height: none !important;
+            overflow: visible !important;
             width: auto !important;
             margin-left: auto !important;
             gap: 0.5rem !important;
@@ -318,6 +322,17 @@
             text-decoration: none !important;
         }
         
+        .btn-signup {
+            background-color: #1F7A6B !important;
+            color: #FFFFFF !important;
+            margin-left: 0.5rem !important;
+        }
+        
+        .btn-signup:hover {
+            background-color: #186054 !important;
+            color: #FFFFFF !important;
+        }
+        
         /* Badge small */
         .badge {
             font-size: 0.7rem !important;
@@ -331,10 +346,26 @@
                 flex-direction: column !important;
                 gap: 0 !important;
                 margin-left: 0 !important;
+                margin-right: 0 !important;
+                width: 100% !important;
             }
             
             .navbar-expand-lg .navbar-collapse {
                 margin-top: 0.5rem !important;
+                width: 100% !important;
+                max-height: none !important;
+                overflow: visible !important;
+            }
+            
+            .navbar-nav {
+                width: 100% !important;
+                margin-left: 0 !important !important;
+                margin-right: 0 !important;
+            }
+            
+            .navbar-nav.ms-auto {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
             }
             
             .nav-item {
@@ -356,6 +387,80 @@
                 background-color: #FAFAFA !important;
                 color: #D4AF37 !important;
                 padding-left: 1.5rem !important;
+            }
+            
+            /* Ensure login/signup buttons are visible in mobile menu */
+            .nav-link.btn-login {
+                display: block !important;
+                padding: 0.7rem 1.25rem !important;
+                margin: 0.5rem 0.5rem !important;
+                text-align: center !important;
+                border-radius: 0.4rem !important;
+                background-color: #D4AF37 !important;
+                color: #1E1E1E !important;
+                font-weight: 600 !important;
+                border: none !important;
+                border-bottom: none !important;
+                width: calc(100% - 1rem) !important;
+                font-size: 0.95rem !important;
+                inline-block: block !important;
+            }
+            
+            .nav-link.btn-login:hover {
+                background-color: #E8C84A !important;
+                color: #1E1E1E !important;
+                padding-left: 1.25rem !important;
+            }
+            
+            /* Sign Up button styling on mobile */
+            .nav-link.btn-signup {
+                background-color: #1F7A6B !important;
+                color: #FFFFFF !important;
+                margin-left: 0.5rem !important;
+                margin-right: 0.5rem !important;
+                width: calc(100% - 1rem) !important;
+            }
+            
+            .nav-link.btn-signup:hover {
+                background-color: #186054 !important;
+                color: #FFFFFF !important;
+                padding-left: 1.25rem !important;
+            }
+            
+            .dropdown-menu {
+                position: static !important;
+                float: none !important;
+                width: 100% !important;
+                margin-left: 0 !important;
+                background: #FAFAFA !important;
+                border-left: 3px solid #D4AF37 !important;
+                box-shadow: none !important;
+                border-bottom: none !important;
+                display: block !important;
+            }
+            
+            .dropdown-item {
+                padding: 0.75rem 1.25rem !important;
+                font-size: 0.9rem !important;
+                color: #333333 !important;
+                border-bottom: 1px solid #F5F5F5 !important;
+                display: block !important;
+                width: 100% !important;
+            }
+        }
+                background-color: #D4AF37 !important;
+                color: #1E1E1E !important;
+                font-weight: 600 !important;
+                border: none !important;
+                border-bottom: none !important;
+                width: calc(100% - 2.5rem) !important;
+                margin-left: 1.25rem !important;
+            }
+            
+            .nav-link.btn-login:hover {
+                background-color: #E8C84A !important;
+                color: #1E1E1E !important;
+                padding-left: 1.25rem !important;
             }
             
             .dropdown-menu {
@@ -380,6 +485,26 @@
                 font-size: 0.9rem !important;
                 padding: 0.5rem 0 !important;
             }
+            
+            /* Ensure login/signup buttons remain visible and functional on tablet */
+            .nav-link.btn-login {
+                display: block !important;
+                padding: 0.7rem 1rem !important;
+                margin: 0.5rem 0 !important;
+                text-align: center !important;
+                border-radius: 0.4rem !important;
+                background-color: #D4AF37 !important;
+                color: #1E1E1E !important;
+                font-weight: 600 !important;
+                border: none !important;
+                border-bottom: none !important;
+                font-size: 0.9rem !important;
+            }
+            
+            .nav-link.btn-login:hover {
+                background-color: #E8C84A !important;
+                color: #1E1E1E !important;
+            }
         }
         
         @media (max-width: 576px) {
@@ -398,7 +523,45 @@
             
             .nav-link {
                 font-size: 0.85rem !important;
-                padding: 0.5rem 0 !important;
+                padding: 0.75rem 1.25rem !important;
+            }
+            
+            /* Login/Signup buttons on small mobile screens - ENSURE VISIBLE */
+            .nav-link.btn-login {
+                display: block !important;
+                padding: 0.65rem 1rem !important;
+                margin: 0.5rem 0.5rem !important;
+                text-align: center !important;
+                border-radius: 0.4rem !important;
+                background-color: #D4AF37 !important;
+                color: #1E1E1E !important;
+                font-weight: 600 !important;
+                border: none !important;
+                border-bottom: none !important;
+                width: calc(100% - 1rem) !important;
+                font-size: 0.85rem !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+            
+            .nav-link.btn-login:hover {
+                background-color: #E8C84A !important;
+                color: #1E1E1E !important;
+                padding-left: 1rem !important;
+            }
+            
+            /* Sign Up button on small screens */
+            .nav-link.btn-signup {
+                background-color: #1F7A6B !important;
+                color: #FFFFFF !important;
+                margin-left: 0.5rem !important;
+                margin-right: 0.5rem !important;
+                width: calc(100% - 1rem) !important;
+            }
+            
+            .nav-link.btn-signup:hover {
+                background-color: #186054 !important;
+                color: #FFFFFF !important;
             }
             
             .btn-login {
@@ -409,12 +572,13 @@
             }
             
             .dropdown-item {
-                padding: 0.85rem 1.25rem !important;
-                font-size: 0.95rem !important;
+                padding: 0.75rem 1.25rem !important;
+                font-size: 0.85rem !important;
                 color: #333333 !important;
                 border-bottom: 1px solid #F5F5F5 !important;
                 font-weight: 500 !important;
                 transition: all 0.2s ease !important;
+                display: block !important;
             }
             
             .dropdown-item:hover {
@@ -448,6 +612,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'products:shop' %}">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'products:artisan_listing' %}">Artisans</a>
                     </li>
                     
                     <!-- Currency Selector -->
@@ -512,7 +679,7 @@
                             <a class="nav-link btn-login" href="{% url 'accounts:login' %}">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link btn-login" href="{% url 'accounts:customer_register' %}" style="background-color: #1F7A6B !important; margin-left: 0.5rem;">Sign Up</a>
+                            <a class="nav-link btn-login btn-signup" href="{% url 'accounts:customer_register' %}">Sign Up</a>
                         </li>
                     {% endif %}
                 </ul>

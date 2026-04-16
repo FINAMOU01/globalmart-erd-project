@@ -334,6 +334,14 @@
                 padding-left: 1.5rem !important;
             }
             
+            .nav-auth-link:nth-child(2) {
+                background: #1F7A6B !important;
+            }
+            
+            .nav-auth-link:nth-child(2):hover {
+                background: #1a615a !important;
+            }
+            
             .nav-auth-link:last-child {
                 border-bottom: none !important;
             }
@@ -381,6 +389,19 @@
                 <li class="nav-item"><a href="{% url 'products:shop' %}" class="nav-link">Shop</a></li>
                 <li class="nav-item"><a href="{% url 'products:artisan_listing' %}" class="nav-link">Artisans</a></li>
                 <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
+                
+                <!-- Mobile Auth Items - visible only on mobile -->
+                <li class="mobile-auth-separator"></li>
+                <li class="mobile-auth-item">
+                    <a href="{% url 'accounts:login' %}" class="nav-auth-link">
+                        <i class="fas fa-sign-in-alt"></i> &nbsp; Login
+                    </a>
+                </li>
+                <li class="mobile-auth-item">
+                    <a href="{% url 'accounts:register' %}" class="nav-auth-link" style="background: #1F7A6B;">
+                        <i class="fas fa-user-plus"></i> &nbsp; Sign Up
+                    </a>
+                </li>
             </ul>
             
             <!-- Search Bar -->
