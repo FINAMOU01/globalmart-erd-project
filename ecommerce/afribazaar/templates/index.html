@@ -202,16 +202,24 @@
             font-size: 0.85rem !important;
         }
         
-        /* Hide mobile auth items on desktop */
-        .mobile-auth-item {
-            display: none !important;
-        }
-        
+        /* Hide mobile auth items on desktop - STRONG HIDE */
+        .mobile-auth-item,
         .mobile-auth-separator {
             display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: hidden !important;
+            position: absolute !important;
+            width: 0 !important;
+            pointer-events: none !important;
         }
         
-        /* Mobile Responsive */
+        .mobile-auth-link {
+            display: none !important;
+            visibility: hidden !important;
+        }
         @media (max-width: 1024px) {
             .search-container {
                 flex: 0 0 250px;
@@ -303,48 +311,6 @@
                 border-bottom: 1px solid #F5F3EE;
                 width: 100%;
             }
-            
-            /* Show mobile auth items in dropdown menu */
-            .mobile-auth-item {
-                display: block !important;
-            }
-            
-            .mobile-auth-separator {
-                display: block !important;
-                height: 1px;
-                background: #D4AF37;
-                border: none;
-                margin: 0.5rem 0;
-            }
-            
-            .nav-auth-link {
-                padding: 0.85rem 1.25rem !important;
-                border-bottom: none !important;
-                width: 100% !important;
-                display: flex !important;
-                align-items: center !important;
-                background: #D4AF37;
-                color: #1E1E1E !important;
-                font-weight: 700;
-                transition: all 0.2s ease;
-            }
-            
-            .nav-auth-link:hover {
-                background: #E8C84A !important;
-                padding-left: 1.5rem !important;
-            }
-            
-            .nav-auth-link:nth-child(2) {
-                background: #1F7A6B !important;
-            }
-            
-            .nav-auth-link:nth-child(2):hover {
-                background: #1a615a !important;
-            }
-            
-            .nav-auth-link:last-child {
-                border-bottom: none !important;
-            }
         }
         
         @media (max-width: 480px) {
@@ -389,19 +355,6 @@
                 <li class="nav-item"><a href="{% url 'products:shop' %}" class="nav-link">Shop</a></li>
                 <li class="nav-item"><a href="{% url 'products:artisan_listing' %}" class="nav-link">Artisans</a></li>
                 <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
-                
-                <!-- Mobile Auth Items - visible only on mobile -->
-                <li class="mobile-auth-separator"></li>
-                <li class="mobile-auth-item">
-                    <a href="{% url 'accounts:login' %}" class="nav-auth-link">
-                        <i class="fas fa-sign-in-alt"></i> &nbsp; Login
-                    </a>
-                </li>
-                <li class="mobile-auth-item">
-                    <a href="{% url 'accounts:register' %}" class="nav-auth-link" style="background: #1F7A6B;">
-                        <i class="fas fa-user-plus"></i> &nbsp; Sign Up
-                    </a>
-                </li>
             </ul>
             
             <!-- Search Bar -->
