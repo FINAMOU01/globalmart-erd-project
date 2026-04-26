@@ -30,6 +30,8 @@ urlpatterns = [
     path('payments/', include('payments.urls', namespace='payments')),
     path('products/', include('products.urls')),
     path('orders/', include('orders.urls')),
+    path('api/', include('api.urls', namespace='api')),
+    path('api/raw/', include('api_raw.urls', namespace='api_raw')),
 ]
 
 # Serve static and media files
