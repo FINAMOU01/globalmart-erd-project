@@ -1,0 +1,4830 @@
+openapi: 3.0.3
+info:
+  title: AfriBazaar API
+  version: 1.0.0
+  description: Full CRUD API for AfriBazaar e-commerce platform
+paths:
+  /api/artisans/:
+    get:
+      operationId: api_artisans_list
+      description: |-
+        ViewSet for Artisan API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/artisans/ -> List all artisans
+        - GET /api/artisans/<id>/ -> Get artisan details
+        - POST /api/artisans/ -> Create new artisan (not recommended - use registration)
+        - PUT /api/artisans/<id>/ -> Update entire artisan profile
+        - PATCH /api/artisans/<id>/ -> Partial update
+        - DELETE /api/artisans/<id>/ -> Delete artisan
+
+        Custom actions:
+        - GET /api/artisans/<id>/products/ -> Get artisan's products
+        - GET /api/artisans/<id>/ratings/ -> Get artisan's ratings
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedArtisanList'
+          description: ''
+    post:
+      operationId: api_artisans_create
+      description: |-
+        ViewSet for Artisan API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/artisans/ -> List all artisans
+        - GET /api/artisans/<id>/ -> Get artisan details
+        - POST /api/artisans/ -> Create new artisan (not recommended - use registration)
+        - PUT /api/artisans/<id>/ -> Update entire artisan profile
+        - PATCH /api/artisans/<id>/ -> Partial update
+        - DELETE /api/artisans/<id>/ -> Delete artisan
+
+        Custom actions:
+        - GET /api/artisans/<id>/products/ -> Get artisan's products
+        - GET /api/artisans/<id>/ratings/ -> Get artisan's ratings
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Artisan'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artisan'
+          description: ''
+  /api/artisans/{user_id}/:
+    get:
+      operationId: api_artisans_retrieve
+      description: |-
+        ViewSet for Artisan API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/artisans/ -> List all artisans
+        - GET /api/artisans/<id>/ -> Get artisan details
+        - POST /api/artisans/ -> Create new artisan (not recommended - use registration)
+        - PUT /api/artisans/<id>/ -> Update entire artisan profile
+        - PATCH /api/artisans/<id>/ -> Partial update
+        - DELETE /api/artisans/<id>/ -> Delete artisan
+
+        Custom actions:
+        - GET /api/artisans/<id>/products/ -> Get artisan's products
+        - GET /api/artisans/<id>/ratings/ -> Get artisan's ratings
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this User.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artisan'
+          description: ''
+    put:
+      operationId: api_artisans_update
+      description: |-
+        ViewSet for Artisan API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/artisans/ -> List all artisans
+        - GET /api/artisans/<id>/ -> Get artisan details
+        - POST /api/artisans/ -> Create new artisan (not recommended - use registration)
+        - PUT /api/artisans/<id>/ -> Update entire artisan profile
+        - PATCH /api/artisans/<id>/ -> Partial update
+        - DELETE /api/artisans/<id>/ -> Delete artisan
+
+        Custom actions:
+        - GET /api/artisans/<id>/products/ -> Get artisan's products
+        - GET /api/artisans/<id>/ratings/ -> Get artisan's ratings
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this User.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Artisan'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artisan'
+          description: ''
+    patch:
+      operationId: api_artisans_partial_update
+      description: |-
+        ViewSet for Artisan API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/artisans/ -> List all artisans
+        - GET /api/artisans/<id>/ -> Get artisan details
+        - POST /api/artisans/ -> Create new artisan (not recommended - use registration)
+        - PUT /api/artisans/<id>/ -> Update entire artisan profile
+        - PATCH /api/artisans/<id>/ -> Partial update
+        - DELETE /api/artisans/<id>/ -> Delete artisan
+
+        Custom actions:
+        - GET /api/artisans/<id>/products/ -> Get artisan's products
+        - GET /api/artisans/<id>/ratings/ -> Get artisan's ratings
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this User.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedArtisan'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artisan'
+          description: ''
+    delete:
+      operationId: api_artisans_destroy
+      description: |-
+        ViewSet for Artisan API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/artisans/ -> List all artisans
+        - GET /api/artisans/<id>/ -> Get artisan details
+        - POST /api/artisans/ -> Create new artisan (not recommended - use registration)
+        - PUT /api/artisans/<id>/ -> Update entire artisan profile
+        - PATCH /api/artisans/<id>/ -> Partial update
+        - DELETE /api/artisans/<id>/ -> Delete artisan
+
+        Custom actions:
+        - GET /api/artisans/<id>/products/ -> Get artisan's products
+        - GET /api/artisans/<id>/ratings/ -> Get artisan's ratings
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this User.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/artisans/{user_id}/products/:
+    get:
+      operationId: api_artisans_products_retrieve
+      description: |-
+        Get all products by this artisan.
+
+        Usage:
+        GET /api/artisans/<artisan_id>/products/
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this User.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artisan'
+          description: ''
+  /api/artisans/{user_id}/ratings/:
+    get:
+      operationId: api_artisans_ratings_retrieve
+      description: |-
+        Get all ratings for this artisan.
+
+        Usage:
+        GET /api/artisans/<artisan_id>/ratings/
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this User.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artisan'
+          description: ''
+  /api/categories/:
+    get:
+      operationId: api_categories_list
+      description: |-
+        ViewSet for Category API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/categories/ -> List all categories
+        - GET /api/categories/<id>/ -> Get category details
+        - POST /api/categories/ -> Create new category
+        - PUT /api/categories/<id>/ -> Update entire category
+        - PATCH /api/categories/<id>/ -> Partial update
+        - DELETE /api/categories/<id>/ -> Delete category
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCategoryList'
+          description: ''
+    post:
+      operationId: api_categories_create
+      description: |-
+        ViewSet for Category API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/categories/ -> List all categories
+        - GET /api/categories/<id>/ -> Get category details
+        - POST /api/categories/ -> Create new category
+        - PUT /api/categories/<id>/ -> Update entire category
+        - PATCH /api/categories/<id>/ -> Partial update
+        - DELETE /api/categories/<id>/ -> Delete category
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+  /api/categories/{category_id}/:
+    get:
+      operationId: api_categories_retrieve
+      description: |-
+        ViewSet for Category API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/categories/ -> List all categories
+        - GET /api/categories/<id>/ -> Get category details
+        - POST /api/categories/ -> Create new category
+        - PUT /api/categories/<id>/ -> Update entire category
+        - PATCH /api/categories/<id>/ -> Partial update
+        - DELETE /api/categories/<id>/ -> Delete category
+      parameters:
+      - in: path
+        name: category_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    put:
+      operationId: api_categories_update
+      description: |-
+        ViewSet for Category API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/categories/ -> List all categories
+        - GET /api/categories/<id>/ -> Get category details
+        - POST /api/categories/ -> Create new category
+        - PUT /api/categories/<id>/ -> Update entire category
+        - PATCH /api/categories/<id>/ -> Partial update
+        - DELETE /api/categories/<id>/ -> Delete category
+      parameters:
+      - in: path
+        name: category_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    patch:
+      operationId: api_categories_partial_update
+      description: |-
+        ViewSet for Category API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/categories/ -> List all categories
+        - GET /api/categories/<id>/ -> Get category details
+        - POST /api/categories/ -> Create new category
+        - PUT /api/categories/<id>/ -> Update entire category
+        - PATCH /api/categories/<id>/ -> Partial update
+        - DELETE /api/categories/<id>/ -> Delete category
+      parameters:
+      - in: path
+        name: category_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    delete:
+      operationId: api_categories_destroy
+      description: |-
+        ViewSet for Category API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/categories/ -> List all categories
+        - GET /api/categories/<id>/ -> Get category details
+        - POST /api/categories/ -> Create new category
+        - PUT /api/categories/<id>/ -> Update entire category
+        - PATCH /api/categories/<id>/ -> Partial update
+        - DELETE /api/categories/<id>/ -> Delete category
+      parameters:
+      - in: path
+        name: category_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/orders/:
+    get:
+      operationId: api_orders_list
+      description: |-
+        ViewSet for Order API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/orders/ -> List all orders (paginated)
+        - GET /api/orders/<id>/ -> Get order details
+        - POST /api/orders/ -> Create new order
+        - PUT /api/orders/<id>/ -> Update entire order
+        - PATCH /api/orders/<id>/ -> Partial update (e.g., status changes)
+        - DELETE /api/orders/<id>/ -> Delete order
+
+        Custom actions:
+        - GET /api/orders/by_status/?status=pending -> Filter orders by status
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrderListList'
+          description: ''
+    post:
+      operationId: api_orders_create
+      description: |-
+        ViewSet for Order API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/orders/ -> List all orders (paginated)
+        - GET /api/orders/<id>/ -> Get order details
+        - POST /api/orders/ -> Create new order
+        - PUT /api/orders/<id>/ -> Update entire order
+        - PATCH /api/orders/<id>/ -> Partial update (e.g., status changes)
+        - DELETE /api/orders/<id>/ -> Delete order
+
+        Custom actions:
+        - GET /api/orders/by_status/?status=pending -> Filter orders by status
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /api/orders/{order_id}/:
+    get:
+      operationId: api_orders_retrieve
+      description: |-
+        ViewSet for Order API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/orders/ -> List all orders (paginated)
+        - GET /api/orders/<id>/ -> Get order details
+        - POST /api/orders/ -> Create new order
+        - PUT /api/orders/<id>/ -> Update entire order
+        - PATCH /api/orders/<id>/ -> Partial update (e.g., status changes)
+        - DELETE /api/orders/<id>/ -> Delete order
+
+        Custom actions:
+        - GET /api/orders/by_status/?status=pending -> Filter orders by status
+      parameters:
+      - in: path
+        name: order_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    put:
+      operationId: api_orders_update
+      description: |-
+        ViewSet for Order API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/orders/ -> List all orders (paginated)
+        - GET /api/orders/<id>/ -> Get order details
+        - POST /api/orders/ -> Create new order
+        - PUT /api/orders/<id>/ -> Update entire order
+        - PATCH /api/orders/<id>/ -> Partial update (e.g., status changes)
+        - DELETE /api/orders/<id>/ -> Delete order
+
+        Custom actions:
+        - GET /api/orders/by_status/?status=pending -> Filter orders by status
+      parameters:
+      - in: path
+        name: order_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    patch:
+      operationId: api_orders_partial_update
+      description: |-
+        ViewSet for Order API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/orders/ -> List all orders (paginated)
+        - GET /api/orders/<id>/ -> Get order details
+        - POST /api/orders/ -> Create new order
+        - PUT /api/orders/<id>/ -> Update entire order
+        - PATCH /api/orders/<id>/ -> Partial update (e.g., status changes)
+        - DELETE /api/orders/<id>/ -> Delete order
+
+        Custom actions:
+        - GET /api/orders/by_status/?status=pending -> Filter orders by status
+      parameters:
+      - in: path
+        name: order_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrder'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    delete:
+      operationId: api_orders_destroy
+      description: |-
+        ViewSet for Order API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/orders/ -> List all orders (paginated)
+        - GET /api/orders/<id>/ -> Get order details
+        - POST /api/orders/ -> Create new order
+        - PUT /api/orders/<id>/ -> Update entire order
+        - PATCH /api/orders/<id>/ -> Partial update (e.g., status changes)
+        - DELETE /api/orders/<id>/ -> Delete order
+
+        Custom actions:
+        - GET /api/orders/by_status/?status=pending -> Filter orders by status
+      parameters:
+      - in: path
+        name: order_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/orders/by_status/:
+    get:
+      operationId: api_orders_by_status_retrieve
+      description: |-
+        Filter orders by status.
+
+        Valid statuses: pending, confirmed, processing, shipped, delivered, cancelled
+
+        Usage:
+        GET /api/orders/by_status/?status=pending
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /api/products/:
+    get:
+      operationId: api_products_list
+      description: |-
+        ViewSet for Product API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/products/ -> List all products
+        - GET /api/products/<id>/ -> Get product details
+        - POST /api/products/ -> Create new product
+        - PUT /api/products/<id>/ -> Update entire product
+        - PATCH /api/products/<id>/ -> Partial update
+        - DELETE /api/products/<id>/ -> Delete product
+
+        Custom actions:
+        - GET /api/products/featured/ -> Get featured products
+        - GET /api/products/by_category/ -> Get products by category
+        - GET /api/products/by_artisan/ -> Get products by artisan
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductListList'
+          description: ''
+    post:
+      operationId: api_products_create
+      description: |-
+        ViewSet for Product API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/products/ -> List all products
+        - GET /api/products/<id>/ -> Get product details
+        - POST /api/products/ -> Create new product
+        - PUT /api/products/<id>/ -> Update entire product
+        - PATCH /api/products/<id>/ -> Partial update
+        - DELETE /api/products/<id>/ -> Delete product
+
+        Custom actions:
+        - GET /api/products/featured/ -> Get featured products
+        - GET /api/products/by_category/ -> Get products by category
+        - GET /api/products/by_artisan/ -> Get products by artisan
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+  /api/products/{product_id}/:
+    get:
+      operationId: api_products_retrieve
+      description: |-
+        ViewSet for Product API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/products/ -> List all products
+        - GET /api/products/<id>/ -> Get product details
+        - POST /api/products/ -> Create new product
+        - PUT /api/products/<id>/ -> Update entire product
+        - PATCH /api/products/<id>/ -> Partial update
+        - DELETE /api/products/<id>/ -> Delete product
+
+        Custom actions:
+        - GET /api/products/featured/ -> Get featured products
+        - GET /api/products/by_category/ -> Get products by category
+        - GET /api/products/by_artisan/ -> Get products by artisan
+      parameters:
+      - in: path
+        name: product_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    put:
+      operationId: api_products_update
+      description: |-
+        ViewSet for Product API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/products/ -> List all products
+        - GET /api/products/<id>/ -> Get product details
+        - POST /api/products/ -> Create new product
+        - PUT /api/products/<id>/ -> Update entire product
+        - PATCH /api/products/<id>/ -> Partial update
+        - DELETE /api/products/<id>/ -> Delete product
+
+        Custom actions:
+        - GET /api/products/featured/ -> Get featured products
+        - GET /api/products/by_category/ -> Get products by category
+        - GET /api/products/by_artisan/ -> Get products by artisan
+      parameters:
+      - in: path
+        name: product_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    patch:
+      operationId: api_products_partial_update
+      description: |-
+        ViewSet for Product API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/products/ -> List all products
+        - GET /api/products/<id>/ -> Get product details
+        - POST /api/products/ -> Create new product
+        - PUT /api/products/<id>/ -> Update entire product
+        - PATCH /api/products/<id>/ -> Partial update
+        - DELETE /api/products/<id>/ -> Delete product
+
+        Custom actions:
+        - GET /api/products/featured/ -> Get featured products
+        - GET /api/products/by_category/ -> Get products by category
+        - GET /api/products/by_artisan/ -> Get products by artisan
+      parameters:
+      - in: path
+        name: product_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProduct'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    delete:
+      operationId: api_products_destroy
+      description: |-
+        ViewSet for Product API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/products/ -> List all products
+        - GET /api/products/<id>/ -> Get product details
+        - POST /api/products/ -> Create new product
+        - PUT /api/products/<id>/ -> Update entire product
+        - PATCH /api/products/<id>/ -> Partial update
+        - DELETE /api/products/<id>/ -> Delete product
+
+        Custom actions:
+        - GET /api/products/featured/ -> Get featured products
+        - GET /api/products/by_category/ -> Get products by category
+        - GET /api/products/by_artisan/ -> Get products by artisan
+      parameters:
+      - in: path
+        name: product_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/products/by_artisan/:
+    get:
+      operationId: api_products_by_artisan_retrieve
+      description: |-
+        Get products by artisan.
+
+        Usage:
+        GET /api/products/by_artisan/?artisan_id=1
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+  /api/products/by_category/:
+    get:
+      operationId: api_products_by_category_retrieve
+      description: |-
+        Get products by category.
+
+        Usage:
+        GET /api/products/by_category/?category_id=1
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+  /api/products/featured/:
+    get:
+      operationId: api_products_featured_retrieve
+      description: |-
+        Get all featured products.
+
+        Usage:
+        GET /api/products/featured/
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+  /api/products/top_sales/:
+    get:
+      operationId: api_products_top_sales_retrieve
+      description: |-
+        Get top 10 products by sales (most sold products).
+
+        Usage:
+        GET /api/products/top_sales/
+
+        Returns: List of 10 products with the most sales
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+  /api/raw/cart-items/:
+    get:
+      operationId: api_raw_cart_items_list
+      description: |-
+        Full CRUD API endpoint for cart_items table
+
+        GET /api/raw/cart-items/ - List all
+        POST /api/raw/cart-items/ - Create new
+        GET /api/raw/cart-items/<id>/ - Retrieve
+        PUT /api/raw/cart-items/<id>/ - Full update
+        PATCH /api/raw/cart-items/<id>/ - Partial update
+        DELETE /api/raw/cart-items/<id>/ - Delete
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCartItemList'
+          description: ''
+    post:
+      operationId: api_raw_cart_items_create
+      description: |-
+        Full CRUD API endpoint for cart_items table
+
+        GET /api/raw/cart-items/ - List all
+        POST /api/raw/cart-items/ - Create new
+        GET /api/raw/cart-items/<id>/ - Retrieve
+        PUT /api/raw/cart-items/<id>/ - Full update
+        PATCH /api/raw/cart-items/<id>/ - Partial update
+        DELETE /api/raw/cart-items/<id>/ - Delete
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItem'
+          description: ''
+  /api/raw/cart-items/{cart_item_id}/:
+    get:
+      operationId: api_raw_cart_items_retrieve
+      description: |-
+        Full CRUD API endpoint for cart_items table
+
+        GET /api/raw/cart-items/ - List all
+        POST /api/raw/cart-items/ - Create new
+        GET /api/raw/cart-items/<id>/ - Retrieve
+        PUT /api/raw/cart-items/<id>/ - Full update
+        PATCH /api/raw/cart-items/<id>/ - Partial update
+        DELETE /api/raw/cart-items/<id>/ - Delete
+      parameters:
+      - in: path
+        name: cart_item_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cart item.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItem'
+          description: ''
+    put:
+      operationId: api_raw_cart_items_update
+      description: |-
+        Full CRUD API endpoint for cart_items table
+
+        GET /api/raw/cart-items/ - List all
+        POST /api/raw/cart-items/ - Create new
+        GET /api/raw/cart-items/<id>/ - Retrieve
+        PUT /api/raw/cart-items/<id>/ - Full update
+        PATCH /api/raw/cart-items/<id>/ - Partial update
+        DELETE /api/raw/cart-items/<id>/ - Delete
+      parameters:
+      - in: path
+        name: cart_item_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cart item.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItem'
+          description: ''
+    patch:
+      operationId: api_raw_cart_items_partial_update
+      description: |-
+        Full CRUD API endpoint for cart_items table
+
+        GET /api/raw/cart-items/ - List all
+        POST /api/raw/cart-items/ - Create new
+        GET /api/raw/cart-items/<id>/ - Retrieve
+        PUT /api/raw/cart-items/<id>/ - Full update
+        PATCH /api/raw/cart-items/<id>/ - Partial update
+        DELETE /api/raw/cart-items/<id>/ - Delete
+      parameters:
+      - in: path
+        name: cart_item_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cart item.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCartItem'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItem'
+          description: ''
+    delete:
+      operationId: api_raw_cart_items_destroy
+      description: |-
+        Full CRUD API endpoint for cart_items table
+
+        GET /api/raw/cart-items/ - List all
+        POST /api/raw/cart-items/ - Create new
+        GET /api/raw/cart-items/<id>/ - Retrieve
+        PUT /api/raw/cart-items/<id>/ - Full update
+        PATCH /api/raw/cart-items/<id>/ - Partial update
+        DELETE /api/raw/cart-items/<id>/ - Delete
+      parameters:
+      - in: path
+        name: cart_item_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cart item.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/raw/carts/:
+    get:
+      operationId: api_raw_carts_list
+      description: |-
+        Full CRUD API endpoint for carts table
+
+        GET /api/raw/carts/ - List all
+        POST /api/raw/carts/ - Create new
+        GET /api/raw/carts/<id>/ - Retrieve
+        PUT /api/raw/carts/<id>/ - Full update
+        PATCH /api/raw/carts/<id>/ - Partial update
+        DELETE /api/raw/carts/<id>/ - Delete
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCartList'
+          description: ''
+    post:
+      operationId: api_raw_carts_create
+      description: |-
+        Full CRUD API endpoint for carts table
+
+        GET /api/raw/carts/ - List all
+        POST /api/raw/carts/ - Create new
+        GET /api/raw/carts/<id>/ - Retrieve
+        PUT /api/raw/carts/<id>/ - Full update
+        PATCH /api/raw/carts/<id>/ - Partial update
+        DELETE /api/raw/carts/<id>/ - Delete
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: ''
+  /api/raw/carts/{cart_id}/:
+    get:
+      operationId: api_raw_carts_retrieve
+      description: |-
+        Full CRUD API endpoint for carts table
+
+        GET /api/raw/carts/ - List all
+        POST /api/raw/carts/ - Create new
+        GET /api/raw/carts/<id>/ - Retrieve
+        PUT /api/raw/carts/<id>/ - Full update
+        PATCH /api/raw/carts/<id>/ - Partial update
+        DELETE /api/raw/carts/<id>/ - Delete
+      parameters:
+      - in: path
+        name: cart_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cart.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: ''
+    put:
+      operationId: api_raw_carts_update
+      description: |-
+        Full CRUD API endpoint for carts table
+
+        GET /api/raw/carts/ - List all
+        POST /api/raw/carts/ - Create new
+        GET /api/raw/carts/<id>/ - Retrieve
+        PUT /api/raw/carts/<id>/ - Full update
+        PATCH /api/raw/carts/<id>/ - Partial update
+        DELETE /api/raw/carts/<id>/ - Delete
+      parameters:
+      - in: path
+        name: cart_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cart.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: ''
+    patch:
+      operationId: api_raw_carts_partial_update
+      description: |-
+        Full CRUD API endpoint for carts table
+
+        GET /api/raw/carts/ - List all
+        POST /api/raw/carts/ - Create new
+        GET /api/raw/carts/<id>/ - Retrieve
+        PUT /api/raw/carts/<id>/ - Full update
+        PATCH /api/raw/carts/<id>/ - Partial update
+        DELETE /api/raw/carts/<id>/ - Delete
+      parameters:
+      - in: path
+        name: cart_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cart.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCart'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: ''
+    delete:
+      operationId: api_raw_carts_destroy
+      description: |-
+        Full CRUD API endpoint for carts table
+
+        GET /api/raw/carts/ - List all
+        POST /api/raw/carts/ - Create new
+        GET /api/raw/carts/<id>/ - Retrieve
+        PUT /api/raw/carts/<id>/ - Full update
+        PATCH /api/raw/carts/<id>/ - Partial update
+        DELETE /api/raw/carts/<id>/ - Delete
+      parameters:
+      - in: path
+        name: cart_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cart.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/raw/categories/:
+    get:
+      operationId: api_raw_categories_list
+      description: |-
+        Full CRUD API endpoint for categories table
+
+        GET /api/raw/categories/ - List all
+        POST /api/raw/categories/ - Create new
+        GET /api/raw/categories/<id>/ - Retrieve
+        PUT /api/raw/categories/<id>/ - Full update
+        PATCH /api/raw/categories/<id>/ - Partial update
+        DELETE /api/raw/categories/<id>/ - Delete
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCategoryList'
+          description: ''
+    post:
+      operationId: api_raw_categories_create
+      description: |-
+        Full CRUD API endpoint for categories table
+
+        GET /api/raw/categories/ - List all
+        POST /api/raw/categories/ - Create new
+        GET /api/raw/categories/<id>/ - Retrieve
+        PUT /api/raw/categories/<id>/ - Full update
+        PATCH /api/raw/categories/<id>/ - Partial update
+        DELETE /api/raw/categories/<id>/ - Delete
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+  /api/raw/categories/{category_id}/:
+    get:
+      operationId: api_raw_categories_retrieve
+      description: |-
+        Full CRUD API endpoint for categories table
+
+        GET /api/raw/categories/ - List all
+        POST /api/raw/categories/ - Create new
+        GET /api/raw/categories/<id>/ - Retrieve
+        PUT /api/raw/categories/<id>/ - Full update
+        PATCH /api/raw/categories/<id>/ - Partial update
+        DELETE /api/raw/categories/<id>/ - Delete
+      parameters:
+      - in: path
+        name: category_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    put:
+      operationId: api_raw_categories_update
+      description: |-
+        Full CRUD API endpoint for categories table
+
+        GET /api/raw/categories/ - List all
+        POST /api/raw/categories/ - Create new
+        GET /api/raw/categories/<id>/ - Retrieve
+        PUT /api/raw/categories/<id>/ - Full update
+        PATCH /api/raw/categories/<id>/ - Partial update
+        DELETE /api/raw/categories/<id>/ - Delete
+      parameters:
+      - in: path
+        name: category_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    patch:
+      operationId: api_raw_categories_partial_update
+      description: |-
+        Full CRUD API endpoint for categories table
+
+        GET /api/raw/categories/ - List all
+        POST /api/raw/categories/ - Create new
+        GET /api/raw/categories/<id>/ - Retrieve
+        PUT /api/raw/categories/<id>/ - Full update
+        PATCH /api/raw/categories/<id>/ - Partial update
+        DELETE /api/raw/categories/<id>/ - Delete
+      parameters:
+      - in: path
+        name: category_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    delete:
+      operationId: api_raw_categories_destroy
+      description: |-
+        Full CRUD API endpoint for categories table
+
+        GET /api/raw/categories/ - List all
+        POST /api/raw/categories/ - Create new
+        GET /api/raw/categories/<id>/ - Retrieve
+        PUT /api/raw/categories/<id>/ - Full update
+        PATCH /api/raw/categories/<id>/ - Partial update
+        DELETE /api/raw/categories/<id>/ - Delete
+      parameters:
+      - in: path
+        name: category_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/raw/currencies/:
+    get:
+      operationId: api_raw_currencies_list
+      description: |-
+        Full CRUD API endpoint for currencies table
+
+        GET /api/raw/currencies/ - List all
+        POST /api/raw/currencies/ - Create new
+        GET /api/raw/currencies/<id>/ - Retrieve
+        PUT /api/raw/currencies/<id>/ - Full update
+        PATCH /api/raw/currencies/<id>/ - Partial update
+        DELETE /api/raw/currencies/<id>/ - Delete
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCurrencyList'
+          description: ''
+    post:
+      operationId: api_raw_currencies_create
+      description: |-
+        Full CRUD API endpoint for currencies table
+
+        GET /api/raw/currencies/ - List all
+        POST /api/raw/currencies/ - Create new
+        GET /api/raw/currencies/<id>/ - Retrieve
+        PUT /api/raw/currencies/<id>/ - Full update
+        PATCH /api/raw/currencies/<id>/ - Partial update
+        DELETE /api/raw/currencies/<id>/ - Delete
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Currency'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Currency'
+          description: ''
+  /api/raw/currencies/{currency_code}/:
+    get:
+      operationId: api_raw_currencies_retrieve
+      description: |-
+        Full CRUD API endpoint for currencies table
+
+        GET /api/raw/currencies/ - List all
+        POST /api/raw/currencies/ - Create new
+        GET /api/raw/currencies/<id>/ - Retrieve
+        PUT /api/raw/currencies/<id>/ - Full update
+        PATCH /api/raw/currencies/<id>/ - Partial update
+        DELETE /api/raw/currencies/<id>/ - Delete
+      parameters:
+      - in: path
+        name: currency_code
+        schema:
+          type: string
+        description: A unique value identifying this currency.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Currency'
+          description: ''
+    put:
+      operationId: api_raw_currencies_update
+      description: |-
+        Full CRUD API endpoint for currencies table
+
+        GET /api/raw/currencies/ - List all
+        POST /api/raw/currencies/ - Create new
+        GET /api/raw/currencies/<id>/ - Retrieve
+        PUT /api/raw/currencies/<id>/ - Full update
+        PATCH /api/raw/currencies/<id>/ - Partial update
+        DELETE /api/raw/currencies/<id>/ - Delete
+      parameters:
+      - in: path
+        name: currency_code
+        schema:
+          type: string
+        description: A unique value identifying this currency.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Currency'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Currency'
+          description: ''
+    patch:
+      operationId: api_raw_currencies_partial_update
+      description: |-
+        Full CRUD API endpoint for currencies table
+
+        GET /api/raw/currencies/ - List all
+        POST /api/raw/currencies/ - Create new
+        GET /api/raw/currencies/<id>/ - Retrieve
+        PUT /api/raw/currencies/<id>/ - Full update
+        PATCH /api/raw/currencies/<id>/ - Partial update
+        DELETE /api/raw/currencies/<id>/ - Delete
+      parameters:
+      - in: path
+        name: currency_code
+        schema:
+          type: string
+        description: A unique value identifying this currency.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCurrency'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Currency'
+          description: ''
+    delete:
+      operationId: api_raw_currencies_destroy
+      description: |-
+        Full CRUD API endpoint for currencies table
+
+        GET /api/raw/currencies/ - List all
+        POST /api/raw/currencies/ - Create new
+        GET /api/raw/currencies/<id>/ - Retrieve
+        PUT /api/raw/currencies/<id>/ - Full update
+        PATCH /api/raw/currencies/<id>/ - Partial update
+        DELETE /api/raw/currencies/<id>/ - Delete
+      parameters:
+      - in: path
+        name: currency_code
+        schema:
+          type: string
+        description: A unique value identifying this currency.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/raw/customer-tiers/:
+    get:
+      operationId: api_raw_customer_tiers_list
+      description: |-
+        Full CRUD API endpoint for customer_tiers table
+
+        GET /api/raw/customer-tiers/ - List all
+        POST /api/raw/customer-tiers/ - Create new
+        GET /api/raw/customer-tiers/<id>/ - Retrieve
+        PUT /api/raw/customer-tiers/<id>/ - Full update
+        PATCH /api/raw/customer-tiers/<id>/ - Partial update
+        DELETE /api/raw/customer-tiers/<id>/ - Delete
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCustomerTierList'
+          description: ''
+    post:
+      operationId: api_raw_customer_tiers_create
+      description: |-
+        Full CRUD API endpoint for customer_tiers table
+
+        GET /api/raw/customer-tiers/ - List all
+        POST /api/raw/customer-tiers/ - Create new
+        GET /api/raw/customer-tiers/<id>/ - Retrieve
+        PUT /api/raw/customer-tiers/<id>/ - Full update
+        PATCH /api/raw/customer-tiers/<id>/ - Partial update
+        DELETE /api/raw/customer-tiers/<id>/ - Delete
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerTier'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerTier'
+          description: ''
+  /api/raw/customer-tiers/{tier_id}/:
+    get:
+      operationId: api_raw_customer_tiers_retrieve
+      description: |-
+        Full CRUD API endpoint for customer_tiers table
+
+        GET /api/raw/customer-tiers/ - List all
+        POST /api/raw/customer-tiers/ - Create new
+        GET /api/raw/customer-tiers/<id>/ - Retrieve
+        PUT /api/raw/customer-tiers/<id>/ - Full update
+        PATCH /api/raw/customer-tiers/<id>/ - Partial update
+        DELETE /api/raw/customer-tiers/<id>/ - Delete
+      parameters:
+      - in: path
+        name: tier_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Customer Tier.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerTier'
+          description: ''
+    put:
+      operationId: api_raw_customer_tiers_update
+      description: |-
+        Full CRUD API endpoint for customer_tiers table
+
+        GET /api/raw/customer-tiers/ - List all
+        POST /api/raw/customer-tiers/ - Create new
+        GET /api/raw/customer-tiers/<id>/ - Retrieve
+        PUT /api/raw/customer-tiers/<id>/ - Full update
+        PATCH /api/raw/customer-tiers/<id>/ - Partial update
+        DELETE /api/raw/customer-tiers/<id>/ - Delete
+      parameters:
+      - in: path
+        name: tier_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Customer Tier.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerTier'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerTier'
+          description: ''
+    patch:
+      operationId: api_raw_customer_tiers_partial_update
+      description: |-
+        Full CRUD API endpoint for customer_tiers table
+
+        GET /api/raw/customer-tiers/ - List all
+        POST /api/raw/customer-tiers/ - Create new
+        GET /api/raw/customer-tiers/<id>/ - Retrieve
+        PUT /api/raw/customer-tiers/<id>/ - Full update
+        PATCH /api/raw/customer-tiers/<id>/ - Partial update
+        DELETE /api/raw/customer-tiers/<id>/ - Delete
+      parameters:
+      - in: path
+        name: tier_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Customer Tier.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomerTier'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerTier'
+          description: ''
+    delete:
+      operationId: api_raw_customer_tiers_destroy
+      description: |-
+        Full CRUD API endpoint for customer_tiers table
+
+        GET /api/raw/customer-tiers/ - List all
+        POST /api/raw/customer-tiers/ - Create new
+        GET /api/raw/customer-tiers/<id>/ - Retrieve
+        PUT /api/raw/customer-tiers/<id>/ - Full update
+        PATCH /api/raw/customer-tiers/<id>/ - Partial update
+        DELETE /api/raw/customer-tiers/<id>/ - Delete
+      parameters:
+      - in: path
+        name: tier_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Customer Tier.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/raw/order-items/:
+    get:
+      operationId: api_raw_order_items_list
+      description: |-
+        Full CRUD API endpoint for order_items table
+
+        GET /api/raw/order-items/ - List all
+        POST /api/raw/order-items/ - Create new
+        GET /api/raw/order-items/<id>/ - Retrieve
+        PUT /api/raw/order-items/<id>/ - Full update
+        PATCH /api/raw/order-items/<id>/ - Partial update
+        DELETE /api/raw/order-items/<id>/ - Delete
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrderItemList'
+          description: ''
+    post:
+      operationId: api_raw_order_items_create
+      description: |-
+        Full CRUD API endpoint for order_items table
+
+        GET /api/raw/order-items/ - List all
+        POST /api/raw/order-items/ - Create new
+        GET /api/raw/order-items/<id>/ - Retrieve
+        PUT /api/raw/order-items/<id>/ - Full update
+        PATCH /api/raw/order-items/<id>/ - Partial update
+        DELETE /api/raw/order-items/<id>/ - Delete
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderItem'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+          description: ''
+  /api/raw/order-items/{order_item_id}/:
+    get:
+      operationId: api_raw_order_items_retrieve
+      description: |-
+        Full CRUD API endpoint for order_items table
+
+        GET /api/raw/order-items/ - List all
+        POST /api/raw/order-items/ - Create new
+        GET /api/raw/order-items/<id>/ - Retrieve
+        PUT /api/raw/order-items/<id>/ - Full update
+        PATCH /api/raw/order-items/<id>/ - Partial update
+        DELETE /api/raw/order-items/<id>/ - Delete
+      parameters:
+      - in: path
+        name: order_item_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order item.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+          description: ''
+    put:
+      operationId: api_raw_order_items_update
+      description: |-
+        Full CRUD API endpoint for order_items table
+
+        GET /api/raw/order-items/ - List all
+        POST /api/raw/order-items/ - Create new
+        GET /api/raw/order-items/<id>/ - Retrieve
+        PUT /api/raw/order-items/<id>/ - Full update
+        PATCH /api/raw/order-items/<id>/ - Partial update
+        DELETE /api/raw/order-items/<id>/ - Delete
+      parameters:
+      - in: path
+        name: order_item_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order item.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderItem'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+          description: ''
+    patch:
+      operationId: api_raw_order_items_partial_update
+      description: |-
+        Full CRUD API endpoint for order_items table
+
+        GET /api/raw/order-items/ - List all
+        POST /api/raw/order-items/ - Create new
+        GET /api/raw/order-items/<id>/ - Retrieve
+        PUT /api/raw/order-items/<id>/ - Full update
+        PATCH /api/raw/order-items/<id>/ - Partial update
+        DELETE /api/raw/order-items/<id>/ - Delete
+      parameters:
+      - in: path
+        name: order_item_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order item.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderItem'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+          description: ''
+    delete:
+      operationId: api_raw_order_items_destroy
+      description: |-
+        Full CRUD API endpoint for order_items table
+
+        GET /api/raw/order-items/ - List all
+        POST /api/raw/order-items/ - Create new
+        GET /api/raw/order-items/<id>/ - Retrieve
+        PUT /api/raw/order-items/<id>/ - Full update
+        PATCH /api/raw/order-items/<id>/ - Partial update
+        DELETE /api/raw/order-items/<id>/ - Delete
+      parameters:
+      - in: path
+        name: order_item_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order item.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/raw/orders/:
+    get:
+      operationId: api_raw_orders_list
+      description: |-
+        Full CRUD API endpoint for orders table
+
+        GET /api/raw/orders/ - List all
+        POST /api/raw/orders/ - Create new
+        GET /api/raw/orders/<id>/ - Retrieve
+        PUT /api/raw/orders/<id>/ - Full update
+        PATCH /api/raw/orders/<id>/ - Partial update
+        DELETE /api/raw/orders/<id>/ - Delete
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrderList'
+          description: ''
+    post:
+      operationId: api_raw_orders_create
+      description: |-
+        Full CRUD API endpoint for orders table
+
+        GET /api/raw/orders/ - List all
+        POST /api/raw/orders/ - Create new
+        GET /api/raw/orders/<id>/ - Retrieve
+        PUT /api/raw/orders/<id>/ - Full update
+        PATCH /api/raw/orders/<id>/ - Partial update
+        DELETE /api/raw/orders/<id>/ - Delete
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /api/raw/orders/{order_id}/:
+    get:
+      operationId: api_raw_orders_retrieve
+      description: |-
+        Full CRUD API endpoint for orders table
+
+        GET /api/raw/orders/ - List all
+        POST /api/raw/orders/ - Create new
+        GET /api/raw/orders/<id>/ - Retrieve
+        PUT /api/raw/orders/<id>/ - Full update
+        PATCH /api/raw/orders/<id>/ - Partial update
+        DELETE /api/raw/orders/<id>/ - Delete
+      parameters:
+      - in: path
+        name: order_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    put:
+      operationId: api_raw_orders_update
+      description: |-
+        Full CRUD API endpoint for orders table
+
+        GET /api/raw/orders/ - List all
+        POST /api/raw/orders/ - Create new
+        GET /api/raw/orders/<id>/ - Retrieve
+        PUT /api/raw/orders/<id>/ - Full update
+        PATCH /api/raw/orders/<id>/ - Partial update
+        DELETE /api/raw/orders/<id>/ - Delete
+      parameters:
+      - in: path
+        name: order_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    patch:
+      operationId: api_raw_orders_partial_update
+      description: |-
+        Full CRUD API endpoint for orders table
+
+        GET /api/raw/orders/ - List all
+        POST /api/raw/orders/ - Create new
+        GET /api/raw/orders/<id>/ - Retrieve
+        PUT /api/raw/orders/<id>/ - Full update
+        PATCH /api/raw/orders/<id>/ - Partial update
+        DELETE /api/raw/orders/<id>/ - Delete
+      parameters:
+      - in: path
+        name: order_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrder'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    delete:
+      operationId: api_raw_orders_destroy
+      description: |-
+        Full CRUD API endpoint for orders table
+
+        GET /api/raw/orders/ - List all
+        POST /api/raw/orders/ - Create new
+        GET /api/raw/orders/<id>/ - Retrieve
+        PUT /api/raw/orders/<id>/ - Full update
+        PATCH /api/raw/orders/<id>/ - Partial update
+        DELETE /api/raw/orders/<id>/ - Delete
+      parameters:
+      - in: path
+        name: order_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/raw/products/:
+    get:
+      operationId: api_raw_products_list
+      description: |-
+        Full CRUD API endpoint for products table
+
+        GET /api/raw/products/ - List all
+        POST /api/raw/products/ - Create new
+        GET /api/raw/products/<id>/ - Retrieve
+        PUT /api/raw/products/<id>/ - Full update
+        PATCH /api/raw/products/<id>/ - Partial update
+        DELETE /api/raw/products/<id>/ - Delete
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductList'
+          description: ''
+    post:
+      operationId: api_raw_products_create
+      description: |-
+        Full CRUD API endpoint for products table
+
+        GET /api/raw/products/ - List all
+        POST /api/raw/products/ - Create new
+        GET /api/raw/products/<id>/ - Retrieve
+        PUT /api/raw/products/<id>/ - Full update
+        PATCH /api/raw/products/<id>/ - Partial update
+        DELETE /api/raw/products/<id>/ - Delete
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+  /api/raw/products/{product_id}/:
+    get:
+      operationId: api_raw_products_retrieve
+      description: |-
+        Full CRUD API endpoint for products table
+
+        GET /api/raw/products/ - List all
+        POST /api/raw/products/ - Create new
+        GET /api/raw/products/<id>/ - Retrieve
+        PUT /api/raw/products/<id>/ - Full update
+        PATCH /api/raw/products/<id>/ - Partial update
+        DELETE /api/raw/products/<id>/ - Delete
+      parameters:
+      - in: path
+        name: product_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    put:
+      operationId: api_raw_products_update
+      description: |-
+        Full CRUD API endpoint for products table
+
+        GET /api/raw/products/ - List all
+        POST /api/raw/products/ - Create new
+        GET /api/raw/products/<id>/ - Retrieve
+        PUT /api/raw/products/<id>/ - Full update
+        PATCH /api/raw/products/<id>/ - Partial update
+        DELETE /api/raw/products/<id>/ - Delete
+      parameters:
+      - in: path
+        name: product_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    patch:
+      operationId: api_raw_products_partial_update
+      description: |-
+        Full CRUD API endpoint for products table
+
+        GET /api/raw/products/ - List all
+        POST /api/raw/products/ - Create new
+        GET /api/raw/products/<id>/ - Retrieve
+        PUT /api/raw/products/<id>/ - Full update
+        PATCH /api/raw/products/<id>/ - Partial update
+        DELETE /api/raw/products/<id>/ - Delete
+      parameters:
+      - in: path
+        name: product_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProduct'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    delete:
+      operationId: api_raw_products_destroy
+      description: |-
+        Full CRUD API endpoint for products table
+
+        GET /api/raw/products/ - List all
+        POST /api/raw/products/ - Create new
+        GET /api/raw/products/<id>/ - Retrieve
+        PUT /api/raw/products/<id>/ - Full update
+        PATCH /api/raw/products/<id>/ - Partial update
+        DELETE /api/raw/products/<id>/ - Delete
+      parameters:
+      - in: path
+        name: product_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/raw/users/:
+    get:
+      operationId: api_raw_users_list
+      description: |-
+        Full CRUD API endpoint for users table
+
+        GET /api/raw/users/ - List all
+        POST /api/raw/users/ - Create new
+        GET /api/raw/users/<id>/ - Retrieve
+        PUT /api/raw/users/<id>/ - Full update
+        PATCH /api/raw/users/<id>/ - Partial update
+        DELETE /api/raw/users/<id>/ - Delete
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+          description: ''
+    post:
+      operationId: api_raw_users_create
+      description: |-
+        Full CRUD API endpoint for users table
+
+        GET /api/raw/users/ - List all
+        POST /api/raw/users/ - Create new
+        GET /api/raw/users/<id>/ - Retrieve
+        PUT /api/raw/users/<id>/ - Full update
+        PATCH /api/raw/users/<id>/ - Partial update
+        DELETE /api/raw/users/<id>/ - Delete
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/raw/users/{user_id}/:
+    get:
+      operationId: api_raw_users_retrieve
+      description: |-
+        Full CRUD API endpoint for users table
+
+        GET /api/raw/users/ - List all
+        POST /api/raw/users/ - Create new
+        GET /api/raw/users/<id>/ - Retrieve
+        PUT /api/raw/users/<id>/ - Full update
+        PATCH /api/raw/users/<id>/ - Partial update
+        DELETE /api/raw/users/<id>/ - Delete
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: api_raw_users_update
+      description: |-
+        Full CRUD API endpoint for users table
+
+        GET /api/raw/users/ - List all
+        POST /api/raw/users/ - Create new
+        GET /api/raw/users/<id>/ - Retrieve
+        PUT /api/raw/users/<id>/ - Full update
+        PATCH /api/raw/users/<id>/ - Partial update
+        DELETE /api/raw/users/<id>/ - Delete
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: api_raw_users_partial_update
+      description: |-
+        Full CRUD API endpoint for users table
+
+        GET /api/raw/users/ - List all
+        POST /api/raw/users/ - Create new
+        GET /api/raw/users/<id>/ - Retrieve
+        PUT /api/raw/users/<id>/ - Full update
+        PATCH /api/raw/users/<id>/ - Partial update
+        DELETE /api/raw/users/<id>/ - Delete
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: api_raw_users_destroy
+      description: |-
+        Full CRUD API endpoint for users table
+
+        GET /api/raw/users/ - List all
+        POST /api/raw/users/ - Create new
+        GET /api/raw/users/<id>/ - Retrieve
+        PUT /api/raw/users/<id>/ - Full update
+        PATCH /api/raw/users/<id>/ - Partial update
+        DELETE /api/raw/users/<id>/ - Delete
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/reviews/:
+    get:
+      operationId: api_reviews_list
+      description: |-
+        ViewSet for Artisan Rating API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/reviews/ -> List all reviews
+        - GET /api/reviews/<id>/ -> Get review details
+        - POST /api/reviews/ -> Create new review (rating)
+        - PUT /api/reviews/<id>/ -> Update entire review
+        - PATCH /api/reviews/<id>/ -> Partial update
+        - DELETE /api/reviews/<id>/ -> Delete review
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedArtisanRatingList'
+          description: ''
+    post:
+      operationId: api_reviews_create
+      description: |-
+        ViewSet for Artisan Rating API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/reviews/ -> List all reviews
+        - GET /api/reviews/<id>/ -> Get review details
+        - POST /api/reviews/ -> Create new review (rating)
+        - PUT /api/reviews/<id>/ -> Update entire review
+        - PATCH /api/reviews/<id>/ -> Partial update
+        - DELETE /api/reviews/<id>/ -> Delete review
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtisanRating'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtisanRating'
+          description: ''
+  /api/reviews/{rating_id}/:
+    get:
+      operationId: api_reviews_retrieve
+      description: |-
+        ViewSet for Artisan Rating API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/reviews/ -> List all reviews
+        - GET /api/reviews/<id>/ -> Get review details
+        - POST /api/reviews/ -> Create new review (rating)
+        - PUT /api/reviews/<id>/ -> Update entire review
+        - PATCH /api/reviews/<id>/ -> Partial update
+        - DELETE /api/reviews/<id>/ -> Delete review
+      parameters:
+      - in: path
+        name: rating_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this artisan rating.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtisanRating'
+          description: ''
+    put:
+      operationId: api_reviews_update
+      description: |-
+        ViewSet for Artisan Rating API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/reviews/ -> List all reviews
+        - GET /api/reviews/<id>/ -> Get review details
+        - POST /api/reviews/ -> Create new review (rating)
+        - PUT /api/reviews/<id>/ -> Update entire review
+        - PATCH /api/reviews/<id>/ -> Partial update
+        - DELETE /api/reviews/<id>/ -> Delete review
+      parameters:
+      - in: path
+        name: rating_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this artisan rating.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtisanRating'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtisanRating'
+          description: ''
+    patch:
+      operationId: api_reviews_partial_update
+      description: |-
+        ViewSet for Artisan Rating API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/reviews/ -> List all reviews
+        - GET /api/reviews/<id>/ -> Get review details
+        - POST /api/reviews/ -> Create new review (rating)
+        - PUT /api/reviews/<id>/ -> Update entire review
+        - PATCH /api/reviews/<id>/ -> Partial update
+        - DELETE /api/reviews/<id>/ -> Delete review
+      parameters:
+      - in: path
+        name: rating_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this artisan rating.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedArtisanRating'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtisanRating'
+          description: ''
+    delete:
+      operationId: api_reviews_destroy
+      description: |-
+        ViewSet for Artisan Rating API endpoints.
+
+        Supports full CRUD operations:
+        - GET /api/reviews/ -> List all reviews
+        - GET /api/reviews/<id>/ -> Get review details
+        - POST /api/reviews/ -> Create new review (rating)
+        - PUT /api/reviews/<id>/ -> Update entire review
+        - PATCH /api/reviews/<id>/ -> Partial update
+        - DELETE /api/reviews/<id>/ -> Delete review
+      parameters:
+      - in: path
+        name: rating_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this artisan rating.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - ht
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+components:
+  schemas:
+    AccountStatusEnum:
+      enum:
+      - active
+      - suspended
+      - deleted
+      - pending_verification
+      type: string
+      description: |-
+        * `active` - Active
+        * `suspended` - Suspended
+        * `deleted` - Deleted
+        * `pending_verification` - Pending Verification
+    Artisan:
+      type: object
+      description: |-
+        Serializer for Artisan user with profile information.
+        Combines User and ArtisanProfile data.
+      properties:
+        user_id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        last_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        is_artisan:
+          type: boolean
+          readOnly: true
+        profile:
+          allOf:
+          - $ref: '#/components/schemas/ArtisanProfile'
+          readOnly: true
+        products_count:
+          type: string
+          readOnly: true
+      required:
+      - email
+      - is_artisan
+      - products_count
+      - profile
+      - user_id
+      - username
+    ArtisanProfile:
+      type: object
+      description: |-
+        Serializer for Artisan Profile.
+        Shows artisan details and rating stats.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        phone:
+          type: string
+          maxLength: 15
+        address:
+          type: string
+        bio:
+          type: string
+          description: Description of your artisan work and experience
+        profile_picture:
+          type: string
+          format: uri
+          nullable: true
+        social_links:
+          description: Social media links as JSON
+        is_verified:
+          type: boolean
+        currency_preference:
+          allOf:
+          - $ref: '#/components/schemas/CurrencyPreferenceEnum'
+          description: |-
+            Your default currency for displaying dashboard values
+
+            * `USD` - USD - US Dollar
+            * `EUR` - EUR - Euro
+            * `GBP` - GBP - British Pound
+            * `XAF` - XAF - CFA Franc (Central)
+            * `NGN` - NGN - Nigerian Naira
+            * `GHS` - GHS - Ghanaian Cedi
+            * `KES` - KES - Kenyan Shilling
+            * `ZAR` - ZAR - South African Rand
+            * `EGP` - EGP - Egyptian Pound
+            * `MAD` - MAD - Moroccan Dirham
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+        average_rating:
+          type: string
+          readOnly: true
+        total_ratings:
+          type: string
+          readOnly: true
+      required:
+      - average_rating
+      - date_joined
+      - id
+      - total_ratings
+    ArtisanRating:
+      type: object
+      description: |-
+        Serializer for Artisan ratings and reviews.
+        Shows rating, comment, and rater information.
+        Supports full CRUD operations.
+      properties:
+        rating_id:
+          type: integer
+          readOnly: true
+        artisan_id:
+          type: integer
+          writeOnly: true
+        artisan_name:
+          type: string
+          readOnly: true
+        rater_id:
+          type: integer
+          writeOnly: true
+        rater_username:
+          type: string
+          readOnly: true
+        rater_name:
+          type: string
+          readOnly: true
+        rating:
+          allOf:
+          - $ref: '#/components/schemas/RatingEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        rating_display:
+          type: string
+          readOnly: true
+        comment:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - artisan_name
+      - created_at
+      - rater_name
+      - rater_username
+      - rating
+      - rating_display
+      - rating_id
+      - updated_at
+    Cart:
+      type: object
+      description: Full CRUD serializer for carts table
+      properties:
+        cart_id:
+          type: integer
+          readOnly: true
+        user_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        total_items:
+          type: integer
+          readOnly: true
+        subtotal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        expires_at:
+          type: string
+          format: date-time
+      required:
+      - cart_id
+      - created_at
+      - expires_at
+      - subtotal
+      - total_items
+      - updated_at
+      - user_id
+    CartItem:
+      type: object
+      description: Full CRUD serializer for cart_items table
+      properties:
+        cart_item_id:
+          type: integer
+          readOnly: true
+        cart_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        product_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        unit_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        subtotal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+        added_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - added_at
+      - cart_id
+      - cart_item_id
+      - product_id
+      - quantity
+      - subtotal
+      - unit_price
+    Category:
+      type: object
+      description: |-
+        Serializer for Category model.
+        Includes basic info about product categories.
+        Supports full CRUD operations.
+      properties:
+        category_id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - category_id
+      - created_at
+      - name
+    Currency:
+      type: object
+      description: Full CRUD serializer for currencies table
+      properties:
+        currency_code:
+          type: string
+          readOnly: true
+        currency_name:
+          type: string
+          maxLength: 50
+        currency_symbol:
+          type: string
+          maxLength: 5
+        is_active:
+          type: boolean
+        decimal_places:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - currency_code
+      - currency_name
+      - currency_symbol
+    CurrencyCodeEnum:
+      enum:
+      - USD
+      - EUR
+      - GBP
+      - XAF
+      - NGN
+      - GHS
+      - KES
+      - ZAR
+      - EGP
+      - MAD
+      type: string
+      description: |-
+        * `USD` - USD - US Dollar
+        * `EUR` - EUR - Euro
+        * `GBP` - GBP - British Pound
+        * `XAF` - XAF - CFA Franc (Central)
+        * `NGN` - NGN - Nigerian Naira
+        * `GHS` - GHS - Ghanaian Cedi
+        * `KES` - KES - Kenyan Shilling
+        * `ZAR` - ZAR - South African Rand
+        * `EGP` - EGP - Egyptian Pound
+        * `MAD` - MAD - Moroccan Dirham
+    CurrencyPreferenceEnum:
+      enum:
+      - USD
+      - EUR
+      - GBP
+      - XAF
+      - NGN
+      - GHS
+      - KES
+      - ZAR
+      - EGP
+      - MAD
+      type: string
+      description: |-
+        * `USD` - USD - US Dollar
+        * `EUR` - EUR - Euro
+        * `GBP` - GBP - British Pound
+        * `XAF` - XAF - CFA Franc (Central)
+        * `NGN` - NGN - Nigerian Naira
+        * `GHS` - GHS - Ghanaian Cedi
+        * `KES` - KES - Kenyan Shilling
+        * `ZAR` - ZAR - South African Rand
+        * `EGP` - EGP - Egyptian Pound
+        * `MAD` - MAD - Moroccan Dirham
+    CustomerTier:
+      type: object
+      description: Full CRUD serializer for customer_tiers table
+      properties:
+        tier_id:
+          type: integer
+          readOnly: true
+        tier_name:
+          type: string
+          maxLength: 50
+        min_annual_spend:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        discount_percentage:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        benefits_description:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - discount_percentage
+      - min_annual_spend
+      - tier_id
+      - tier_name
+      - updated_at
+    Order:
+      type: object
+      description: |-
+        Serializer for Order model.
+        Includes nested order items and customer information.
+        Supports full CRUD operations.
+      properties:
+        order_id:
+          type: integer
+          readOnly: true
+        customer_id:
+          type: integer
+          writeOnly: true
+        customer_name:
+          type: string
+          readOnly: true
+        customer_email:
+          type: string
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+        total_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+        items_count:
+          type: string
+          readOnly: true
+        total_items:
+          type: string
+          readOnly: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - customer_email
+      - customer_name
+      - items
+      - items_count
+      - order_id
+      - total_items
+      - total_price
+      - updated_at
+    OrderItem:
+      type: object
+      description: Serializer for individual items within an order.
+      properties:
+        order_item_id:
+          type: integer
+          readOnly: true
+        product_name:
+          type: string
+          readOnly: true
+        artisan_name:
+          type: string
+          readOnly: true
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        subtotal:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - artisan_name
+      - created_at
+      - order_item_id
+      - price
+      - product_name
+      - subtotal
+    OrderList:
+      type: object
+      description: |-
+        Lightweight serializer for order lists.
+        Used for list views to reduce payload.
+      properties:
+        order_id:
+          type: integer
+          readOnly: true
+        customer_name:
+          type: string
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+        total_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        items_count:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - customer_name
+      - items_count
+      - order_id
+    PaginatedArtisanList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Artisan'
+    PaginatedArtisanRatingList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArtisanRating'
+    PaginatedCartItemList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+    PaginatedCartList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cart'
+    PaginatedCategoryList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+    PaginatedCurrencyList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Currency'
+    PaginatedCustomerTierList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerTier'
+    PaginatedOrderItemList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+    PaginatedOrderList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+    PaginatedOrderListList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderList'
+    PaginatedProductList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+    PaginatedProductListList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductList'
+    PaginatedUserList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    PatchedArtisan:
+      type: object
+      description: |-
+        Serializer for Artisan user with profile information.
+        Combines User and ArtisanProfile data.
+      properties:
+        user_id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        last_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        is_artisan:
+          type: boolean
+          readOnly: true
+        profile:
+          allOf:
+          - $ref: '#/components/schemas/ArtisanProfile'
+          readOnly: true
+        products_count:
+          type: string
+          readOnly: true
+    PatchedArtisanRating:
+      type: object
+      description: |-
+        Serializer for Artisan ratings and reviews.
+        Shows rating, comment, and rater information.
+        Supports full CRUD operations.
+      properties:
+        rating_id:
+          type: integer
+          readOnly: true
+        artisan_id:
+          type: integer
+          writeOnly: true
+        artisan_name:
+          type: string
+          readOnly: true
+        rater_id:
+          type: integer
+          writeOnly: true
+        rater_username:
+          type: string
+          readOnly: true
+        rater_name:
+          type: string
+          readOnly: true
+        rating:
+          allOf:
+          - $ref: '#/components/schemas/RatingEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        rating_display:
+          type: string
+          readOnly: true
+        comment:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedCart:
+      type: object
+      description: Full CRUD serializer for carts table
+      properties:
+        cart_id:
+          type: integer
+          readOnly: true
+        user_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        total_items:
+          type: integer
+          readOnly: true
+        subtotal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        expires_at:
+          type: string
+          format: date-time
+    PatchedCartItem:
+      type: object
+      description: Full CRUD serializer for cart_items table
+      properties:
+        cart_item_id:
+          type: integer
+          readOnly: true
+        cart_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        product_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        unit_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        subtotal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+        added_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedCategory:
+      type: object
+      description: |-
+        Serializer for Category model.
+        Includes basic info about product categories.
+        Supports full CRUD operations.
+      properties:
+        category_id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedCurrency:
+      type: object
+      description: Full CRUD serializer for currencies table
+      properties:
+        currency_code:
+          type: string
+          readOnly: true
+        currency_name:
+          type: string
+          maxLength: 50
+        currency_symbol:
+          type: string
+          maxLength: 5
+        is_active:
+          type: boolean
+        decimal_places:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedCustomerTier:
+      type: object
+      description: Full CRUD serializer for customer_tiers table
+      properties:
+        tier_id:
+          type: integer
+          readOnly: true
+        tier_name:
+          type: string
+          maxLength: 50
+        min_annual_spend:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        discount_percentage:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        benefits_description:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedOrder:
+      type: object
+      description: |-
+        Serializer for Order model.
+        Includes nested order items and customer information.
+        Supports full CRUD operations.
+      properties:
+        order_id:
+          type: integer
+          readOnly: true
+        customer_id:
+          type: integer
+          writeOnly: true
+        customer_name:
+          type: string
+          readOnly: true
+        customer_email:
+          type: string
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+        total_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+        items_count:
+          type: string
+          readOnly: true
+        total_items:
+          type: string
+          readOnly: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedOrderItem:
+      type: object
+      description: Full CRUD serializer for order_items table
+      properties:
+        order_item_id:
+          type: integer
+          readOnly: true
+        order_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        product_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        artisan_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        unit_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        subtotal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedProduct:
+      type: object
+      description: |-
+        Serializer for Product model.
+        Includes nested category and artisan information.
+        Supports full CRUD operations.
+      properties:
+        product_id:
+          type: integer
+          readOnly: true
+        artisan:
+          allOf:
+          - $ref: '#/components/schemas/Artisan'
+          readOnly: true
+        artisan_id:
+          type: integer
+          writeOnly: true
+        category:
+          allOf:
+          - $ref: '#/components/schemas/Category'
+          readOnly: true
+        category_id:
+          type: integer
+          writeOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        currency_code:
+          allOf:
+          - $ref: '#/components/schemas/CurrencyCodeEnum'
+          description: |-
+            Currency code
+
+            * `USD` - USD - US Dollar
+            * `EUR` - EUR - Euro
+            * `GBP` - GBP - British Pound
+            * `XAF` - XAF - CFA Franc (Central)
+            * `NGN` - NGN - Nigerian Naira
+            * `GHS` - GHS - Ghanaian Cedi
+            * `KES` - KES - Kenyan Shilling
+            * `ZAR` - ZAR - South African Rand
+            * `EGP` - EGP - Egyptian Pound
+            * `MAD` - MAD - Moroccan Dirham
+        formatted_price:
+          type: string
+          readOnly: true
+        stock_quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        sku:
+          type: string
+          nullable: true
+          maxLength: 50
+        reorder_level:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        is_featured:
+          type: boolean
+        is_active:
+          type: boolean
+        average_rating:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,2})?$
+        review_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        total_sales:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedUser:
+      type: object
+      description: Full CRUD serializer for users table
+      properties:
+        user_id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        password_hash:
+          type: string
+          maxLength: 255
+        first_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        last_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        phone_number:
+          type: string
+          nullable: true
+          maxLength: 20
+        is_artisan:
+          type: boolean
+        is_admin:
+          type: boolean
+        is_active:
+          type: boolean
+        account_status:
+          $ref: '#/components/schemas/AccountStatusEnum'
+        tier_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        email_verified:
+          type: boolean
+        email_verified_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_login:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    Product:
+      type: object
+      description: |-
+        Serializer for Product model.
+        Includes nested category and artisan information.
+        Supports full CRUD operations.
+      properties:
+        product_id:
+          type: integer
+          readOnly: true
+        artisan:
+          allOf:
+          - $ref: '#/components/schemas/Artisan'
+          readOnly: true
+        artisan_id:
+          type: integer
+          writeOnly: true
+        category:
+          allOf:
+          - $ref: '#/components/schemas/Category'
+          readOnly: true
+        category_id:
+          type: integer
+          writeOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        currency_code:
+          allOf:
+          - $ref: '#/components/schemas/CurrencyCodeEnum'
+          description: |-
+            Currency code
+
+            * `USD` - USD - US Dollar
+            * `EUR` - EUR - Euro
+            * `GBP` - GBP - British Pound
+            * `XAF` - XAF - CFA Franc (Central)
+            * `NGN` - NGN - Nigerian Naira
+            * `GHS` - GHS - Ghanaian Cedi
+            * `KES` - KES - Kenyan Shilling
+            * `ZAR` - ZAR - South African Rand
+            * `EGP` - EGP - Egyptian Pound
+            * `MAD` - MAD - Moroccan Dirham
+        formatted_price:
+          type: string
+          readOnly: true
+        stock_quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        sku:
+          type: string
+          nullable: true
+          maxLength: 50
+        reorder_level:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        is_featured:
+          type: boolean
+        is_active:
+          type: boolean
+        average_rating:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,2})?$
+        review_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        total_sales:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - artisan
+      - category
+      - created_at
+      - formatted_price
+      - name
+      - price
+      - product_id
+      - updated_at
+    ProductList:
+      type: object
+      description: |-
+        Lightweight serializer for product lists.
+        Used for list views to reduce payload.
+      properties:
+        product_id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        artisan_name:
+          type: string
+          readOnly: true
+        category_name:
+          type: string
+          readOnly: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        currency_code:
+          allOf:
+          - $ref: '#/components/schemas/CurrencyCodeEnum'
+          description: |-
+            Currency code
+
+            * `USD` - USD - US Dollar
+            * `EUR` - EUR - Euro
+            * `GBP` - GBP - British Pound
+            * `XAF` - XAF - CFA Franc (Central)
+            * `NGN` - NGN - Nigerian Naira
+            * `GHS` - GHS - Ghanaian Cedi
+            * `KES` - KES - Kenyan Shilling
+            * `ZAR` - ZAR - South African Rand
+            * `EGP` - EGP - Egyptian Pound
+            * `MAD` - MAD - Moroccan Dirham
+        formatted_price:
+          type: string
+          readOnly: true
+        stock_quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        is_featured:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - artisan_name
+      - category_name
+      - created_at
+      - formatted_price
+      - name
+      - price
+      - product_id
+    RatingEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      type: integer
+      description: |-
+        * `1` - ⭐ Poor
+        * `2` - ⭐⭐ Fair
+        * `3` - ⭐⭐⭐ Good
+        * `4` - ⭐⭐⭐⭐ Very Good
+        * `5` - ⭐⭐⭐⭐⭐ Excellent
+    StatusEnum:
+      enum:
+      - pending
+      - confirmed
+      - processing
+      - shipped
+      - delivered
+      - cancelled
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `confirmed` - Confirmed
+        * `processing` - Processing
+        * `shipped` - Shipped
+        * `delivered` - Delivered
+        * `cancelled` - Cancelled
+    User:
+      type: object
+      description: Full CRUD serializer for users table
+      properties:
+        user_id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        password_hash:
+          type: string
+          maxLength: 255
+        first_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        last_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        phone_number:
+          type: string
+          nullable: true
+          maxLength: 20
+        is_artisan:
+          type: boolean
+        is_admin:
+          type: boolean
+        is_active:
+          type: boolean
+        account_status:
+          $ref: '#/components/schemas/AccountStatusEnum'
+        tier_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        email_verified:
+          type: boolean
+        email_verified_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_login:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - email
+      - email_verified_at
+      - last_login
+      - password_hash
+      - updated_at
+      - user_id
+      - username
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid

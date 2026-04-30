@@ -20,6 +20,7 @@ from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve
+from drf_spectacular.views import SpectacularSwaggerView, SpectacularAPIView
 import os
 
 urlpatterns = [
@@ -32,6 +33,10 @@ urlpatterns = [
     path('orders/', include('orders.urls')),
     path('api/', include('api.urls', namespace='api')),
     path('api/raw/', include('api_raw.urls', namespace='api_raw')),
+    
+    # Swagger UI for API Documentation
+    path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
 ]
 
 # Serve static and media files

@@ -10,11 +10,12 @@ class ProductForm(forms.ModelForm):
     """
     Form for artisans to create and edit their products.
     Automatically sets the artisan to the current logged-in user.
+    Images are managed separately through the ProductImage model.
     """
     
     class Meta:
         model = Product
-        fields = ['name', 'description', 'category', 'price', 'currency_code', 'stock_quantity', 'image', 'attributes', 'is_featured']
+        fields = ['name', 'description', 'category', 'price', 'currency_code', 'stock_quantity', 'sku', 'reorder_level', 'is_featured']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -48,11 +49,15 @@ class ProductForm(forms.ModelForm):
                 'min': '0',
                 'required': True,
             }),
-            'image': forms.FileInput(attrs={
+            'sku': forms.TextInput(attrs={
                 'class': 'form-control',
-                'accept': 'image/*',
+                'placeholder': 'SKU (optional)',
             }),
-            'attributes': forms.HiddenInput(),
+            'reorder_level': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Reorder Level',
+                'min': '0',
+            }),
             'is_featured': forms.CheckboxInput(attrs={
                 'class': 'form-check-input',
             }),
@@ -60,10 +65,10 @@ class ProductForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['attributes'].required = False
         self.fields['is_featured'].required = False
+        self.fields['sku'].required = False
         
-        # Enhance currency choices with country flags (for form display)
+        # Enhance currency choices
         flag_choices = [
             ('USD', 'USD - US Dollar'),
             ('EUR', 'EUR - Euro'),
@@ -77,27 +82,6 @@ class ProductForm(forms.ModelForm):
             ('MAD', 'MAD - Moroccan Dirham'),
         ]
         self.fields['currency_code'].choices = flag_choices
-        
-        # Make image optional when editing (if instance exists)
-        if self.instance and self.instance.pk:
-            self.fields['image'].required = False
-            self.fields['image'].widget.attrs['required'] = False
-    
-    def clean_attributes(self):
-        """
-        Validate that attributes is valid JSON if provided.
-        """
-        import json
-        attributes = self.cleaned_data.get('attributes')
-        
-        if attributes:
-            if isinstance(attributes, str):
-                try:
-                    json.loads(attributes)
-                except json.JSONDecodeError:
-                    raise forms.ValidationError("Attributes must be valid JSON format.")
-        
-        return attributes
 
 
 class ArtisanProfileForm(forms.Form):

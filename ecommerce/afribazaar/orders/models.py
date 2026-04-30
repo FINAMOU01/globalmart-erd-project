@@ -19,14 +19,16 @@ class Order(models.Model):
         ('cancelled', 'Cancelled'),
     ]
     
+    order_id = models.AutoField(primary_key=True, db_column='order_id')
     customer = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='orders',
+        db_column='customer_id',
         limit_choices_to={'is_artisan': False}
     )
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, db_column='total_amount')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -39,6 +41,8 @@ class Order(models.Model):
     
     class Meta:
         ordering = ['-created_at']
+        db_table = 'orders'
+        managed = False
         indexes = [
             models.Index(fields=['customer', '-created_at']),
             models.Index(fields=['status']),
@@ -50,16 +54,18 @@ class OrderItem(models.Model):
     Represents individual items within an order.
     Each item links to a product sold by an artisan.
     """
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    order_item_id = models.AutoField(primary_key=True, db_column='order_item_id')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items', db_column='order_id')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
     artisan = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='sold_items',
+        db_column='artisan_id',
         limit_choices_to={'is_artisan': True}
     )
     quantity = models.IntegerField(default=1)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2, db_column='unit_price')
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
@@ -71,6 +77,8 @@ class OrderItem(models.Model):
     
     class Meta:
         ordering = ['-created_at']
+        db_table = 'order_items'
+        managed = False
         indexes = [
             models.Index(fields=['order']),
             models.Index(fields=['artisan', '-created_at']),
@@ -82,10 +90,12 @@ class Cart(models.Model):
     Shopping cart for storing temporary items before checkout.
     One cart per user at a time.
     """
+    cart_id = models.AutoField(primary_key=True, db_column='cart_id')
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        related_name='cart'
+        related_name='cart',
+        db_column='user_id'
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -105,14 +115,17 @@ class Cart(models.Model):
     
     class Meta:
         ordering = ['-created_at']
+        db_table = 'carts'
+        managed = False
 
 
 class CartItem(models.Model):
     """
     Represents individual items in a shopping cart.
     """
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    cart_item_id = models.AutoField(primary_key=True, db_column='cart_item_id')
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items', db_column='cart_id')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
     
@@ -126,6 +139,8 @@ class CartItem(models.Model):
     
     class Meta:
         ordering = ['-added_at']
+        db_table = 'cart_items'
+        managed = False
         unique_together = ('cart', 'product')
         indexes = [
             models.Index(fields=['cart']),

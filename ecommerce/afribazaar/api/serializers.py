@@ -26,8 +26,8 @@ class CategorySerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Category
-        fields = ['id', 'name', 'description', 'image', 'created_at']
-        read_only_fields = ['id', 'created_at']
+        fields = ['category_id', 'name', 'description', 'created_at']
+        read_only_fields = ['category_id', 'created_at']
 
 
 class ArtisanProfileSerializer(serializers.ModelSerializer):
@@ -53,7 +53,7 @@ class ArtisanProfileSerializer(serializers.ModelSerializer):
             'average_rating',
             'total_ratings',
         ]
-        read_only_fields = ['id', 'date_joined', 'average_rating', 'total_ratings']
+        read_only_fields = ['date_joined', 'average_rating', 'total_ratings']
     
     def get_average_rating(self, obj):
         """Calculate average rating for this artisan"""
@@ -75,7 +75,7 @@ class ArtisanSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'id',
+            'user_id',
             'username',
             'email',
             'first_name',
@@ -84,7 +84,7 @@ class ArtisanSerializer(serializers.ModelSerializer):
             'profile',
             'products_count',
         ]
-        read_only_fields = ['id', 'is_artisan']
+        read_only_fields = ['user_id', 'is_artisan']
     
     def get_products_count(self, obj):
         """Get number of products by this artisan"""
@@ -102,12 +102,11 @@ class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     artisan = ArtisanSerializer(read_only=True)
     formatted_price = serializers.SerializerMethodField()
-    image = serializers.ImageField(required=False, allow_null=True)
     
     class Meta:
         model = Product
         fields = [
-            'id',
+            'product_id',
             'artisan',
             'artisan_id',
             'category',
@@ -118,28 +117,28 @@ class ProductSerializer(serializers.ModelSerializer):
             'currency_code',
             'formatted_price',
             'stock_quantity',
-            'image',
-            'attributes',
+            'sku',
+            'reorder_level',
             'is_featured',
+            'is_active',
+            'average_rating',
+            'review_count',
+            'total_sales',
             'created_at',
             'updated_at',
         ]
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        read_only_fields = ['product_id', 'created_at', 'updated_at']
     
     def get_formatted_price(self, obj):
         """Return price formatted with currency symbol"""
         return f"{obj.price} {obj.currency_code}"
     
     def create(self, validated_data):
-        """Create new product"""
-        validated_data.pop('category_id', None)
-        validated_data.pop('artisan_id', None)
+        """Create new product with artisan_id and category_id"""
         return super().create(validated_data)
     
     def update(self, instance, validated_data):
-        """Update product"""
-        validated_data.pop('category_id', None)
-        validated_data.pop('artisan_id', None)
+        """Update product with artisan_id and category_id"""
         return super().update(instance, validated_data)
 
 
@@ -155,7 +154,7 @@ class ProductListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            'id',
+            'product_id',
             'name',
             'artisan_name',
             'category_name',
@@ -163,11 +162,10 @@ class ProductListSerializer(serializers.ModelSerializer):
             'currency_code',
             'formatted_price',
             'stock_quantity',
-            'image',
             'is_featured',
             'created_at',
         ]
-        read_only_fields = ['id', 'created_at']
+        read_only_fields = ['product_id', 'created_at']
     
     def get_formatted_price(self, obj):
         """Return price formatted with currency symbol"""
@@ -190,7 +188,7 @@ class ArtisanRatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArtisanRating
         fields = [
-            'id',
+            'rating_id',
             'artisan_id',
             'artisan_name',
             'rater_id',
@@ -202,7 +200,7 @@ class ArtisanRatingSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         ]
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        read_only_fields = ['rating_id', 'created_at', 'updated_at']
     
     def get_rating_display(self, obj):
         """Get the display label for rating"""
@@ -227,7 +225,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
         fields = [
-            'id',
+            'order_item_id',
             'product_name',
             'artisan_name',
             'quantity',
@@ -235,7 +233,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'subtotal',
             'created_at',
         ]
-        read_only_fields = ['id', 'created_at']
+        read_only_fields = ['order_item_id', 'created_at']
     
     def get_subtotal(self, obj):
         """Calculate subtotal for this order item"""
@@ -258,7 +256,7 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = [
-            'id',
+            'order_id',
             'customer_id',
             'customer_name',
             'customer_email',
@@ -270,7 +268,7 @@ class OrderSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         ]
-        read_only_fields = ['id', 'total_price', 'created_at', 'updated_at']
+        read_only_fields = ['order_id', 'total_price', 'created_at', 'updated_at']
     
     def get_items_count(self, obj):
         """Get number of different items in this order"""
@@ -292,14 +290,14 @@ class OrderListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = [
-            'id',
+            'order_id',
             'customer_name',
             'status',
             'total_price',
             'items_count',
             'created_at',
         ]
-        read_only_fields = ['id', 'created_at']
+        read_only_fields = ['order_id', 'created_at']
     
     def get_items_count(self, obj):
         """Get number of items in this order"""

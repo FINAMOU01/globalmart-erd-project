@@ -11,7 +11,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
             <li class="breadcrumb-item"><a href="{% url 'products:shop' %}">Shop</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'products:category' product.category.id %}">{{ product.category.name }}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'products:category' product.category.category_id %}">{{ product.category.name }}</a></li>
             <li class="breadcrumb-item active">{{ product.name }}</li>
         </ol>
     </nav>
@@ -85,7 +85,7 @@
 
                 <!-- Add to Cart Button -->
                 <div class="mb-4">
-                    <a href="{% url 'orders:add_to_cart' product.id %}?next={% url 'products:product_detail' product.id %}" class="btn btn-large btn-gold" {% if product.stock_quantity == 0 %}onclick="return false;"{% endif %} style="{% if product.stock_quantity == 0 %}opacity: 0.5; cursor: not-allowed;{% endif %}">
+                    <a href="{% url 'orders:add_to_cart' product.product_id %}?next={% url 'products:product_detail' product.product_id %}" class="btn btn-large btn-gold" {% if product.stock_quantity == 0 %}onclick="return false;"{% endif %} style="{% if product.stock_quantity == 0 %}opacity: 0.5; cursor: not-allowed;{% endif %}">
                         <i class="fas fa-shopping-cart me-2"></i> Add to Cart
                     </a>
                 </div>

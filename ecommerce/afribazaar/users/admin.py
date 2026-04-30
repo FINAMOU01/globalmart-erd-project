@@ -4,23 +4,36 @@ from .models import CustomUser, ArtisanProfile
 
 
 @admin.register(CustomUser)
-class CustomUserAdmin(BaseUserAdmin):
+class CustomUserAdmin(admin.ModelAdmin):
     """
-    Extended User Admin for managing CustomUser with artisan designation.
+    Admin for managing CustomUser with artisan designation.
     """
-    list_display = ('username', 'email', 'get_full_name', 'is_artisan', 'phone', 'country', 'date_joined')
-    list_filter = ('is_artisan', 'date_joined', 'country')
-    search_fields = ('username', 'email', 'first_name', 'last_name', 'phone')
+    list_display = ('username', 'email', 'get_full_name', 'is_artisan', 'is_admin', 'is_active')
+    list_filter = ('is_artisan', 'is_admin', 'is_active', 'created_at')
+    search_fields = ('username', 'email', 'first_name', 'last_name', 'phone_number')
+    readonly_fields = ('created_at', 'updated_at', 'last_login')
     
-    fieldsets = BaseUserAdmin.fieldsets + (
-        ('AfriBazaar Info', {'fields': ('is_artisan', 'phone', 'country')}),
+    fieldsets = (
+        ('Authentication', {'fields': ('username', 'email', 'password')}),
+        ('Personal Info', {'fields': ('first_name', 'last_name', 'phone_number')}),
+        ('AfriBazaar Info', {'fields': ('is_artisan', 'is_admin', 'is_active', 'tier_id', 'account_status', 'email_verified', 'email_verified_at')}),
+        ('Timestamps', {'fields': ('last_login', 'created_at', 'updated_at'), 'classes': ('collapse',)}),
     )
     
-    add_fieldsets = BaseUserAdmin.add_fieldsets + (
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'email', 'password1', 'password2'),
+        }),
+        ('Personal Info', {'fields': ('first_name', 'last_name', 'phone_number')}),
         ('AfriBazaar Info', {
-            'fields': ('is_artisan', 'phone', 'country'),
+            'fields': ('is_artisan', 'is_admin', 'tier_id', 'account_status'),
         }),
     )
+    
+    def get_full_name(self, obj):
+        return obj.get_full_name()
+    get_full_name.short_description = 'Full Name'
 
 
 @admin.register(ArtisanProfile)
@@ -28,7 +41,7 @@ class ArtisanProfileAdmin(admin.ModelAdmin):
     """
     Admin for managing artisan profiles.
     """
-    list_display = ('get_artisan_name', 'get_artisan_country', 'created_at', 'updated_at')
+    list_display = ('get_artisan_name', 'get_artisan_username', 'created_at', 'updated_at')
     list_filter = ('created_at', 'updated_at')
     search_fields = ('user__first_name', 'user__last_name', 'user__username')
     readonly_fields = ('created_at', 'updated_at')
@@ -43,6 +56,6 @@ class ArtisanProfileAdmin(admin.ModelAdmin):
         return obj.user.get_full_name()
     get_artisan_name.short_description = 'Artisan Name'
     
-    def get_artisan_country(self, obj):
-        return obj.user.country
-    get_artisan_country.short_description = 'Country'
+    def get_artisan_username(self, obj):
+        return obj.user.username
+    get_artisan_username.short_description = 'Username'

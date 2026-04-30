@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
-from django.db.models import Q
+from django.db.models import Q, Count
 
 from products.models import Product, Category, ArtisanRating
 from orders.models import Order, OrderItem
@@ -133,6 +133,27 @@ class ProductViewSet(viewsets.ModelViewSet):
         
         serializer = self.get_serializer(products, many=True)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'])
+    def top_sales(self, request):
+        """
+        Get top 10 products by sales (most sold products).
+        
+        Usage:
+        GET /api/products/top_sales/
+        
+        Returns: List of 10 products with the most sales
+        """
+        # Count how many times each product appears in OrderItem
+        top_products = self.queryset.annotate(
+            sales_count=Count('orderitem')
+        ).order_by('-sales_count')[:10]
+        
+        serializer = self.get_serializer(top_products, many=True)
+        return Response({
+            'count': len(top_products),
+            'results': serializer.data
+        })
 
 
 class CategoryViewSet(viewsets.ModelViewSet):

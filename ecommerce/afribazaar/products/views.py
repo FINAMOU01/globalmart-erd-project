@@ -62,7 +62,7 @@ class ProductListView(ListView):
         artisan_id = self.request.GET.get('artisan')
         if artisan_id:
             try:
-                artisan = User.objects.get(id=artisan_id, is_artisan=True)
+                artisan = User.objects.get(user_id=artisan_id, is_artisan=True)
                 context['filtered_artisan'] = artisan
             except User.DoesNotExist:
                 pass
@@ -87,7 +87,7 @@ class ProductDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['related_products'] = Product.objects.filter(
             category=self.object.category
-        ).exclude(id=self.object.id)[:4]
+        ).exclude(product_id=self.object.product_id)[:4]
         return context
 
 
@@ -98,7 +98,7 @@ def category_products(request, category_id):
     """
     Display all products in a specific category.
     """
-    category = get_object_or_404(Category, id=category_id)
+    category = get_object_or_404(Category, category_id=category_id)
     products = Product.objects.filter(category=category).select_related('artisan')
     categories = Category.objects.all()
     
@@ -178,7 +178,7 @@ def artisan_detail(request, artisan_id):
     Allows users to rate the artisan.
     """
     # Get the artisan user
-    artisan = get_object_or_404(User, id=artisan_id, is_artisan=True)
+    artisan = get_object_or_404(User, user_id=artisan_id, is_artisan=True)
     
     # Get artisan profile - ensure it exists
     profile = None

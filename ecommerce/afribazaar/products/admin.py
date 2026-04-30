@@ -13,7 +13,7 @@ class CategoryAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at',)
     
     fieldsets = (
-        ('Category Information', {'fields': ('name', 'description', 'image')}),
+        ('Category Information', {'fields': ('name', 'description')}),
         ('Timestamps', {'fields': ('created_at',), 'classes': ('collapse',)}),
     )
     
@@ -27,31 +27,21 @@ class ProductAdmin(admin.ModelAdmin):
     """
     Admin for managing all products.
     """
-    list_display = ('name', 'get_artisan_name', 'category', 'price', 'stock_quantity', 'is_featured', 'created_at', 'get_image_preview')
+    list_display = ('name', 'get_artisan_name', 'category', 'price', 'stock_quantity', 'is_featured', 'created_at')
     list_filter = ('category', 'is_featured', 'created_at', 'price')
     search_fields = ('name', 'description', 'artisan__first_name', 'artisan__last_name')
-    readonly_fields = ('created_at', 'updated_at', 'get_image_preview')
+    readonly_fields = ('created_at', 'updated_at')
     
     fieldsets = (
         ('Product Information', {'fields': ('name', 'description', 'category', 'artisan')}),
-        ('Pricing & Stock', {'fields': ('price', 'stock_quantity')}),
-        ('Media', {'fields': ('image', 'get_image_preview')}),
-        ('Product Attributes', {'fields': ('attributes',)}),
-        ('Status', {'fields': ('is_featured', 'created_at', 'updated_at')}),
+        ('Pricing & Stock', {'fields': ('price', 'stock_quantity', 'sku', 'reorder_level')}),
+        ('Status & Analytics', {'fields': ('is_featured', 'is_active', 'average_rating', 'review_count', 'total_sales')}),
+        ('Timestamps', {'fields': ('created_at', 'updated_at'), 'classes': ('collapse',)}),
     )
     
     def get_artisan_name(self, obj):
         return obj.artisan.get_full_name()
     get_artisan_name.short_description = 'Artisan'
-    
-    def get_image_preview(self, obj):
-        if obj.image:
-            return format_html(
-                '<img src="{}" width="100" height="100" style="border-radius: 5px;"/>',
-                obj.image.url
-            )
-        return "No Image"
-    get_image_preview.short_description = 'Image Preview'
 
 
 @admin.register(ArtisanRating)
