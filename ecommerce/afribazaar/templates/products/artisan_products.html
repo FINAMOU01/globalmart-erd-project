@@ -101,7 +101,7 @@
                                 <select name="category" class="form-select" style="border-color: #1F7A6B;">
                                     <option value="">All Categories</option>
                                     {% for category in categories %}
-                                    <option value="{{ category.id }}" {% if category.id|stringformat:"s" == category_filter %}selected{% endif %}>
+                                    <option value="{{ category.category_id }}" {% if category.category_id|stringformat:"s" == category_filter %}selected{% endif %}>
                                         {{ category.name }}
                                     </option>
                                     {% endfor %}
@@ -164,7 +164,7 @@
                                             <div>
                                                 <strong>{{ product.name }}</strong>
                                                 <br>
-                                                <small class="text-muted">ID: #{{ product.id }}</small>
+                                                <small class="text-muted">ID: #{{ product.product_id }}</small>
                                             </div>
                                         </div>
                                     </td>
@@ -186,13 +186,13 @@
                                     </td>
                                     <td>
                                         <div class="btn-group btn-group-sm" role="group">
-                                            <a href="{% url 'products:product_detail' product.id %}" class="btn btn-outline-primary" title="View">
+                                            <a href="{% url 'products:product_detail' product.product_id %}" class="btn btn-outline-primary" title="View">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{% url 'products:edit_product' product.id %}" class="btn btn-outline-warning" title="Edit">
+                                            <a href="{% url 'products:edit_product' product.product_id %}" class="btn btn-outline-warning" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="{% url 'products:delete_product' product.id %}" class="btn btn-outline-danger" title="Delete" onclick="return confirm('Are you sure?')">
+                                            <a href="{% url 'products:delete_product' product.product_id %}" class="btn btn-outline-danger" title="Delete" onclick="return confirm('Are you sure?')">
                                                 <i class="fas fa-trash"></i>
                                             </a>
                                         </div>

@@ -191,10 +191,10 @@
                                 <small class="product-date">Added {{ product.created_at|date:"M d, Y" }}</small>
                             </div>
                             <div class="product-actions">
-                                <a href="{% url 'products:edit_product' product.id %}" class="btn btn-sm btn-edit" title="Edit">
+                                <a href="{% url 'products:edit_product' product.product_id %}" class="btn btn-sm btn-edit" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <a href="{% url 'products:delete_product' product.id %}" class="btn btn-sm btn-delete" title="Delete">
+                                <a href="{% url 'products:delete_product' product.product_id %}" class="btn btn-sm btn-delete" title="Delete">
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </div>
